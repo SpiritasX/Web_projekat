@@ -14,6 +14,8 @@ public class Polica implements Serializable {
 
     @Column(nullable = false)
     private boolean primarna;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Citalac citalac;
 
     public Long getId() {
         return id;

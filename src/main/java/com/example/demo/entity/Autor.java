@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -15,16 +17,14 @@ public class Autor extends Korisnik implements Serializable  {
 
     @Column(nullable = false)
     private boolean aktivan;
-    //@Column
-   // private ArrayList<Knjiga> spisakKnjiga;// nece da mi radi nesto kad ubacim listu knjiga
 
     public Autor(Long id, String ime, String prezime, String korisnickoIme, String email, String lozinka, Date datumRodjenja, String profilnaSlika, String opis, boolean admin) {
         super(id, ime, prezime, korisnickoIme, email, lozinka, datumRodjenja, profilnaSlika, opis,admin);
         this.id=id;
         this.aktivan=aktivan;
-        //this.spisakKnjiga=new ArrayList<>();
     }
-
+    @OneToMany(mappedBy = "autor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Knjiga> knjige = new HashSet<>();
     public Autor() {
         super();
     }

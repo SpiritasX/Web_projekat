@@ -5,7 +5,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class Korisnik implements Serializable {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class Korisnik implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,8 +35,7 @@ public class Korisnik implements Serializable {
     @Column
     private String opis;
 
-    @Column(nullable = false)
-    private boolean admin;
+
 
     public Korisnik() {
 
@@ -114,20 +114,12 @@ public class Korisnik implements Serializable {
         this.opis = opis;
     }
 
-    public boolean isAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
-    }
 
     @Override
     public String toString() {
         return "Korisnik{" +
                 "id=" + id +
                 ", korisnickoIme='" + korisnickoIme + '\'' +
-                ", admin=" + admin +
                 '}';
     }
 
@@ -141,6 +133,6 @@ public class Korisnik implements Serializable {
         this.datumRodjenja = datumRodjenja;
         this.profilnaSlika = profilnaSlika;
         this.opis = opis;
-        this.admin = admin;
+
     }
 }

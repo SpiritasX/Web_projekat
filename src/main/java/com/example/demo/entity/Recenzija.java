@@ -27,7 +27,15 @@ public class Recenzija implements Serializable {
     @Column(nullable = false)
     private Date datum_recenzije;
     @Column(nullable = false)
-    private String KORISNIK; //bice 1:1 sa korisnikom
+    private Korisnik korisnik ; //bice 1:1 sa korisnikom
+
+    public Korisnik getKorisnik() {
+        return korisnik;
+    }
+
+    public void setKorisnik(Korisnik korisnik) {
+        this.korisnik = korisnik;
+    }
 
     public float getOcena() {
         return ocena;
@@ -53,19 +61,13 @@ public class Recenzija implements Serializable {
         this.datum_recenzije = datum_recenzije;
     }
 
-    public String getKORISNIK() {
-        return KORISNIK;
-    }
 
-    public void setKORISNIK(String KORISNIK) {
-        this.KORISNIK = KORISNIK;
-    }
 
     @Override
     public String toString() {
         return "Recenzija{" +
                 "ocena=" + ocena +
-                ", korisnik='" + KORISNIK + '\'' +
+                ", korisnik='" + korisnik + '\'' +
                 '}';
     }
 }

@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Knjiga implements Serializable {
 
     @Id
@@ -38,6 +39,12 @@ public class Knjiga implements Serializable {
     private Zanr zanr;
     @OneToMany(mappedBy = "knjiga", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Zanr> zanrovi = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Autor autor;
+
+    public Autor getAutor(){return  autor;}
+    public void setAutor(Autor autor){this.autor=autor;}
 
     public Set<Zanr> getZanrovi() {
         return zanrovi;
