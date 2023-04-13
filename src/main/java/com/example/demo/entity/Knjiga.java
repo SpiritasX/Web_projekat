@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 public class Knjiga implements Serializable {
 
@@ -32,7 +35,17 @@ public class Knjiga implements Serializable {
     private float ocena;
 
     @Column(nullable = false)
-    private String zanr; //ovo ce biti klasa i veza izmedju zanr i knjiga many to one
+    private Zanr zanr;
+    @OneToMany(mappedBy = "knjiga", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Zanr> zanrovi = new HashSet<>();
+
+    public Set<Zanr> getZanrovi() {
+        return zanrovi;
+    }
+
+    public void setZanrovi(Set<Zanr> zanrovi) {
+        this.zanrovi = zanrovi;
+    }
 
     public void setID(Long id) {
         this.ID = id;
@@ -99,11 +112,11 @@ public class Knjiga implements Serializable {
         this.ocena = ocena;
     }
 
-    public String getZanr() {
+    public Zanr getZanr() {
         return zanr;
     }
 
-    public void setZanr(String zanr) {
+    public void setZanr(Zanr zanr) {
         this.zanr = zanr;
     }
 
@@ -116,4 +129,5 @@ public class Knjiga implements Serializable {
                 ", zanr='" + zanr + '\'' +
                 '}';
     }
+
 }

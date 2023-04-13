@@ -37,6 +37,11 @@ public class Korisnik implements Serializable {
     @Column(nullable = false)
     private boolean admin;
 
+    public Korisnik() {
+
+    }
+
+
     public Long getId() {
         return id;
     }
@@ -124,5 +129,18 @@ public class Korisnik implements Serializable {
                 ", korisnickoIme='" + korisnickoIme + '\'' +
                 ", admin=" + admin +
                 '}';
+    }
+
+    public Korisnik(Long id, String ime, String prezime, String korisnickoIme, String email, String lozinka, Date datumRodjenja, String profilnaSlika, String opis, boolean admin) {
+        this.id = id;
+        this.ime = ime;
+        this.prezime = prezime;
+        this.korisnickoIme = korisnickoIme;
+        this.email = email;
+        this.lozinka = lozinka;
+        this.datumRodjenja = datumRodjenja;
+        this.profilnaSlika = profilnaSlika;
+        this.opis = opis;
+        this.admin = admin;
     }
 }

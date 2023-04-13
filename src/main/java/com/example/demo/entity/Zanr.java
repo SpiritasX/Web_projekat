@@ -21,7 +21,8 @@ public class Zanr implements Serializable {
 
     @Column(nullable = false,unique = true)
      private String naziv;
-
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Knjiga knjiga;
     public String getNaziv() {
         return naziv;
     }
@@ -35,5 +36,13 @@ public class Zanr implements Serializable {
         return "Zanr{" +
                 "naziv='" + naziv + '\'' +
                 '}';
+    }
+
+    public Knjiga getKnjiga() {
+        return knjiga;
+    }
+
+    public void setKnjiga(Knjiga knjiga) {
+        this.knjiga = knjiga;
     }
 }
