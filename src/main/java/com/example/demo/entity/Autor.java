@@ -18,6 +18,14 @@ public class Autor extends Citalac implements Serializable  {
     @Column(nullable = false)
     private boolean aktivan;
 
+    public Set<Knjiga> getKnjige() {
+        return knjige;
+    }
+
+    public void setKnjige(Set<Knjiga> knjige) {
+        this.knjige = knjige;
+    }
+
     @OneToMany(mappedBy = "autor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Knjiga> knjige = new HashSet<>();
     public Autor() {

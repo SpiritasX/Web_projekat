@@ -34,8 +34,17 @@ public abstract class Korisnik implements Serializable {
 
     @Column
     private String opis;
+    @OneToOne( cascade = CascadeType.ALL)
+    @JoinColumn(name="recenzija_id",referencedColumnName = "id")
+    private Recenzija recenzija;
 
+    public Recenzija getRecenzija() {
+        return recenzija;
+    }
 
+    public void setRecenzija(Recenzija recenzija) {
+        this.recenzija = recenzija;
+    }
 
     public Korisnik() {
 

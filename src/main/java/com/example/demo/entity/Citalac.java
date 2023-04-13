@@ -20,6 +20,7 @@ public class Citalac extends Korisnik implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     @OneToMany(mappedBy = "citalac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Polica> want_to_read = new HashSet<>();
     @OneToMany(mappedBy = "citalac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

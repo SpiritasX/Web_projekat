@@ -2,6 +2,8 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Polica implements Serializable {
@@ -17,6 +19,20 @@ public class Polica implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Citalac citalac;
 
+    @OneToMany(mappedBy = "polica", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Stavka> stavke = new HashSet<>();
+
+
+
+
+    public Set<Stavka> getStavke() {
+        return stavke;
+    }
+
+    public void setStavke(Set<Stavka> stavke) {
+        this.stavke = stavke;
+    }
+
     public Citalac getCitalac() {
         return citalac;
     }
@@ -24,6 +40,8 @@ public class Polica implements Serializable {
     public void setCitalac(Citalac citalac) {
         this.citalac = citalac;
     }
+
+
 
     public Long getId() {
         return id;

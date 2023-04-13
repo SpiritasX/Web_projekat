@@ -26,8 +26,22 @@ public class Recenzija implements Serializable {
     private String tekst;
     @Column(nullable = false)
     private Date datum_recenzije;
-    @Column(nullable = false)
-    private Korisnik korisnik ; //bice 1:1 sa korisnikom
+
+
+
+    @OneToOne(mappedBy = "recenzija")
+    private Stavka stavka;
+
+    @OneToOne(mappedBy = "recenzija")
+    private Korisnik korisnik;
+
+    public Stavka getStavka() {
+        return stavka;
+    }
+
+    public void setStavka(Stavka stavka) {
+        this.stavka = stavka;
+    }
 
     public Korisnik getKorisnik() {
         return korisnik;

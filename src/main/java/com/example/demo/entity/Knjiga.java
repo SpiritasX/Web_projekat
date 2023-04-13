@@ -37,17 +37,28 @@ public class Knjiga implements Serializable {
 
     @Column(nullable = false)
     private Zanr zanr;
-    @OneToMany(mappedBy = "knjiga", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Zanr> zanrovi = new HashSet<>();
-
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Autor autor;
 
-    public Autor getAutor(){return  autor;}
-    public void setAutor(Autor autor){this.autor=autor;}
+    @ManyToMany
+    @JoinTable(name = "zanrovi_knjige",
+            joinColumns = @JoinColumn(name = "knjiga_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "zanr_id", referencedColumnName = "id"))
+    private Set<Zanr>zanrovi= new HashSet<>();
 
     public Set<Zanr> getZanrovi() {
         return zanrovi;
+    }
+    @OneToOne( cascade = CascadeType.ALL)
+    @JoinColumn(name="stavka_id",referencedColumnName = "id")
+    private Stavka stavka;
+
+    public Stavka getStavka() {
+        return stavka;
+    }
+
+    public void setStavka(Stavka stavka) {
+        this.stavka = stavka;
     }
 
     public void setZanrovi(Set<Zanr> zanrovi) {
