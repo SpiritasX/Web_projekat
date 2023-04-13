@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+
 public class Citalac extends Korisnik implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

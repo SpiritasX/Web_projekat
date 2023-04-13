@@ -17,6 +17,14 @@ public class Polica implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Citalac citalac;
 
+    public Citalac getCitalac() {
+        return citalac;
+    }
+
+    public void setCitalac(Citalac citalac) {
+        this.citalac = citalac;
+    }
+
     public Long getId() {
         return id;
     }

@@ -9,7 +9,7 @@ import java.util.Set;
 
 
 @Entity
-public class Autor extends Korisnik implements Serializable  {
+public class Autor extends Citalac implements Serializable  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,11 +18,6 @@ public class Autor extends Korisnik implements Serializable  {
     @Column(nullable = false)
     private boolean aktivan;
 
-    public Autor(Long id, String ime, String prezime, String korisnickoIme, String email, String lozinka, Date datumRodjenja, String profilnaSlika, String opis, boolean admin) {
-        super(id, ime, prezime, korisnickoIme, email, lozinka, datumRodjenja, profilnaSlika, opis,admin);
-        this.id=id;
-        this.aktivan=aktivan;
-    }
     @OneToMany(mappedBy = "autor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Knjiga> knjige = new HashSet<>();
     public Autor() {
