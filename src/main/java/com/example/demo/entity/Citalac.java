@@ -7,30 +7,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-
+@DiscriminatorValue(value = "CITALAC")
 public class Citalac extends Korisnik implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @OneToMany(mappedBy = "citalac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Polica> want_to_read = new HashSet<>();
-    @OneToMany(mappedBy = "citalac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 
+    @OneToMany(mappedBy = "citalac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Polica> currently_reading = new HashSet<>();
-    @OneToMany(mappedBy = "citalac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 
+    @OneToMany(mappedBy = "citalac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Polica> read = new HashSet<>();
-    @OneToMany(mappedBy = "citalac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 
+    @OneToMany(mappedBy = "citalac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Polica> ostale_police = new HashSet<>();
 
     public Set<Polica> getWant_to_read() {

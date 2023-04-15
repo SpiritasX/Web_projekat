@@ -9,14 +9,13 @@ import java.util.Set;
 
 
 @Entity
-public class Autor extends Citalac implements Serializable  {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-
+@DiscriminatorValue(value = "AUTOR")
+public class Autor extends Korisnik implements Serializable  {
     @Column(nullable = false)
     private boolean aktivan;
+
+    @OneToMany(mappedBy = "autor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Knjiga> knjige = new HashSet<>();
 
     public Set<Knjiga> getKnjige() {
         return knjige;
@@ -24,21 +23,6 @@ public class Autor extends Citalac implements Serializable  {
 
     public void setKnjige(Set<Knjiga> knjige) {
         this.knjige = knjige;
-    }
-
-    @OneToMany(mappedBy = "autor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Knjiga> knjige = new HashSet<>();
-    public Autor() {
-        super();
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public boolean isAktivan() {

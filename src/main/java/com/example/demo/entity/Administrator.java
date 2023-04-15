@@ -7,17 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@DiscriminatorValue(value = "ADMINISTRATOR")
 public class Administrator extends Korisnik implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
     @OneToMany(mappedBy = "administrator", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Zahtev> zahtevi = new HashSet<>();
 

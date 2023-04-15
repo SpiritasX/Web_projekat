@@ -1,7 +1,7 @@
-INSERT INTO AUTOR (ime, prezime, korisnicko_ime, email, lozinka, datum_rodjenja, profilna_slika, aktivan) VALUES ('J. K.', 'Rowling', 'rolovana', 'jkrowling@harrypotter.com', 'rolnica', '1965-07-31', '/slike/1.jpg', true);
+INSERT INTO KORISNIK (uloga, ime, prezime, korisnicko_ime, email, lozinka, datum_rodjenja, profilna_slika, aktivan) VALUES ('AUTOR', 'J. K.', 'Rowling', 'rolovana', 'jkrowling@harrypotter.com', 'rolnica', '1965-07-31', '/slike/1.jpg', true);
 
-INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, email, lozinka, admin) VALUES ('Dejan', 'Bogovac', 'Cutthroat', 'bogovac.in20.2021@uns.ac.rs', 'test123', true);
-INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, email, lozinka, admin) VALUES ('Anastasija', 'Terzic', 'Anastasija', 'terzic.in44.2021@uns.ac.rs', 'test123', true);
+INSERT INTO KORISNIK (uloga, ime, prezime, korisnicko_ime, email, lozinka, aktivan) VALUES ('ADMINISTRATOR', 'Dejan', 'Bogovac', 'Cutthroat', 'bogovac.in20.2021@uns.ac.rs', 'test123', false);
+INSERT INTO KORISNIK (uloga, ime, prezime, korisnicko_ime, email, lozinka, aktivan) VALUES ('ADMINISTRATOR', 'Anastasija', 'Terzic', 'Anastasija', 'terzic.in44.2021@uns.ac.rs', 'test123', false);
 
 INSERT INTO POLICA (naziv, primarna) VALUES ('Want To Read', true);
 INSERT INTO POLICA (naziv, primarna) VALUES ('Currently Reading', true);
@@ -17,6 +17,6 @@ INSERT INTO ZANR(naziv)VALUES ('komedija');
 INSERT INTO ZANR(naziv)VALUES ('romantika');
 INSERT INTO ZANR(naziv)VALUES ('horor');
 INSERT INTO ZANR(naziv)VALUES ('triler');
-INSERT INTO RECENZIJA(ocena,tekst,datum_recenzije,KORISNIK)VALUES (10.0,'sve bajno, sve sjajno. ala je lep ovaj svet ovde potok onde cvet ','2021-04-04','DEJAN');
-INSERT INTO RECENZIJA(ocena,tekst,datum_recenzije,KORISNIK)VALUES (1.0,'uzas, idi pecaj nisi ti za papir i olovku','2020-10-04','ANASTASIJA');
+INSERT INTO RECENZIJA(ocena,tekst,datum_recenzije)VALUES (10.0,'sve bajno, sve sjajno. ala je lep ovaj svet ovde potok onde cvet ','2021-04-04');
+INSERT INTO RECENZIJA(ocena,tekst,datum_recenzije)VALUES (1.0,'uzas, idi pecaj nisi ti za papir i olovku','2020-10-04');
 

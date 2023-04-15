@@ -8,8 +8,6 @@ import java.util.Set;
 
 @Entity
 public class Zanr implements Serializable {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
