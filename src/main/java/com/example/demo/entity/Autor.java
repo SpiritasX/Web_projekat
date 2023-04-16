@@ -1,16 +1,11 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-
 @Entity
-@DiscriminatorValue(value = "AUTOR")
-public class Autor extends Korisnik implements Serializable  {
+public class Autor extends Citalac {
     @Column(nullable = false)
     private boolean aktivan;
 

@@ -32,8 +32,9 @@ public class Recenzija implements Serializable {
     @OneToOne(mappedBy = "recenzija")
     private Stavka stavka;
 
-    @OneToOne(mappedBy = "recenzija")
-    private Korisnik korisnik;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="citalac_id",referencedColumnName = "id")
+    private Citalac citalac;
 
     public Stavka getStavka() {
         return stavka;
@@ -43,12 +44,12 @@ public class Recenzija implements Serializable {
         this.stavka = stavka;
     }
 
-    public Korisnik getKorisnik() {
-        return korisnik;
+    public Citalac getKorisnik() {
+        return citalac;
     }
 
-    public void setKorisnik(Korisnik korisnik) {
-        this.korisnik = korisnik;
+    public void setKorisnik(Citalac citalac) {
+        this.citalac = citalac;
     }
 
     public float getOcena() {
@@ -81,7 +82,7 @@ public class Recenzija implements Serializable {
     public String toString() {
         return "Recenzija{" +
                 "ocena=" + ocena +
-                ", korisnik='" + korisnik + '\'' +
+                ", citalac='" + citalac + '\'' +
                 '}';
     }
 }

@@ -12,10 +12,12 @@ public class Stavka implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Polica polica;
 
-    @OneToOne( cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="recenzija_id",referencedColumnName = "id")
     private Recenzija recenzija;
-    @OneToOne(mappedBy = "stavka")
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "knjiga_id", referencedColumnName = "id")
     private Knjiga knjiga;
 
     public void setKnjiga(Knjiga knjiga) {

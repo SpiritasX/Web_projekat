@@ -1,47 +1,48 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@DiscriminatorValue(value = "CITALAC")
-public class Citalac extends Korisnik implements Serializable {
-    @OneToMany(mappedBy = "citalac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Polica> want_to_read = new HashSet<>();
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class Citalac extends Korisnik {
+    @OneToOne(optional = false)
+    private Polica want_to_read;
 
-    @OneToMany(mappedBy = "citalac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Polica> currently_reading = new HashSet<>();
+    @OneToOne(optional = false)
+    private Polica currently_reading;
 
-    @OneToMany(mappedBy = "citalac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Polica> read = new HashSet<>();
+    @OneToOne(optional = false)
+    private Polica read;
 
     @OneToMany(mappedBy = "citalac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Polica> ostale_police = new HashSet<>();
 
-    public Set<Polica> getWant_to_read() {
+    @OneToOne(mappedBy = "citalac")
+    private Recenzija recenzija;
+
+    public Polica getWant_to_read() {
         return want_to_read;
     }
 
-    public void setWant_to_read(Set<Polica> want_to_read) {
+    public void setWant_to_read(Polica want_to_read) {
         this.want_to_read = want_to_read;
     }
 
-    public Set<Polica> getCurrently_reading() {
+    public Polica getCurrently_reading() {
         return currently_reading;
     }
 
-    public void setCurrently_reading(Set<Polica> currently_reading) {
+    public void setCurrently_reading(Polica currently_reading) {
         this.currently_reading = currently_reading;
     }
 
-    public Set<Polica> getRead() {
+    public Polica getRead() {
         return read;
     }
 
-    public void setRead(Set<Polica> read) {
+    public void setRead(Polica read) {
         this.read = read;
     }
 
@@ -51,5 +52,13 @@ public class Citalac extends Korisnik implements Serializable {
 
     public void setOstale_police(Set<Polica> ostale_police) {
         this.ostale_police = ostale_police;
+    }
+
+    public Recenzija getRecenzija() {
+        return recenzija;
+    }
+
+    public void setRecenzija(Recenzija recenzija) {
+        this.recenzija = recenzija;
     }
 }

@@ -4,56 +4,23 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(
-        name = "ULOGA",
-        discriminatorType = DiscriminatorType.STRING
-)
+@MappedSuperclass
 public abstract class Korisnik implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @Column
     private String ime;
-
-    @Column
     private String prezime;
-
     @Column(unique = true)
     private String korisnickoIme;
-
     @Column(unique = true, nullable = false)
     private String email;
-
     @Column(nullable = false)
     private String lozinka;
-
-    @Column
     private Date datumRodjenja;
-
     @Column(unique = true)
     private String profilnaSlika;
-
-    @Column
     private String opis;
-    @OneToOne( cascade = CascadeType.ALL)
-    @JoinColumn(name="recenzija_id",referencedColumnName = "id")
-    private Recenzija recenzija;
-
-    public Recenzija getRecenzija() {
-        return recenzija;
-    }
-
-    public void setRecenzija(Recenzija recenzija) {
-        this.recenzija = recenzija;
-    }
-
-    public Korisnik() {
-
-    }
-
 
     public Long getId() {
         return id;
@@ -134,18 +101,5 @@ public abstract class Korisnik implements Serializable {
                 "id=" + id +
                 ", korisnickoIme='" + korisnickoIme + '\'' +
                 '}';
-    }
-
-    public Korisnik(Long id, String ime, String prezime, String korisnickoIme, String email, String lozinka, Date datumRodjenja, String profilnaSlika, String opis, boolean admin) {
-        this.id = id;
-        this.ime = ime;
-        this.prezime = prezime;
-        this.korisnickoIme = korisnickoIme;
-        this.email = email;
-        this.lozinka = lozinka;
-        this.datumRodjenja = datumRodjenja;
-        this.profilnaSlika = profilnaSlika;
-        this.opis = opis;
-
     }
 }
