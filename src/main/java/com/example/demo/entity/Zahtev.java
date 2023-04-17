@@ -33,6 +33,17 @@ public class Zahtev implements Serializable {
     @Enumerated
     private Status status;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Administrator administrator;
+
+    public Administrator getAdministrator() {
+        return administrator;
+    }
+
+    public void setAdministrator(Administrator administrator) {
+        this.administrator = administrator;
+    }
+
     public Long getId() {
         return id;
     }

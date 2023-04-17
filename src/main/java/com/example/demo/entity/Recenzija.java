@@ -26,8 +26,31 @@ public class Recenzija implements Serializable {
     private String tekst;
     @Column(nullable = false)
     private Date datum_recenzije;
-    @Column(nullable = false)
-    private String KORISNIK; //bice 1:1 sa korisnikom
+
+
+
+    @OneToOne(mappedBy = "recenzija")
+    private Stavka stavka;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="citalac_id",referencedColumnName = "id")
+    private Citalac citalac;
+
+    public Stavka getStavka() {
+        return stavka;
+    }
+
+    public void setStavka(Stavka stavka) {
+        this.stavka = stavka;
+    }
+
+    public Citalac getKorisnik() {
+        return citalac;
+    }
+
+    public void setKorisnik(Citalac citalac) {
+        this.citalac = citalac;
+    }
 
     public float getOcena() {
         return ocena;
@@ -53,19 +76,13 @@ public class Recenzija implements Serializable {
         this.datum_recenzije = datum_recenzije;
     }
 
-    public String getKORISNIK() {
-        return KORISNIK;
-    }
 
-    public void setKORISNIK(String KORISNIK) {
-        this.KORISNIK = KORISNIK;
-    }
 
     @Override
     public String toString() {
         return "Recenzija{" +
                 "ocena=" + ocena +
-                ", korisnik='" + KORISNIK + '\'' +
+                ", citalac='" + citalac + '\'' +
                 '}';
     }
 }

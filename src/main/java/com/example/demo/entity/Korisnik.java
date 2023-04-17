@@ -4,38 +4,23 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity
-public class Korisnik implements Serializable {
+@MappedSuperclass
+public abstract class Korisnik implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @Column
     private String ime;
-
-    @Column
     private String prezime;
-
     @Column(unique = true)
     private String korisnickoIme;
-
     @Column(unique = true, nullable = false)
     private String email;
-
     @Column(nullable = false)
     private String lozinka;
-
-    @Column
     private Date datumRodjenja;
-
     @Column(unique = true)
     private String profilnaSlika;
-
-    @Column
     private String opis;
-
-    @Column(nullable = false)
-    private boolean admin;
 
     public Long getId() {
         return id;
@@ -109,20 +94,12 @@ public class Korisnik implements Serializable {
         this.opis = opis;
     }
 
-    public boolean isAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
-    }
 
     @Override
     public String toString() {
         return "Korisnik{" +
                 "id=" + id +
                 ", korisnickoIme='" + korisnickoIme + '\'' +
-                ", admin=" + admin +
                 '}';
     }
 }

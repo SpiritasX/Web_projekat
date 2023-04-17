@@ -4,35 +4,56 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Date;
-@Entity
-public class Knjiga implements Serializable {
+import java.util.HashSet;
+import java.util.Set;
 
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class Knjiga implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
-
     @Column(unique = true, nullable = false)
     private String naslov;
     @Column(unique = true)
     private String naslovna_fotografija;
-
     @Column(unique = true,nullable = false)
     private int ISBN;
-
     @Column(nullable = false)
     private Date datum_objavljivanja;
-
     @Column(nullable = false)
     private int broj_strana;
-
-    @Column
     private String opis;
-
-    @Column
     private float ocena;
 
-    @Column(nullable = false)
-    private String zanr; //ovo ce biti klasa i veza izmedju zanr i knjiga many to one
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Autor autor;
+
+    @ManyToMany
+    @JoinTable(name = "zanrovi_knjige",
+            joinColumns = @JoinColumn(name = "knjiga_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "zanr_id", referencedColumnName = "id"))
+    private Set<Zanr>zanrovi= new HashSet<>();
+
+
+    @OneToOne(mappedBy = "knjiga")
+    private Stavka stavka;
+
+    public Stavka getStavka() {
+        return stavka;
+    }
+
+    public void setStavka(Stavka stavka) {
+        this.stavka = stavka;
+    }
+
+    public Set<Zanr> getZanrovi() {
+        return zanrovi;
+    }
+
+    public void setZanrovi(Set<Zanr> zanrovi) {
+        this.zanrovi = zanrovi;
+    }
 
     public void setID(Long id) {
         this.ID = id;
@@ -41,7 +62,6 @@ public class Knjiga implements Serializable {
     public Long getID() {
         return ID;
     }
-
 
     public String getNaslov() {
         return naslov;
@@ -99,21 +119,16 @@ public class Knjiga implements Serializable {
         this.ocena = ocena;
     }
 
-    public String getZanr() {
-        return zanr;
-    }
-
-    public void setZanr(String zanr) {
-        this.zanr = zanr;
-    }
-
     @Override
     public String toString() {
         return "Knjiga{" +
-                "naslov='" + naslov + '\'' +
+                "ID=" + ID +
+                ", naslov='" + naslov + '\'' +
+                ", ISBN=" + ISBN +
                 ", datum_objavljivanja=" + datum_objavljivanja +
-                ", ocena=" + ocena +
-                ", zanr='" + zanr + '\'' +
+                ", broj_strana=" + broj_strana +
+                ", autor=" + autor +
+                ", zanrovi=" + zanrovi +
                 '}';
     }
 }
