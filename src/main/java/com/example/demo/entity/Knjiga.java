@@ -31,8 +31,8 @@ public class Knjiga implements Serializable {
 
     @ManyToMany
     @JoinTable(name = "zanrovi_knjige",
-            joinColumns = @JoinColumn(name = "knjiga_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "zanr_id", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "knjiga_id", referencedColumnName = "id"),//pojasniti
+            inverseJoinColumns = @JoinColumn(name = "zanr_id", referencedColumnName = "id"))//nije mi bas najjasnije
     private Set<Zanr>zanrovi= new HashSet<>();
 
 
