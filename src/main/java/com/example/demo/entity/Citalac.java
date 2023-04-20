@@ -5,22 +5,24 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Citalac extends Korisnik {
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, mappedBy = "citalac", targetEntity = Polica.class)
     private Polica want_to_read;
 
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, mappedBy = "citalac", targetEntity = Polica.class)
     private Polica currently_reading;
 
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, mappedBy = "citalac", targetEntity = Polica.class)
     private Polica read;
 
-    @OneToMany(mappedBy = "citalac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Polica> ostale_police = new HashSet<>();
+    @OneToMany(targetEntity = Polica.class)
+    @JoinColumn(name = "korisnik_id")
+    private Set<Polica> ostale_police = new HashSet<Polica>();
 
-    @OneToOne(mappedBy = "citalac")
-    private Recenzija recenzija;
+    @OneToMany(targetEntity = Recenzija.class)
+    @JoinColumn(name = "korisnik_id")
+    private Set<Recenzija> recenzije = new HashSet<Recenzija>();
 
     public Polica getWant_to_read() {
         return want_to_read;
@@ -54,11 +56,17 @@ public class Citalac extends Korisnik {
         this.ostale_police = ostale_police;
     }
 
-    public Recenzija getRecenzija() {
-        return recenzija;
+    public Set<Recenzija> getRecenzije() {
+        return recenzije;
     }
 
-    public void setRecenzija(Recenzija recenzija) {
-        this.recenzija = recenzija;
+    public void setRecenzije(Set<Recenzija> recenzije) {
+        this.recenzije = recenzije;
+    }
+
+    @Override
+    public String toString() {
+        return "Citalac{" +
+                "} " + super.toString();
     }
 }

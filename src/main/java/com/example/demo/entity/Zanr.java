@@ -11,6 +11,11 @@ public class Zanr implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
+    @Column(nullable = false, unique = true)
+    private String naziv;
+
+    @ManyToMany(mappedBy = "zanrovi")
+    private Set<Knjiga> knjige = new HashSet<Knjiga>();
 
     public void setID(Long id) {
         this.ID = id;
@@ -18,21 +23,6 @@ public class Zanr implements Serializable {
 
     public Long getID() {
         return ID;
-    }
-
-    @Column(nullable = false,unique = true)
-     private String naziv;
-
-
-    @ManyToMany(mappedBy = "zanrovi")
-    private Set<Knjiga> knjige = new HashSet<>();
-
-    public Set<Knjiga> getKnjige() {
-        return knjige;
-    }
-
-    public void setKnjige(Set<Knjiga> knjige) {
-        this.knjige = knjige;
     }
 
     public String getNaziv() {
@@ -49,6 +39,4 @@ public class Zanr implements Serializable {
                 "naziv='" + naziv + '\'' +
                 '}';
     }
-
-
 }

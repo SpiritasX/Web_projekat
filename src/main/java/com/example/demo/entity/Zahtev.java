@@ -5,44 +5,21 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-enum Status {
-    CEKA,
-    ODOBREN,
-    ODBIJEN
-}
-
 @Entity
 public class Zahtev implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
+    @Column(nullable = false)
     private String email;
-
-    @Column
+    @Column(nullable = false)
     private String telefon;
-
-    @Column
+    @Column(nullable = false)
     private String poruka;
-
-    @Column
+    @Column(nullable = false)
     private Date datum;
-
-    @Column
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Status status;
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Administrator administrator;
-
-    public Administrator getAdministrator() {
-        return administrator;
-    }
-
-    public void setAdministrator(Administrator administrator) {
-        this.administrator = administrator;
-    }
 
     public Long getId() {
         return id;

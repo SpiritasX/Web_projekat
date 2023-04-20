@@ -8,44 +8,24 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Knjiga implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String naslov;
-    @Column(unique = true)
+    @Column(nullable = false)
     private String naslovna_fotografija;
-    @Column(unique = true,nullable = false)
-    private int ISBN;
+    @Column(unique = true, nullable = false)
+    private String ISBN;
     @Column(nullable = false)
     private Date datum_objavljivanja;
-    @Column(nullable = false)
-    private int broj_strana;
+    private Long broj_strana;
     private String opis;
-    private float ocena;
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Autor autor;
+    private Double ocena;
 
     @ManyToMany
-    @JoinTable(name = "zanrovi_knjige",
-            joinColumns = @JoinColumn(name = "knjiga_id", referencedColumnName = "id"),//pojasniti
-            inverseJoinColumns = @JoinColumn(name = "zanr_id", referencedColumnName = "id"))//nije mi bas najjasnije
-    private Set<Zanr>zanrovi= new HashSet<>();
-
-
-    @OneToOne(mappedBy = "knjiga")
-    private Stavka stavka;
-
-    public Stavka getStavka() {
-        return stavka;
-    }
-
-    public void setStavka(Stavka stavka) {
-        this.stavka = stavka;
-    }
+    private Set<Zanr> zanrovi = new HashSet<>();
 
     public Set<Zanr> getZanrovi() {
         return zanrovi;
@@ -79,11 +59,11 @@ public class Knjiga implements Serializable {
         this.naslovna_fotografija = naslovna_fotografija;
     }
 
-    public int getISBN() {
+    public String getISBN() {
         return ISBN;
     }
 
-    public void setISBN(int ISBN) {
+    public void setISBN(String ISBN) {
         this.ISBN = ISBN;
     }
 
@@ -95,11 +75,11 @@ public class Knjiga implements Serializable {
         this.datum_objavljivanja = datum_objavljivanja;
     }
 
-    public int getBroj_strana() {
+    public Long getBroj_strana() {
         return broj_strana;
     }
 
-    public void setBroj_strana(int broj_strana) {
+    public void setBroj_strana(Long broj_strana) {
         this.broj_strana = broj_strana;
     }
 
@@ -111,11 +91,11 @@ public class Knjiga implements Serializable {
         this.opis = opis;
     }
 
-    public float getOcena() {
+    public Double getOcena() {
         return ocena;
     }
 
-    public void setOcena(float ocena) {
+    public void setOcena(Double ocena) {
         this.ocena = ocena;
     }
 
@@ -127,7 +107,6 @@ public class Knjiga implements Serializable {
                 ", ISBN=" + ISBN +
                 ", datum_objavljivanja=" + datum_objavljivanja +
                 ", broj_strana=" + broj_strana +
-                ", autor=" + autor +
                 ", zanrovi=" + zanrovi +
                 '}';
     }

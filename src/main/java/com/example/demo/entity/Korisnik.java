@@ -1,26 +1,32 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.GeneratorType;
+import org.hibernate.annotations.GenericGenerator;
+
 import java.io.Serializable;
 import java.util.Date;
 
 @MappedSuperclass
 public abstract class Korisnik implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @SequenceGenerator(name = "mySeqGenV1")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV1")
+    @GeneratedValue
     private Long id;
     private String ime;
     private String prezime;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String korisnickoIme;
     @Column(unique = true, nullable = false)
     private String email;
     @Column(nullable = false)
     private String lozinka;
     private Date datumRodjenja;
-    @Column(unique = true)
     private String profilnaSlika;
     private String opis;
+    @Column(nullable = false)
+    private Boolean admin;
 
     public Long getId() {
         return id;
@@ -94,6 +100,13 @@ public abstract class Korisnik implements Serializable {
         this.opis = opis;
     }
 
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
+    }
 
     @Override
     public String toString() {

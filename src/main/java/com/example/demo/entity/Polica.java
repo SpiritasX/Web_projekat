@@ -10,38 +10,17 @@ public class Polica implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
     private String naziv;
-
     @Column(nullable = false)
     private boolean primarna;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
+    @OneToOne
+    @JoinColumn(name = "korisnik_id")
     private Citalac citalac;
 
-    @OneToMany(mappedBy = "polica", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Stavka> stavke = new HashSet<>();
-
-
-
-
-    public Set<Stavka> getStavke() {
-        return stavke;
-    }
-
-    public void setStavke(Set<Stavka> stavke) {
-        this.stavke = stavke;
-    }
-
-    public Citalac getCitalac() {
-        return citalac;
-    }
-
-    public void setCitalac(Citalac citalac) {
-        this.citalac = citalac;
-    }
-
-
+    @OneToMany
+    @JoinColumn(name = "polica_id")
+    private Set<Stavka> stavke = new HashSet<Stavka>();
 
     public Long getId() {
         return id;
@@ -65,6 +44,14 @@ public class Polica implements Serializable {
 
     public void setPrimarna(boolean primarna) {
         this.primarna = primarna;
+    }
+
+    public Set<Stavka> getStavke() {
+        return stavke;
+    }
+
+    public void setStavke(Set<Stavka> stavke) {
+        this.stavke = stavke;
     }
 
     @Override

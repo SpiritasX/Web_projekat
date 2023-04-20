@@ -7,25 +7,25 @@ import java.util.Set;
 @Entity
 public class Autor extends Citalac {
     @Column(nullable = false)
-    private boolean aktivan;
+    private Boolean aktivan;
 
-    @OneToMany(mappedBy = "autor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Knjiga> knjige = new HashSet<>();
+    @OneToMany
+    @JoinColumn(name = "autor_id")
+    private Set<Knjiga> knjige = new HashSet<Knjiga>();
 
-    public Set<Knjiga> getKnjige() {
-        return knjige;
-    }
-
-    public void setKnjige(Set<Knjiga> knjige) {
-        this.knjige = knjige;
-    }
-
-    public boolean isAktivan() {
+    public Boolean isAktivan() {
         return aktivan;
     }
 
-    public void setAktivan(boolean aktivan) {
+    public void setAktivan(Boolean aktivan) {
         this.aktivan = aktivan;
+    }
+
+    @Override
+    public String toString() {
+        return "Autor{" +
+                "aktivan=" + aktivan +
+                "} " + super.toString();
     }
 }
 
