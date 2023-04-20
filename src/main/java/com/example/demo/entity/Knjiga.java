@@ -25,6 +25,8 @@ public class Knjiga implements Serializable {
     private Double ocena;
 
     @ManyToMany
+  // @JoinColumn(name = "knjiga_id")
+
     private Set<Zanr> zanrovi = new HashSet<>();
 
     public Set<Zanr> getZanrovi() {
