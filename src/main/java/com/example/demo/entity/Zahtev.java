@@ -21,6 +21,10 @@ public class Zahtev implements Serializable {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @OneToOne
+    @JoinColumn(unique = true, nullable = false)
+    private Autor autor;
+
     public Long getId() {
         return id;
     }
