@@ -11,22 +11,20 @@ import java.util.Set;
 public class Knjiga implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private Long id;
     @Column(nullable = false)
     private String naslov;
     @Column(nullable = false)
-    private String naslovna_fotografija;
+    private String naslovnaFotografija;
     @Column(unique = true, nullable = false)
     private String ISBN;
     @Column(nullable = false)
-    private Date datum_objavljivanja;
-    private Long broj_strana;
+    private Date datumObjavljivanja;
+    private Integer brojStrana;
     private String opis;
     private Double ocena;
 
     @ManyToMany
-  // @JoinColumn(name = "knjiga_id")
-
     private Set<Zanr> zanrovi = new HashSet<>();
 
     public Set<Zanr> getZanrovi() {
@@ -37,12 +35,12 @@ public class Knjiga implements Serializable {
         this.zanrovi = zanrovi;
     }
 
-    public void setID(Long id) {
-        this.ID = id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Long getID() {
-        return ID;
+    public Long getId() {
+        return id;
     }
 
     public String getNaslov() {
@@ -53,12 +51,12 @@ public class Knjiga implements Serializable {
         this.naslov = naslov;
     }
 
-    public String getNaslovna_fotografija() {
-        return naslovna_fotografija;
+    public String getNaslovnaFotografija() {
+        return naslovnaFotografija;
     }
 
-    public void setNaslovna_fotografija(String naslovna_fotografija) {
-        this.naslovna_fotografija = naslovna_fotografija;
+    public void setNaslovnaFotografija(String naslovnaFotografija) {
+        this.naslovnaFotografija = naslovnaFotografija;
     }
 
     public String getISBN() {
@@ -69,20 +67,20 @@ public class Knjiga implements Serializable {
         this.ISBN = ISBN;
     }
 
-    public Date getDatum_objavljivanja() {
-        return datum_objavljivanja;
+    public Date getDatumObjavljivanja() {
+        return datumObjavljivanja;
     }
 
-    public void setDatum_objavljivanja(Date datum_objavljivanja) {
-        this.datum_objavljivanja = datum_objavljivanja;
+    public void setDatumObjavljivanja(Date datumObjavljivanja) {
+        this.datumObjavljivanja = datumObjavljivanja;
     }
 
-    public Long getBroj_strana() {
-        return broj_strana;
+    public Integer getBrojStrana() {
+        return brojStrana;
     }
 
-    public void setBroj_strana(Long broj_strana) {
-        this.broj_strana = broj_strana;
+    public void setBrojStrana(Integer brojStrana) {
+        this.brojStrana = brojStrana;
     }
 
     public String getOpis() {
@@ -104,11 +102,11 @@ public class Knjiga implements Serializable {
     @Override
     public String toString() {
         return "Knjiga{" +
-                "ID=" + ID +
+                "id=" + id +
                 ", naslov='" + naslov + '\'' +
                 ", ISBN=" + ISBN +
-                ", datum_objavljivanja=" + datum_objavljivanja +
-                ", broj_strana=" + broj_strana +
+                ", datum_objavljivanja=" + datumObjavljivanja +
+                ", broj_strana=" + brojStrana +
                 ", zanrovi=" + zanrovi +
                 '}';
     }

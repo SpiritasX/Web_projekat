@@ -8,36 +8,36 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Citalac extends Korisnik {
     @OneToOne(optional = false, mappedBy = "citalac", targetEntity = Polica.class)
-    private Polica want_to_read;
+    private Polica wantToRead;
 
     @OneToOne(optional = false, mappedBy = "citalac", targetEntity = Polica.class)
-    private Polica currently_reading;
+    private Polica currentlyReading;
 
     @OneToOne(optional = false, mappedBy = "citalac", targetEntity = Polica.class)
     private Polica read;
 
     @OneToMany(targetEntity = Polica.class)
     @JoinColumn(name = "korisnik_id")
-    private Set<Polica> ostale_police = new HashSet<Polica>();
+    private Set<Polica> ostalePolice = new HashSet<Polica>();
 
     @OneToMany(targetEntity = Recenzija.class)
     @JoinColumn(name = "korisnik_id")
     private Set<Recenzija> recenzije = new HashSet<Recenzija>();
 
-    public Polica getWant_to_read() {
-        return want_to_read;
+    public Polica getWantToRead() {
+        return wantToRead;
     }
 
-    public void setWant_to_read(Polica want_to_read) {
-        this.want_to_read = want_to_read;
+    public void setWantToRead(Polica wantToRead) {
+        this.wantToRead = wantToRead;
     }
 
-    public Polica getCurrently_reading() {
-        return currently_reading;
+    public Polica getCurrentlyReading() {
+        return currentlyReading;
     }
 
-    public void setCurrently_reading(Polica currently_reading) {
-        this.currently_reading = currently_reading;
+    public void setCurrentlyReading(Polica currentlyReading) {
+        this.currentlyReading = currentlyReading;
     }
 
     public Polica getRead() {
@@ -48,12 +48,12 @@ public class Citalac extends Korisnik {
         this.read = read;
     }
 
-    public Set<Polica> getOstale_police() {
-        return ostale_police;
+    public Set<Polica> getOstalePolice() {
+        return ostalePolice;
     }
 
-    public void setOstale_police(Set<Polica> ostale_police) {
-        this.ostale_police = ostale_police;
+    public void setOstalePolice(Set<Polica> ostalePolice) {
+        this.ostalePolice = ostalePolice;
     }
 
     public Set<Recenzija> getRecenzije() {
@@ -67,6 +67,7 @@ public class Citalac extends Korisnik {
     @Override
     public String toString() {
         return "Citalac{" +
-                "} " + super.toString();
+                super.toString() +
+                "} ";
     }
 }

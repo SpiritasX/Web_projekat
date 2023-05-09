@@ -1,34 +1,30 @@
 package com.example.demo.entity;
 
-import com.sun.jdi.PrimitiveValue;
 import jakarta.persistence.*;
-
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 public class Recenzija implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private Long id;
     @Column(nullable = false)
-    private float ocena;
+    private Float ocena;
     private String tekst;
     @Column(nullable = false)
-    private Date datum_recenzije;
+    private Date datumRecenzije;
 
-    public void setID(Long id) {
-        this.ID = id;
+    public Long getId() {
+        return id;
     }
 
-    public Long getID() {
-        return ID;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public float getOcena() {
+    public Float getOcena() {
         return ocena;
     }
 
@@ -44,18 +40,20 @@ public class Recenzija implements Serializable {
         this.tekst = tekst;
     }
 
-    public Date getDatum_recenzije() {
-        return datum_recenzije;
+    public Date getDatumRecenzije() {
+        return datumRecenzije;
     }
 
-    public void setDatum_recenzije(Date datum_recenzije) {
-        this.datum_recenzije = datum_recenzije;
+    public void setDatumRecenzije(Date datumRecenzije) {
+        this.datumRecenzije = datumRecenzije;
     }
 
     @Override
     public String toString() {
         return "Recenzija{" +
-                "ocena=" + ocena +
+                "id=" + id +
+                ", ocena=" + ocena +
+                ", datumRecenzije=" + datumRecenzije +
                 '}';
     }
 }

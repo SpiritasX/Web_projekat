@@ -10,7 +10,7 @@ import java.util.Set;
 public class Zanr implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private Long id;
     @Column(nullable = false, unique = true)
     private String naziv;
 
@@ -19,12 +19,12 @@ public class Zanr implements Serializable {
 
     private Set<Knjiga> knjige = new HashSet<Knjiga>();
 
-    public void setID(Long id) {
-        this.ID = id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Long getID() {
-        return ID;
+    public Long getId() {
+        return id;
     }
 
     public String getNaziv() {
