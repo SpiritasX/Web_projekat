@@ -16,6 +16,10 @@ public class Recenzija implements Serializable {
     @Column(nullable = false)
     private Date datumRecenzije;
 
+    @ManyToOne
+    @JoinColumn(name = "korisnik_id")
+    private Citalac citalac;
+
     public Long getId() {
         return id;
     }
@@ -28,7 +32,7 @@ public class Recenzija implements Serializable {
         return ocena;
     }
 
-    public void setOcena(float ocena) {
+    public void setOcena(Float ocena) {
         this.ocena = ocena;
     }
 
@@ -46,6 +50,14 @@ public class Recenzija implements Serializable {
 
     public void setDatumRecenzije(Date datumRecenzije) {
         this.datumRecenzije = datumRecenzije;
+    }
+
+    public Citalac getCitalac() {
+        return citalac;
+    }
+
+    public void setCitalac(Citalac citalac) {
+        this.citalac = citalac;
     }
 
     @Override

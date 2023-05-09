@@ -25,22 +25,18 @@ public class Knjiga implements Serializable {
     private Double ocena;
 
     @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "knjiga_id"),
+            inverseJoinColumns = @JoinColumn(name = "zanr_id")
+    )
     private Set<Zanr> zanrovi = new HashSet<>();
 
-    public Set<Zanr> getZanrovi() {
-        return zanrovi;
-    }
-
-    public void setZanrovi(Set<Zanr> zanrovi) {
-        this.zanrovi = zanrovi;
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getNaslov() {
@@ -97,6 +93,14 @@ public class Knjiga implements Serializable {
 
     public void setOcena(Double ocena) {
         this.ocena = ocena;
+    }
+
+    public Set<Zanr> getZanrovi() {
+        return zanrovi;
+    }
+
+    public void setZanrovi(Set<Zanr> zanrovi) {
+        this.zanrovi = zanrovi;
     }
 
     @Override

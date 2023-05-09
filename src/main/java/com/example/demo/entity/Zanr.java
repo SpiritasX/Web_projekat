@@ -14,11 +14,6 @@ public class Zanr implements Serializable {
     @Column(nullable = false, unique = true)
     private String naziv;
 
-    @ManyToMany(mappedBy = "zanrovi")
-//@JoinCOlumn(name="zanr_id")
-
-    private Set<Knjiga> knjige = new HashSet<Knjiga>();
-
     public void setId(Long id) {
         this.id = id;
     }

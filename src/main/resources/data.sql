@@ -58,9 +58,9 @@ INSERT INTO STAVKA (knjiga_id, recenzija_id, polica_id) VALUES (2, 1, 7);
 INSERT INTO STAVKA (knjiga_id, recenzija_id, polica_id) VALUES (4, 3, 14);
 
 
-INSERT INTO KNJIGA_ZANROVI (knjige_id, zanrovi_id) VALUES (1, 2);
-INSERT INTO KNJIGA_ZANROVI (knjige_id, zanrovi_id) VALUES (2, 1);
-INSERT INTO KNJIGA_ZANROVI (knjige_id, zanrovi_id) VALUES (2, 3);
-INSERT INTO KNJIGA_ZANROVI (knjige_id, zanrovi_id) VALUES (2, 6);
-INSERT INTO KNJIGA_ZANROVI (knjige_id, zanrovi_id) VALUES (4, 4);
-INSERT INTO KNJIGA_ZANROVI (knjige_id, zanrovi_id) VALUES (3, 7);
+INSERT INTO KNJIGA_ZANROVI (knjiga_id, zanr_id) VALUES (1, 2);
+INSERT INTO KNJIGA_ZANROVI (knjiga_id, zanr_id) VALUES (2, 1);
+INSERT INTO KNJIGA_ZANROVI (knjiga_id, zanr_id) VALUES (2, 3);
+INSERT INTO KNJIGA_ZANROVI (knjiga_id, zanr_id) VALUES (2, 6);
+INSERT INTO KNJIGA_ZANROVI (knjiga_id, zanr_id) VALUES (4, 4);
+INSERT INTO KNJIGA_ZANROVI (knjiga_id, zanr_id) VALUES (3, 7);

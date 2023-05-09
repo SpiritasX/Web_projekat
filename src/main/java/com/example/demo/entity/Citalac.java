@@ -7,22 +7,18 @@ import java.util.Set;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Citalac extends Korisnik {
-    @OneToOne(optional = false, mappedBy = "citalac", targetEntity = Polica.class)
+    @OneToOne(optional = false, mappedBy = "citalac")
     private Polica wantToRead;
 
-    @OneToOne(optional = false, mappedBy = "citalac", targetEntity = Polica.class)
+    @OneToOne(optional = false, mappedBy = "citalac")
     private Polica currentlyReading;
 
-    @OneToOne(optional = false, mappedBy = "citalac", targetEntity = Polica.class)
+    @OneToOne(optional = false, mappedBy = "citalac")
     private Polica read;
 
-    @OneToMany(targetEntity = Polica.class)
+    @OneToMany
     @JoinColumn(name = "korisnik_id")
     private Set<Polica> ostalePolice = new HashSet<Polica>();
-
-    @OneToMany(targetEntity = Recenzija.class)
-    @JoinColumn(name = "korisnik_id")
-    private Set<Recenzija> recenzije = new HashSet<Recenzija>();
 
     public Polica getWantToRead() {
         return wantToRead;
@@ -54,14 +50,6 @@ public class Citalac extends Korisnik {
 
     public void setOstalePolice(Set<Polica> ostalePolice) {
         this.ostalePolice = ostalePolice;
-    }
-
-    public Set<Recenzija> getRecenzije() {
-        return recenzije;
-    }
-
-    public void setRecenzije(Set<Recenzija> recenzije) {
-        this.recenzije = recenzije;
     }
 
     @Override

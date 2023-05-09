@@ -12,7 +12,7 @@ public class Stavka implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     private Recenzija recenzija;
 
-    @OneToOne(cascade = CascadeType.ALL)    // manytoone
+    @ManyToOne(cascade = CascadeType.ALL)
     private Knjiga knjiga;
 
     public void setKnjiga(Knjiga knjiga) {
