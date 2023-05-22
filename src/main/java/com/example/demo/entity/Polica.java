@@ -14,9 +14,9 @@ public class Polica implements Serializable {
     @Column(nullable = false)
     private boolean primarna;
 
-    @OneToOne
-    @JoinColumn(name = "korisnik_id")
-    private Citalac citalac;
+//    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(name = "korisnik_id")
+//    private Citalac citalac;
 
     @OneToMany
     @JoinColumn(name = "polica_id")
