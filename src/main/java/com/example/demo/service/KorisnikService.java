@@ -1,30 +1,37 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.LoginDto;
-import com.example.demo.dto.RegisterDto;
+import com.example.demo.dto.*;
 import com.example.demo.entity.*;
 import com.example.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class KorisnikService {
 
     @Autowired
     private CitalacRepository citalacRepository;
-
     @Autowired
     private KnjigaRepository knjigaRepository;
+    @Autowired
+    private AutorRepository autorRepository;
+    @Autowired
+    private ZahtevRepository zahtevRepository;
+    @Autowired
+    private ZanrRepository zanrRepository;
+    @Autowired
+    private RecenzijaRepository recenzijaRepository;
 
-    public Citalac login(String korisnickoIme) {
+    public Citalac prijava(String korisnickoIme) {
         return citalacRepository.findByKorisnickoIme(korisnickoIme);
     }
 
-    public void register(RegisterDto dto) {
+    public void registracija(RegisterDto dto) {
         Citalac citalac = new Citalac();
+        citalac.setIme(dto.getIme());
+        citalac.setPrezime(dto.getPrezime());
         citalac.setKorisnickoIme(dto.getKorisnickoIme());
         citalac.setEmail(dto.getEmail());
         citalac.setLozinka(dto.getLozinka());
@@ -36,21 +43,27 @@ public class KorisnikService {
         return citalacRepository.findAll();
     }
 
-    public List<Korisnik> pretrazi(String type, String str) {
-        List<Korisnik> lista = new ArrayList<>();
-//        switch (type) {
-//            case "korisnici":
-//                for (Citalac c : citalacRepository.findByKorisnickoIme(str))
-//                    lista.add(c);
-//                for (Citalac c : citalacRepository.findByIme(str))
-//                    lista.add(c);
-//                for (Citalac c : citalacRepository.findByPrezime(str))
-//                    lista.add(c);
-//                break;
-//            case "knjige":
-////                for (Knjiga k : knjigaRepository.findByNaslov(str))
-////                    lista.add(k);
-//        }
-        return lista;
+    public Optional<Citalac> jedanCitalac(Long id) {
+        return citalacRepository.findById(id);
+    }
+
+    public Optional<Zanr> jedanZanr(Long id) {
+        return zanrRepository.findById(id);
+    }
+
+    public Optional<Recenzija> jednaRecenzija(Long id) {
+        return recenzijaRepository.findById(id);
+    }
+
+    public List<Knjiga> pretrazi(String pretraga) {
+        return knjigaRepository.findAllByNaslov(pretraga);
+    }
+
+    public Autor pronadjiAutora(String ime) {
+        return autorRepository.findByIme(ime);
+    }
+
+    public void sacuvajZahtev(Zahtev zahtev) {
+        zahtevRepository.save(zahtev);
     }
 }

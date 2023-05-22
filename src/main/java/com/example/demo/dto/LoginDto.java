@@ -3,29 +3,29 @@ package com.example.demo.dto;
 import com.example.demo.entity.Korisnik;
 
 public class LoginDto {
-    private String korisnickoIme;
+    private String email;
     private String lozinka;
 
     public LoginDto() {
 
     }
 
-    public LoginDto(String korisnickoIme, String lozinka) {
-        this.korisnickoIme = korisnickoIme;
+    public LoginDto(String email, String lozinka) {
+        this.email = email;
         this.lozinka = lozinka;
     }
 
     public LoginDto(Korisnik korisnik) {
-        this.korisnickoIme = korisnik.getKorisnickoIme();
+        this.email = korisnik.getEmail();
         this.lozinka = korisnik.getLozinka();
     }
 
-    public String getKorisnickoIme() {
-        return korisnickoIme;
+    public String getEmail() {
+        return email;
     }
 
-    public void setKorisnickoIme(String korisnickoIme) {
-        this.korisnickoIme = korisnickoIme;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getLozinka() {

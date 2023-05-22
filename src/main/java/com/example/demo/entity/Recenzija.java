@@ -52,13 +52,17 @@ public class Recenzija implements Serializable {
         this.datumRecenzije = datumRecenzije;
     }
 
-    public Citalac getCitalac() {
-        return citalac;
-    }
+//    TODO zakomentarisati sve gettere i settere veza
+//    Zbog njih nastaje beskonacna rekurzija pri ispisu
+//    JSON objekata u responsu!!!
 
-    public void setCitalac(Citalac citalac) {
-        this.citalac = citalac;
-    }
+//    public Citalac getCitalac() {
+//        return citalac;
+//    }
+//
+//    public void setCitalac(Citalac citalac) {
+//        this.citalac = citalac;
+//    }
 
     @Override
     public String toString() {

@@ -3,27 +3,49 @@ package com.example.demo.dto;
 import com.example.demo.entity.Korisnik;
 
 public class RegisterDto extends LoginDto {
-    private String email;
+    private String ime;
+    private String prezime;
+    private String korisnickoIme;
 
     public RegisterDto() {
         super();
     }
 
-    public RegisterDto(String korisnickoIme, String email, String lozinka) {
-        super(korisnickoIme, lozinka);
-        this.email = email;
+    public RegisterDto(String email, String lozinka, String ime, String prezime, String korisnickoIme) {
+        super(email, lozinka);
+        this.ime = ime;
+        this.prezime = prezime;
+        this.korisnickoIme = korisnickoIme;
     }
 
     public RegisterDto(Korisnik korisnik) {
         super(korisnik);
-        this.email = korisnik.getEmail();
+        this.ime = korisnik.getIme();
+        this.prezime = korisnik.getPrezime();
+        this.korisnickoIme = korisnik.getKorisnickoIme();
     }
 
-    public String getEmail() {
-        return email;
+    public String getIme() {
+        return ime;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setIme(String ime) {
+        this.ime = ime;
+    }
+
+    public String getPrezime() {
+        return prezime;
+    }
+
+    public void setPrezime(String prezime) {
+        this.prezime = prezime;
+    }
+
+    public String getKorisnickoIme() {
+        return korisnickoIme;
+    }
+
+    public void setKorisnickoIme(String korisnickoIme) {
+        this.korisnickoIme = korisnickoIme;
     }
 }
