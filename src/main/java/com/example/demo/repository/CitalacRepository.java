@@ -4,5 +4,6 @@ import com.example.demo.entity.Citalac;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CitalacRepository extends JpaRepository<Citalac, Long> {
-    Citalac findByKorisnickoIme(String korisnickoIme);
+    Citalac findByEmail(String email);
+
 }

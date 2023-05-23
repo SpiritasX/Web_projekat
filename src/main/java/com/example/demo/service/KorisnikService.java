@@ -12,6 +12,8 @@ import java.util.Optional;
 public class KorisnikService {
 
     @Autowired
+    private PolicaRepository policaRepository;
+    @Autowired
     private CitalacRepository citalacRepository;
     @Autowired
     private KnjigaRepository knjigaRepository;
@@ -24,8 +26,9 @@ public class KorisnikService {
     @Autowired
     private RecenzijaRepository recenzijaRepository;
 
-    public Citalac prijava(String korisnickoIme) {
-        return citalacRepository.findByKorisnickoIme(korisnickoIme);
+
+    public Citalac prijava(String email) {
+        return citalacRepository.findByEmail(email);
     }
 
     public void registracija(RegisterDto dto) {
@@ -38,6 +41,11 @@ public class KorisnikService {
         citalac.setAdmin(false);
         citalacRepository.save(citalac);
     }
+    public List<Polica> listaPolica() {
+        return policaRepository.findAll();
+    //return policaRepository.findById(id);
+    }
+
 
     public List<Citalac> listaCitaoca() {
         return citalacRepository.findAll();
@@ -50,7 +58,6 @@ public class KorisnikService {
     public Optional<Zanr> jedanZanr(Long id) {
         return zanrRepository.findById(id);
     }
-
     public Optional<Recenzija> jednaRecenzija(Long id) {
         return recenzijaRepository.findById(id);
     }

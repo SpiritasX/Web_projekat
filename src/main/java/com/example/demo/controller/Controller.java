@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,21 +23,52 @@ public class Controller {
         return "Hello, World!"; //"<form action=\"/api/login\" method=\"POST\"><button name=\"korisnickoIme\" value=\"Login\"/></form>";
     }
 
-//     curl http://localhost:8880/api/login -d '{"korisnickoIme":"Cutthroat", "lozinka":"test123"}'
     @PostMapping("/api/prijavi-se")
     public ResponseEntity prijava(@RequestBody LoginDto dto, HttpSession session) {
         Citalac citalac = korisnikService.prijava(dto.getEmail());
-
         if (citalac == null)
-            return new ResponseEntity("Pogresno korisnicko ime.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Pogresan email.", HttpStatus.BAD_REQUEST);
         else if (citalac.getLozinka().equals(dto.getLozinka())) {
             session.setAttribute("citalac", citalac);
-            // TODO treba da se prikaze lista polica nakon prijave
-            return new ResponseEntity(citalac.toString(), HttpStatus.OK);
+
+            String citalacString = citalac.toString();
+            String redirectUrl = UriComponentsBuilder.fromPath("/api/prijavljen")
+                    .queryParam("citalacString", citalacString)
+                    .toUriString();
+
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .header("Location", redirectUrl)
+                    .build();
         }
         else
             return new ResponseEntity("Pogresna lozinka", HttpStatus.BAD_REQUEST);
+    }/*
+@PostMapping("/api/prijavi-se")
+public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, RedirectAttributes redirectAttributes) {
+    Citalac citalac = korisnikService.prijava(dto.getEmail());
+
+    if (citalac == null) {
+        // Redirect to an error page or handle the error accordingly
+        return new RedirectView("/error-page");
+    } else if (citalac.getLozinka().equals(dto.getLozinka())) {
+        session.setAttribute("citalac", citalac);
+
+        // Add citalac.toString() as a flash attribute
+        redirectAttributes.addFlashAttribute("citalacString", citalac.toString());
+
+        // Redirect to the "/api/prijavljen" link
+        return new RedirectView("/api/prijavljen");
+    } else {
+        // Redirect to an error page or handle the error accordingly
+        return new RedirectView("/error-page");
     }
+}*/
+    @GetMapping("/api/prijavljen")
+    public List<Polica> listaPolica() {
+    return korisnikService.listaPolica();
+       // return korisnikService.listaPolica(id);
+    }
+
 
 //    curl http://localhost:8880/api/register -d '{"korisnickoIme":"test","email":"test@test.test","lozinka":"test123"}'
 //    TODO ponovljena email adresa i mora da bude jedinstvena, kao i korisnicko ime
@@ -52,7 +84,6 @@ public class Controller {
         // TODO bolji algoritam pretrazivanja
     }
 
-//     curl http://localhost:8880/api/korisnici
     @GetMapping("/api/citaoci")
     public List<Citalac> listaCitalaca() {
         return korisnikService.listaCitaoca();
