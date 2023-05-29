@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.*;
 import com.example.demo.entity.*;
-import com.example.demo.service.KorisnikService;
+import com.example.demo.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,17 @@ import java.util.Optional;
 @RestController
 public class Controller {
     @Autowired
+    private ZanrService zanrService;
+    @Autowired
     private KorisnikService korisnikService;
+    @Autowired
+    private PolicaService policaService;
+    @Autowired
+    private AutorService autorService;
+    @Autowired
+    private ZahtevService zahtevService;
+    @Autowired
+    private RecenzijaService recenzijaService;
 
     @GetMapping("/")
     private String home() {
@@ -65,7 +75,7 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
 }*/
     @GetMapping("/api/prijavljen")
     public List<Polica> listaPolica() {
-    return korisnikService.listaPolica();
+    return policaService.listaPolica();
        // return korisnikService.listaPolica(id);
     }
 
@@ -80,7 +90,8 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
     //     curl http://localhost:8880/api/pretrazi?pretraga=test
     @PostMapping("/api/pretrazi")
     public String pretrazi(@RequestParam String pretraga) {
-        return korisnikService.pretrazi(pretraga).toString();
+       // return knjigaService.pretrazi(pretraga).toString();
+        return "neki";
         // TODO bolji algoritam pretrazivanja
     }
 
@@ -102,7 +113,7 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
 
     @GetMapping("/api/zanrovi/{id}")
     public ResponseEntity jedanZanr(@PathVariable Long id) {
-        Optional<Zanr> zanr = korisnikService.jedanZanr(id);
+        Optional<Zanr> zanr = zanrService.jedanZanr(id);
         if (!zanr.isPresent())
             return new ResponseEntity("Nepostojeci zanr.", HttpStatus.BAD_REQUEST);
         else
@@ -111,7 +122,7 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
 
     @GetMapping("/api/recenzije/{id}")
     public ResponseEntity jednaRecenzija(@PathVariable Long id) {
-        Optional<Recenzija> recenzija = korisnikService.jednaRecenzija(id);
+        Optional<Recenzija> recenzija = recenzijaService.jednaRecenzija(id);
         if (!recenzija.isPresent())
             return new ResponseEntity("Nepostojeca recenzija.", HttpStatus.BAD_REQUEST);
         else
@@ -130,21 +141,17 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
 
 //    TODO proslediti dto servisu i tamo uraditi konverziju u non-dto objekat
     @PostMapping("/api/podnesi-zahtev")
-    public void podnesiZahtev(@RequestBody ZahtevDto dto) {
-        Autor autor = korisnikService.pronadjiAutora(dto.getImeAutora());
+    public ResponseEntity podnesiZahtev(@RequestBody ZahtevDto dto) {
+        Autor autor = autorService.pronadjiAutora(dto.getImeAutora());
+        zahtevService.sacuvajZahtev(dto,autor);
+        return new ResponseEntity<>("Uspesno dodan", HttpStatus.OK);
+    }
 
 //        Zahtev se salje stiskom na taster SA profila autora sto znaci da
 //        je autor vec kreiran i da ce ime uvek biti tacno i postojece!
 //        if (autor == null)
 //            return new ResponseEntity("Nepostojeci autor.", HttpStatus.BAD_REQUEST);
-        Zahtev zahtev = new Zahtev();
-        zahtev.setEmail(dto.getEmail());
-        zahtev.setTelefon(dto.getTelefon());
-        zahtev.setDatum(dto.getDatum());
-        zahtev.setPoruka(dto.getPoruka());
-        zahtev.setAutor(autor);
-        korisnikService.sacuvajZahtev(zahtev);
-    }
+
 
 
 ////////////////////////////////////////// CITALAC //////////////////////////////////////////
