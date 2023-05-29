@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.ZahtevDto;
 import com.example.demo.entity.Autor;
+import com.example.demo.entity.Status;
 import com.example.demo.entity.Zahtev;
 import com.example.demo.repository.ZahtevRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ public class ZahtevService {
         zahtev.setDatum(dto.getDatum());
         zahtev.setPoruka(dto.getPoruka());
         zahtev.setAutor(autor);
+        zahtev.setStatus(Status.CEKA);
         zahtevRepository.save(zahtev);
     }
 

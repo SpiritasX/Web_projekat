@@ -74,17 +74,28 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
     }
 }*/
     @GetMapping("/api/prijavljen")
-    public List<Polica> listaPolica() {
-    return policaService.listaPolica();
-       // return korisnikService.listaPolica(id);
+    public ResponseEntity listaPolica(HttpSession session) {
+        Citalac citalac = (Citalac) session.getAttribute("citalac");
+        if (citalac == null) {
+            return new ResponseEntity<>("Nisi prijavljen", HttpStatus.FORBIDDEN);
+        }
+        else {
+            return new ResponseEntity(citalac.getOstalePolice(), HttpStatus.OK);
+        }
     }
-
 
 //    curl http://localhost:8880/api/register -d '{"korisnickoIme":"test","email":"test@test.test","lozinka":"test123"}'
 //    TODO ponovljena email adresa i mora da bude jedinstvena, kao i korisnicko ime
     @PostMapping("/api/registruj-se")
-    public void registracija(@RequestBody RegisterDto dto) {
-        korisnikService.registracija(dto);
+    public ResponseEntity registracija(@RequestBody RegisterDto dto, HttpSession session) {
+        Citalac citalac = (Citalac) session.getAttribute("citalac");
+        if (citalac == null) {
+            korisnikService.registracija(dto);
+            return new ResponseEntity<>("Uspesno registrovan", HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity("vec ste prijavljeni", HttpStatus.BAD_REQUEST);
+        }
     }
 
     //     curl http://localhost:8880/api/pretrazi?pretraga=test
