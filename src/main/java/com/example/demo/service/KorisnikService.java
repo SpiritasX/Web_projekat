@@ -17,6 +17,8 @@ public class KorisnikService {
 
     @Autowired
     private CitalacRepository citalacRepository;
+    @Autowired
+    private PolicaService policaService;
 
     public Citalac prijava(String email) {
         return citalacRepository.findByEmail(email);
@@ -34,9 +36,9 @@ public class KorisnikService {
         citalac.setAdmin(false);
 
         Set<Polica> police = new HashSet<Polica>();
-        police.add(PolicaService.dodajPolicu("Read"));
-        police.add(PolicaService.dodajPolicu("Currently Reading"));
-        police.add(PolicaService.dodajPolicu("Want To Read"));
+        police.add(policaService.dodajPolicu("Read"));
+        police.add(policaService.dodajPolicu("Currently Reading"));
+        police.add(policaService.dodajPolicu("Want To Read"));
         citalac.setOstalePolice(police);
         citalacRepository.save(citalac);
     }
