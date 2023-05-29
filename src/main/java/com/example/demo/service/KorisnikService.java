@@ -5,8 +5,11 @@ import com.example.demo.entity.*;
 import com.example.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class KorisnikService {
@@ -39,6 +42,12 @@ public class KorisnikService {
         citalac.setEmail(dto.getEmail());
         citalac.setLozinka(dto.getLozinka());
         citalac.setAdmin(false);
+
+        Set<Polica> police = new HashSet<Polica>();
+        police.add(PolicaService.dodajPolicu("Read"));
+        police.add(PolicaService.dodajPolicu("Currently Reading"));
+        police.add(PolicaService.dodajPolicu("Want To Read"));
+        citalac.setOstalePolice(police);
         citalacRepository.save(citalac);
     }
     public List<Polica> listaPolica() {
