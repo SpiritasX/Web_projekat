@@ -20,6 +20,12 @@ public class Autor extends Citalac {
     public void setAktivan(Boolean aktivan) {
         this.aktivan = aktivan;
     }
+    public Set<Knjiga>getKnjige(){
+        return knjige;
+    }
+    public void setKnjige(Set<Knjiga>k){
+        knjige=k;
+    }
 
     @Override
     public String toString() {
