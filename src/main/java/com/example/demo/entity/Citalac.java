@@ -7,8 +7,9 @@ import java.util.Set;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Citalac extends Korisnik {
-    @OneToMany
+   // @OneToMany
     @JoinColumn(name = "korisnik_id")
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Polica> ostalePolice = new HashSet<Polica>();
 
     public Set<Polica> getOstalePolice() {
