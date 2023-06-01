@@ -12,17 +12,31 @@ import java.util.List;
 public class KnjigaService {
     @Autowired
     private KnjigaRepository knjigaRepository;
+
     public List<Knjiga> pretrazi(String pretraga) {
         return knjigaRepository.findAllByNaslov(pretraga);
     }
 
+    public Knjiga pretraziPoIsbn(String isbn) {
+        Knjiga knjiga = (Knjiga) knjigaRepository.findByISBN(isbn);
+        return knjiga;
+    }
+
     public Knjiga dodajKnjigu(String nazivKnjige, String slika, String isbn, Date datum, Integer str) {
-        Knjiga knjiga= new Knjiga();
+        Knjiga knjiga = new Knjiga();
         knjiga.setNaslovnaFotografija(slika);
         knjiga.setISBN(isbn);
         knjiga.setNaslov(nazivKnjige);
         knjiga.setDatumObjavljivanja(datum);
-        knjigaRepository.save(knjiga);
+        knjiga = knjigaRepository.save(knjiga);
         return knjiga;
+    }
+
+    public boolean proveriISBN(String isbn) {
+        Knjiga existingKnjiga = (Knjiga) knjigaRepository.findByISBN(isbn);
+        return existingKnjiga != null;
+    }
+    public void sacuvajKnjigu(Knjiga knjiga) {
+        knjigaRepository.save(knjiga);
     }
 }

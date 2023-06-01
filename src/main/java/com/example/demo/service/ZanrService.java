@@ -15,7 +15,7 @@ public class ZanrService {
     public Zanr dodajZanr(String naziv){
         Zanr zanr=new Zanr();
         zanr.setNaziv(naziv);
-        zanrRepository.save(zanr);
+        zanr = zanrRepository.save(zanr);
         return zanr;
     }
 }

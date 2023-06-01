@@ -72,4 +72,6 @@ public class ZahtevDto {
     public void setImeAutora(String imeAutora) {
         this.imeAutora = imeAutora;
     }
+
+
 }

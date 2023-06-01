@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class KorisnikService {
+public class CitalacService {
 
 
     @Autowired
@@ -51,7 +51,6 @@ public class KorisnikService {
     public Optional<Citalac> jedanCitalac(Long id) {
         return citalacRepository.findById(id);
     }
-
 
 }
 
