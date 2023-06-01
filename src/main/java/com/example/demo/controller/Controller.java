@@ -203,6 +203,8 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
             return new ResponseEntity<>("prijavite se da bi dodali knjigu na policu", HttpStatus.FORBIDDEN);
 
         int rezultat = policaService.dodajKnjiguNaPolicu(dto, citalac);
+        korisnikService.save(citalac);
+        session.setAttribute("citalac", citalac);
 
         if (rezultat == 1)
             return new ResponseEntity("Knjiga ili polica ne postoji.", HttpStatus.BAD_REQUEST);

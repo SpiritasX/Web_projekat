@@ -133,10 +133,13 @@ public class PolicaService {
         Set<Polica> police = citalac.getOstalePolice();
         for (Polica p : police) {
             if (p.getId().equals(polica.getId())) {
-                p = polica;
+                police.remove(p);
                 break;
             }
         }
+        police.add(polica);
+        citalac.setOstalePolice(police);
+
         return 0;
     }
 
