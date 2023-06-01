@@ -1,11 +1,11 @@
 package com.example.demo.dto;
 
-public class DodajKnjiguDto {
+public class KnjigaPolicaDto {
     private Long idKnjige;
     private Long idPolice;
     private RecenzijaDto dto;
 
-    public DodajKnjiguDto(Long idKnjige, Long idPolice, RecenzijaDto dto) {
+    public KnjigaPolicaDto(Long idKnjige, Long idPolice, RecenzijaDto dto) {
         this.idKnjige = idKnjige;
         this.idPolice = idPolice;
         this.dto = dto;

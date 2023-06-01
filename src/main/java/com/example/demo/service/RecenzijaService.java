@@ -19,4 +19,8 @@ public class RecenzijaService {
     public Recenzija save(Recenzija recenzija) {
         return recenzijaRepository.save(recenzija);
     }
+
+    public void delete(Recenzija recenzija) {
+        recenzijaRepository.delete(recenzija);
+    }
 }

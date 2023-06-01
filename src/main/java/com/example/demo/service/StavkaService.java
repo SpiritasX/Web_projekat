@@ -11,7 +11,11 @@ public class StavkaService {
     @Autowired
     private StavkaRepository stavkaRepository;
 
-    public Stavka dodajStavku(Stavka stavka) {
+    public Stavka save(Stavka stavka) {
         return stavkaRepository.save(stavka);
+    }
+
+    public void delete(Stavka stavka) {
+        stavkaRepository.delete(stavka);
     }
 }

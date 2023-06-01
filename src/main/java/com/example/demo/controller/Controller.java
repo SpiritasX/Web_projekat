@@ -8,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Date;
-import java.util.Set;
 
 import java.util.List;
 import java.util.Optional;
@@ -168,13 +166,16 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
         if (citalac == null) {
             return new ResponseEntity<>("prijavite se da bi dodali svoje police", HttpStatus.FORBIDDEN);
         } else {
+            for (Polica p : citalac.getOstalePolice())
+                if (p.getNaziv().equals(nazivPolice))
+                    return new ResponseEntity("Vec postoji polica sa tim nazivom.", HttpStatus.BAD_REQUEST);
             Polica polica;
             polica = policaService.dodajPolicu(nazivPolice, false);
             korisnikService.dodajPolicu(polica, citalac);
             return new ResponseEntity<>("polica: " + nazivPolice + " uspesno dodana", HttpStatus.OK);
         }
     }
-//TO DO DODATI PROVERU DA LI POSTOJI POLICA SA TIM NAZIVOM
+
     @DeleteMapping("/api/obrisi-policu/{id}")
     public ResponseEntity obrisiPolicu(@PathVariable Long id, HttpSession session) {
         Citalac citalac = (Citalac) session.getAttribute("citalac");
@@ -182,12 +183,19 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
         if (citalac == null)
             return new ResponseEntity<>("prijavite se da bi obrisali svoje police", HttpStatus.FORBIDDEN);
 
-        policaService.obrisiPolicu(id);
+        int rezultat = policaService.obrisiPolicu(id);
+
+        if (rezultat == 1)
+            return new ResponseEntity("Nepostojeca polica", HttpStatus.BAD_REQUEST);
+
+        if (rezultat == 2)
+            return new ResponseEntity("Ne moze se obrisati primarna polica", HttpStatus.FORBIDDEN);
+
         return new ResponseEntity<>("uspesno obrisana polica", HttpStatus.OK);
 
     }
     @PutMapping("/api/dodaj-na-policu/{knjiga}/{polica}")
-    public ResponseEntity dodajNaPolicu(@RequestBody DodajKnjiguDto dto, HttpSession session){
+    public ResponseEntity dodajNaPolicu(@RequestBody KnjigaPolicaDto dto, HttpSession session){
         Citalac citalac = (Citalac) session.getAttribute("citalac");
 
         if (citalac == null)
@@ -199,9 +207,12 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
             return new ResponseEntity("Knjiga ili polica ne postoji.", HttpStatus.BAD_REQUEST);
 
         if (rezultat == 2)
-            return new ResponseEntity("Knjiga se vec nalazi na jednoj primarnoj polici", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Polica ne pripada dobrom citaocu", HttpStatus.FORBIDDEN);
 
         if (rezultat == 3)
+            return new ResponseEntity("Knjiga se vec nalazi na jednoj primarnoj polici", HttpStatus.BAD_REQUEST);
+
+        if (rezultat == 4)
             return new ResponseEntity("Knjiga mora da se nalazi na primarnoj polici da bi je dodali na obicnu", HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity<>("uspesno dodata knjiga na policu", HttpStatus.OK);
