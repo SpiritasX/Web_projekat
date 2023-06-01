@@ -226,20 +226,6 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
    ////////////////////////////AUTOR/////////////////////////////////////
 
 
-    @PostMapping("/api/dodaj-novu-knjigu")
-    public ResponseEntity dodajNovuKnjigu(@RequestBody String nazivKnjige, String isbn, Date datum,Integer str, String slika, HttpSession session){
-        Autor autor=(Autor) session.getAttribute("autor");
-        if(autor==null){
-            return new ResponseEntity("nepostojeci autor",HttpStatus.FORBIDDEN);
-        }
-        else{
-//            Knjiga knjiga;
-//            knjiga=knjigaService.dodajKnjigu(nazivKnjige,slika,isbn,datum,str);
-//            autorService.dodajKnjigu(knjiga,autor);
-            return  new ResponseEntity<>("Uspesno dodata nova knjiga",HttpStatus.OK);
-        }
-    }
-//put mapping za azuriranje postojecih knjiga sutra
 
 
 }
