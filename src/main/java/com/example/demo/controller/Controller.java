@@ -5,11 +5,13 @@ import com.example.demo.entity.*;
 import com.example.demo.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +29,8 @@ public class Controller {
     private ZahtevService zahtevService;
     @Autowired
     private RecenzijaService recenzijaService;
+    @Autowired
+    private KnjigaService knjigaService;
 
     @GetMapping("/")
     private String home() {
@@ -166,4 +170,53 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
 
 
 ////////////////////////////////////////// CITALAC //////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////AUTOR///////////////////////
+@PostMapping("/api/dodaj-novu-knjigu")
+public ResponseEntity dodajNovuKnjigu(@RequestBody String nazivKnjige, String isbn, Date datum, Integer str, String slika, HttpSession session){
+    Autor autor=(Autor) session.getAttribute("autor");
+    if(autor==null){
+        return new ResponseEntity("nepostojeci autor",HttpStatus.FORBIDDEN);
+    }
+    else{
+            Knjiga knjiga;
+            knjiga=knjigaService.dodajKnjigu(nazivKnjige,slika,isbn,datum,str);
+            autorService.dodajKnjigu(knjiga,autor);
+        return  new ResponseEntity<>("Uspesno dodata nova knjiga",HttpStatus.OK);
+    }
+
 }
+//public ResponseEntity azurirajPostojecuKnjigu(@RequestBody )
+///////////////////////////ADMINISTRATOR///////////////
+    @PostMapping ("/api/dodaj-zanr")
+    public ResponseEntity dodajNoviZanr(@RequestBody String naziv, HttpSession session){
+        Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
+        if(!korisnik.getAdmin()){
+            return new ResponseEntity<>("morate biti admin da biste dodavali zanrove",HttpStatus.FORBIDDEN);
+        } else{
+            Zanr zanr;
+            zanr=zanrService.dodajZanr(naziv);
+            return new ResponseEntity<>("Uspesno dodat zanr", HttpStatus.OK);
+        }
+    }
+    //korisnik preimenujem u citalac
+}
+

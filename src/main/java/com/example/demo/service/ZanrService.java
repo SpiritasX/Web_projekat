@@ -12,4 +12,10 @@ public class ZanrService {
     public Optional<Zanr> jedanZanr(Long id) {
         return zanrRepository.findById(id);
     }
+    public Zanr dodajZanr(String naziv){
+        Zanr zanr=new Zanr();
+        zanr.setNaziv(naziv);
+        zanrRepository.save(zanr);
+        return zanr;
+    }
 }

@@ -51,6 +51,8 @@ public class KorisnikService {
     public Optional<Citalac> jedanCitalac(Long id) {
         return citalacRepository.findById(id);
     }
+
+
 }
 
 
