@@ -87,7 +87,7 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
         }
     }
 
-    //    curl http://localhost:8880/api/register -d '{"korisnickoIme":"test","email":"test@test.test","lozinka":"test123"}'
+    //    curl http://localhost:8880/api/register -d '{"ime":"test", "prezime":"test", "korisnickoIme":"test","email":"test@test.test","lozinka":"test123"}'
 //    TODO ponovljena email adresa i mora da bude jedinstvena, kao i korisnicko ime
     @PostMapping("/api/registruj-se")
     public ResponseEntity registracija(@RequestBody RegisterDto dto, HttpSession session) {
@@ -184,6 +184,7 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
             return new ResponseEntity<>("prijavite se da bi obrisali svoje police", HttpStatus.FORBIDDEN);
 
         int rezultat = policaService.obrisiPolicu(id);
+        korisnikService.save(citalac);
 
         if (rezultat == 1)
             return new ResponseEntity("Nepostojeca polica", HttpStatus.BAD_REQUEST);
@@ -194,7 +195,7 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
         return new ResponseEntity<>("uspesno obrisana polica", HttpStatus.OK);
 
     }
-    @PutMapping("/api/dodaj-na-policu/{knjiga}/{polica}")
+    @PostMapping("/api/dodaj-na-policu")
     public ResponseEntity dodajNaPolicu(@RequestBody KnjigaPolicaDto dto, HttpSession session){
         Citalac citalac = (Citalac) session.getAttribute("citalac");
 
@@ -230,9 +231,9 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
             return new ResponseEntity("nepostojeci autor",HttpStatus.FORBIDDEN);
         }
         else{
-            Knjiga knjiga;
-            knjiga=knjigaService.dodajKnjigu(nazivKnjige,slika,isbn,datum,str);
-            autorService.dodajKnjigu(knjiga,autor);
+//            Knjiga knjiga;
+//            knjiga=knjigaService.dodajKnjigu(nazivKnjige,slika,isbn,datum,str);
+//            autorService.dodajKnjigu(knjiga,autor);
             return  new ResponseEntity<>("Uspesno dodata nova knjiga",HttpStatus.OK);
         }
     }

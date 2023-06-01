@@ -44,6 +44,10 @@ public class KorisnikService {
         citalacRepository.save(citalac);
     }
 
+    public Citalac save(Citalac citalac) {
+        return citalacRepository.save(citalac);
+    }
+
     public void dodajPolicu(Polica p, Citalac c){
         Set<Polica> police;
         police=c.getOstalePolice();
