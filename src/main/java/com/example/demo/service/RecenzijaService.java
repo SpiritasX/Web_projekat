@@ -11,7 +11,12 @@ import java.util.Optional;
 public class RecenzijaService {
     @Autowired
     private RecenzijaRepository recenzijaRepository;
-    public Optional<Recenzija> jednaRecenzija(Long id) {
+
+    public Optional<Recenzija> findById(Long id) {
         return recenzijaRepository.findById(id);
+    }
+
+    public Recenzija save(Recenzija recenzija) {
+        return recenzijaRepository.save(recenzija);
     }
 }

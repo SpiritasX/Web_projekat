@@ -137,7 +137,7 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
 
     @GetMapping("/api/recenzije/{id}")
     public ResponseEntity jednaRecenzija(@PathVariable Long id) {
-        Optional<Recenzija> recenzija = recenzijaService.jednaRecenzija(id);
+        Optional<Recenzija> recenzija = recenzijaService.findById(id);
         if (!recenzija.isPresent())
             return new ResponseEntity("Nepostojeca recenzija.", HttpStatus.BAD_REQUEST);
         else
@@ -154,19 +154,12 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
 //          'Autor':'test' \
 //     }"
 
-    //    TODO proslediti dto servisu i tamo uraditi konverziju u non-dto objekat
     @PostMapping("/api/podnesi-zahtev")
     public ResponseEntity podnesiZahtev(@RequestBody ZahtevDto dto) {
         Autor autor = autorService.pronadjiAutora(dto.getImeAutora());
         zahtevService.sacuvajZahtev(dto, autor);
         return new ResponseEntity<>("Uspesno dodan", HttpStatus.OK);
     }
-
-//        Zahtev se salje stiskom na taster SA profila autora sto znaci da
-//        je autor vec kreiran i da ce ime uvek biti tacno i postojece!
-//        if (autor == null)
-//            return new ResponseEntity("Nepostojeci autor.", HttpStatus.BAD_REQUEST);
-
 
     ////////////////////////////////////////// CITALAC //////////////////////////////////////////
     @PostMapping("/api/dodaj-policu")
@@ -182,28 +175,36 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
         }
     }
 //TO DO DODATI PROVERU DA LI POSTOJI POLICA SA TIM NAZIVOM
-    @PutMapping("/api/obrisi-policu/{nazivP}")
-    public ResponseEntity obrisiPolicu(@PathVariable String nazivP, HttpSession session) {
+    @DeleteMapping("/api/obrisi-policu/{id}")
+    public ResponseEntity obrisiPolicu(@PathVariable Long id, HttpSession session) {
         Citalac citalac = (Citalac) session.getAttribute("citalac");
-        String nazivPolice = nazivP;
-        if (citalac == null) {
+
+        if (citalac == null)
             return new ResponseEntity<>("prijavite se da bi obrisali svoje police", HttpStatus.FORBIDDEN);
-        } else
-            korisnikService.obrisiPolicu(nazivPolice, citalac);
+
+        policaService.obrisiPolicu(id);
         return new ResponseEntity<>("uspesno obrisana polica", HttpStatus.OK);
 
     }
     @PutMapping("/api/dodaj-na-policu/{knjiga}/{polica}")
-    public ResponseEntity dodajNaPolicu(@PathVariable String nazivKnjige, @PathVariable String nazivPolice, HttpSession session){
-        Citalac citalac=(Citalac) session.getAttribute("citalac");
-        String knjiga = nazivKnjige;
-        String polica = nazivPolice;
-        if (citalac == null) {
+    public ResponseEntity dodajNaPolicu(@RequestBody DodajKnjiguDto dto, HttpSession session){
+        Citalac citalac = (Citalac) session.getAttribute("citalac");
+
+        if (citalac == null)
             return new ResponseEntity<>("prijavite se da bi dodali knjigu na policu", HttpStatus.FORBIDDEN);
-        } else
+
+        int rezultat = policaService.dodajKnjiguNaPolicu(dto, citalac);
+
+        if (rezultat == 1)
+            return new ResponseEntity("Knjiga ili polica ne postoji.", HttpStatus.BAD_REQUEST);
+
+        if (rezultat == 2)
+            return new ResponseEntity("Knjiga se vec nalazi na jednoj primarnoj polici", HttpStatus.BAD_REQUEST);
+
+        if (rezultat == 3)
+            return new ResponseEntity("Knjiga mora da se nalazi na primarnoj polici da bi je dodali na obicnu", HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity<>("uspesno dodata knjiga na policu", HttpStatus.OK);
-
     }
     //to do jos mnogo toga prelazim na autora jer sam se iznervirala sa stavkom i policom
 
@@ -211,7 +212,7 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
    ////////////////////////////AUTOR/////////////////////////////////////
 
 
-    @PostMapping("api/dodaj-novu-knjigu")
+    @PostMapping("/api/dodaj-novu-knjigu")
     public ResponseEntity dodajNovuKnjigu(@RequestBody String nazivKnjige, String isbn, Date datum,Integer str, String slika, HttpSession session){
         Autor autor=(Autor) session.getAttribute("autor");
         if(autor==null){

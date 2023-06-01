@@ -43,28 +43,14 @@ public class KorisnikService {
         citalac.setOstalePolice(police);
         citalacRepository.save(citalac);
     }
-    public void azurirajCitaoca(Citalac c){
-        citalacRepository.save(c);
-    }
 
-    public void dodajPolicu(Polica p,Citalac c){
-        Set<Polica>police;
+    public void dodajPolicu(Polica p, Citalac c){
+        Set<Polica> police;
         police=c.getOstalePolice();
         police.add(p);
         c.setOstalePolice(police);
-        azurirajCitaoca(c);
+        citalacRepository.save(c);
     }
-    public void obrisiPolicu(String p, Citalac c){
-        Set<Polica>police;
-        police=c.getOstalePolice();
-        police.remove(p);
-        c.setOstalePolice(police);
-        azurirajCitaoca(c);
-
-
-    }
-
-
 
     public List<Citalac> listaCitaoca() {
         return citalacRepository.findAll();

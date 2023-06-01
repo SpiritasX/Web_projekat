@@ -15,6 +15,10 @@ public class Stavka implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL)
     private Knjiga knjiga;
 
+    public Knjiga getKnjiga() {
+        return knjiga;
+    }
+
     public void setKnjiga(Knjiga knjiga) {
         this.knjiga = knjiga;
     }

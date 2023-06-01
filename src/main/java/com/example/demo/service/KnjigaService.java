@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class KnjigaService {
@@ -24,8 +25,10 @@ public class KnjigaService {
         knjiga.setNaslov(na);
         knjiga.setDatumObjavljivanja(datum);
         knjiga.setNaslovnaFotografija(slika);
-        knjigaRepository.save(knjiga);
-        return knjiga;
+        return knjigaRepository.save(knjiga);
+    }
 
+    public Optional<Knjiga> findById(Long id) {
+        return knjigaRepository.findById(id);
     }
 }
