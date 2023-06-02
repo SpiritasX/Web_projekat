@@ -6,11 +6,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface KnjigaRepository extends JpaRepository<Knjiga, Long> {
     List<Knjiga> findAllByNaslov(String pretraga);
 
    // Knjiga findByIsbn(String isbn);
-    List<Knjiga>findByISBN(String isbn);
+    Optional<Knjiga> findByISBN(String isbn);
 }

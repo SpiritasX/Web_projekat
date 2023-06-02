@@ -2,15 +2,14 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.*;
 import com.example.demo.entity.*;
-import com.example.demo.repository.KnjigaRepository;
-import com.example.demo.repository.ZahtevRepository;
 import com.example.demo.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.Date;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,10 +30,6 @@ public class Controller {
     private RecenzijaService recenzijaService;
     @Autowired
     private KnjigaService knjigaService;
-    @Autowired
-    private KnjigaRepository knjigaRepository;
-    @Autowired
-    private ZahtevRepository zahtevRepository;
 
     @GetMapping("/")
     private String home() {
@@ -48,38 +43,10 @@ public class Controller {
             return new ResponseEntity("Pogresan email.", HttpStatus.BAD_REQUEST);
         else if (citalac.getLozinka().equals(dto.getLozinka())) {
             session.setAttribute("citalac", citalac);
-
-            String citalacString = citalac.toString();
-            String redirectUrl = UriComponentsBuilder.fromPath("/api/prijavljen")
-                    .queryParam("citalacString", citalacString)
-                    .toUriString();
-
-            return ResponseEntity.status(HttpStatus.FOUND)
-                    .header("Location", redirectUrl)
-                    .build();
+            return new ResponseEntity("USPESNO PR", HttpStatus.OK);
         } else
             return new ResponseEntity("Pogresna lozinka", HttpStatus.BAD_REQUEST);
-    }/*
-@PostMapping("/api/prijavi-se")
-public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, RedirectAttributes redirectAttributes) {
-    Citalac citalac = korisnikService.prijava(dto.getEmail());
-
-    if (citalac == null) {
-        // Redirect to an error page or handle the error accordingly
-        return new RedirectView("/error-page");
-    } else if (citalac.getLozinka().equals(dto.getLozinka())) {
-        session.setAttribute("citalac", citalac);
-
-        // Add citalac.toString() as a flash attribute
-        redirectAttributes.addFlashAttribute("citalacString", citalac.toString());
-
-        // Redirect to the "/api/prijavljen" link
-        return new RedirectView("/api/prijavljen");
-    } else {
-        // Redirect to an error page or handle the error accordingly
-        return new RedirectView("/error-page");
     }
-}*/
 
     @GetMapping("/api/prijavljen")
     public ResponseEntity listaPolica(HttpSession session) {
@@ -91,7 +58,6 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
         }
     }
 
-    //    curl http://localhost:8880/api/register -d '{"korisnickoIme":"test","email":"test@test.test","lozinka":"test123"}'
 //    TODO ponovljena email adresa i mora da bude jedinstvena, kao i korisnicko ime
     @PostMapping("/api/registruj-se")
     public ResponseEntity registracija(@RequestBody RegisterDto dto, HttpSession session) {
@@ -139,7 +105,7 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
 
     @GetMapping("/api/recenzije/{id}")
     public ResponseEntity jednaRecenzija(@PathVariable Long id) {
-        Optional<Recenzija> recenzija = recenzijaService.jednaRecenzija(id);
+        Optional<Recenzija> recenzija = recenzijaService.findById(id);
         if (!recenzija.isPresent())
             return new ResponseEntity("Nepostojeca recenzija.", HttpStatus.BAD_REQUEST);
         else
@@ -156,13 +122,85 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
 //          'Autor':'test' \
 //     }"
 
-    //    TODO proslediti dto servisu i tamo uraditi konverziju u non-dto objekat
+//    TODO proslediti dto servisu i tamo uraditi konverziju u non-dto objekat
     @PostMapping("/api/podnesi-zahtev")
     public ResponseEntity podnesiZahtev(@RequestBody ZahtevDto dto) {
         Autor autor = autorService.pronadjiAutora(dto.getImeAutora());
         zahtevService.sacuvajZahtev(dto, autor);
         return new ResponseEntity<>("Uspesno dodan", HttpStatus.OK);
     }
+
+    ////////////////////////////////////////// CITALAC //////////////////////////////////////////
+    @PostMapping("/api/dodaj-policu")
+    public ResponseEntity dodajPolicu(@RequestBody String nazivPolice, HttpSession session) {
+        Citalac citalac = (Citalac) session.getAttribute("citalac");
+        if (citalac == null) {
+            return new ResponseEntity<>("prijavite se da bi dodali svoje police", HttpStatus.FORBIDDEN);
+        } else {
+            for (Polica p : citalac.getOstalePolice())
+                if (p.getNaziv().equals(nazivPolice))
+                    return new ResponseEntity("Vec postoji polica sa tim nazivom.", HttpStatus.BAD_REQUEST);
+            Polica polica;
+            polica = policaService.dodajPolicu(nazivPolice, false);
+            citalacService.dodajPolicu(polica, citalac);
+            return new ResponseEntity<>("polica: " + nazivPolice + " uspesno dodana", HttpStatus.OK);
+        }
+    }
+
+    @DeleteMapping("/api/obrisi-policu/{id}")
+    public ResponseEntity obrisiPolicu(@PathVariable Long id, HttpSession session) {
+        Citalac citalac = (Citalac) session.getAttribute("citalac");
+
+        if (citalac == null)
+            return new ResponseEntity<>("prijavite se da bi obrisali svoje police", HttpStatus.FORBIDDEN);
+
+        int rezultat = policaService.obrisiPolicu(id);
+        citalacService.save(citalac);
+
+        if (rezultat == 1)
+            return new ResponseEntity("Nepostojeca polica", HttpStatus.BAD_REQUEST);
+
+        if (rezultat == 2)
+            return new ResponseEntity("Ne moze se obrisati primarna polica", HttpStatus.FORBIDDEN);
+
+        return new ResponseEntity<>("uspesno obrisana polica", HttpStatus.OK);
+
+    }
+    @PostMapping("/api/dodaj-na-policu")
+    public ResponseEntity dodajNaPolicu(@RequestBody KnjigaPolicaDto dto, HttpSession session){
+        Citalac citalac = (Citalac) session.getAttribute("citalac");
+
+        if (citalac == null)
+            return new ResponseEntity<>("prijavite se da bi dodali knjigu na policu", HttpStatus.FORBIDDEN);
+
+        int rezultat = policaService.dodajKnjiguNaPolicu(dto, citalac);
+        citalacService.save(citalac);
+        session.setAttribute("citalac", citalac);
+
+        if (rezultat == 1)
+            return new ResponseEntity("Knjiga ili polica ne postoji.", HttpStatus.BAD_REQUEST);
+
+        if (rezultat == 2)
+            return new ResponseEntity("Polica ne pripada dobrom citaocu", HttpStatus.FORBIDDEN);
+
+        if (rezultat == 3)
+            return new ResponseEntity("Knjiga se vec nalazi na jednoj primarnoj polici", HttpStatus.BAD_REQUEST);
+
+        if (rezultat == 4)
+            return new ResponseEntity("Knjiga mora da se nalazi na primarnoj polici da bi je dodali na obicnu", HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>("uspesno dodata knjiga na policu", HttpStatus.OK);
+    }
+    //to do jos mnogo toga prelazim na autora jer sam se iznervirala sa stavkom i policom
+
+
+   ////////////////////////////AUTOR/////////////////////////////////////
+
+
+
+
+
+
 
 //        Zahtev se salje stiskom na taster SA profila autora sto znaci da
 //        je autor vec kreiran i da ce ime uvek biti tacno i postojece!
@@ -193,7 +231,7 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
         if(autor==null){
             return new ResponseEntity("nepostojeci autor", HttpStatus.FORBIDDEN);
         } else{
-            if (knjigaService.proveriISBN(dto.getISBN())) {
+            if (knjigaService.findByISBN(dto.getISBN()) != null) {
                 return new ResponseEntity("Knjiga sa istim ISBN već postoji", HttpStatus.BAD_REQUEST);
             }
             autorService.dodajKnjiguDTO(dto);
@@ -205,7 +243,7 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
 //moze i post valjda idk
     @PutMapping("/api/azuriraj-knjigu/{isbn}")
     public ResponseEntity azurirajKnjigu(@PathVariable String isbn, @RequestBody KnjigaDto dto) {
-        Knjiga knjiga = knjigaService.pretraziPoIsbn(isbn);
+        Knjiga knjiga = knjigaService.findByISBN(isbn);
 
         if (knjiga != null) {
             knjiga.setNaslov(dto.getNaslov());
@@ -233,13 +271,13 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
     @PostMapping ("/api/obrisi-knjigu")
     public ResponseEntity obrisiKnjigu(String isbn) {
 
-        Knjiga knjiga = (Knjiga) knjigaRepository.findByISBN(isbn);
+        Knjiga knjiga = (Knjiga) knjigaService.findByISBN(isbn);
         if (knjiga != null) {
             Double recenzije = knjiga.getOcena();
             // ako knjiga ima recenzije ne moze biti obrisana
             //a ako ima recenzije onda ima ocenu pa proveravam sa ocenom jer oceni mogu direktno da pristupim
             if (recenzije == null) {
-                knjigaRepository.delete(knjiga);
+                knjigaService.delete(knjiga);
                 return new ResponseEntity<>("Knjiga je uspešno obrisana", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Knjiga ima recenzije i ne može biti obrisana", HttpStatus.BAD_REQUEST);
@@ -249,8 +287,7 @@ public RedirectView prijava(@RequestBody LoginDto dto, HttpSession session, Redi
     }
     @PostMapping("/api/obradi-zahtev/{id}")
     public ResponseEntity obradiZahtev(@PathVariable Long id, @RequestParam("prihvati") boolean prihvati) {
-        Optional<Zahtev> zahtevOptional = zahtevRepository.findById(id);
-        Zahtev zahtev = zahtevOptional.orElse(null);
+        Zahtev zahtev = zahtevService.findById(id);
 
         if (zahtev == null) {
             return new ResponseEntity<>("Zahtev nije pronađen", HttpStatus.NOT_FOUND);

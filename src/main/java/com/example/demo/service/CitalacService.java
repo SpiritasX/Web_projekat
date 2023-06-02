@@ -6,6 +6,7 @@ import com.example.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -36,13 +37,24 @@ public class CitalacService {
         citalac.setAdmin(false);
 
         Set<Polica> police = new HashSet<Polica>();
-        police.add(policaService.dodajPolicu("Read"));
-        police.add(policaService.dodajPolicu("Currently Reading"));
-        police.add(policaService.dodajPolicu("Want To Read"));
+        police.add(policaService.dodajPolicu("Read",true));
+        police.add(policaService.dodajPolicu("Currently Reading",true));
+        police.add(policaService.dodajPolicu("Want To Read",true));
         citalac.setOstalePolice(police);
         citalacRepository.save(citalac);
     }
 
+    public Citalac save(Citalac citalac) {
+        return citalacRepository.save(citalac);
+    }
+
+    public void dodajPolicu(Polica p, Citalac c){
+        Set<Polica> police;
+        police=c.getOstalePolice();
+        police.add(p);
+        c.setOstalePolice(police);
+        citalacRepository.save(c);
+    }
 
     public List<Citalac> listaCitaoca() {
         return citalacRepository.findAll();

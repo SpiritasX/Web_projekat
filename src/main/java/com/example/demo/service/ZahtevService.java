@@ -87,6 +87,11 @@ public class ZahtevService {
         autorRepository.save(autor);
     }
 
-
+    public Zahtev findById(Long id) {
+        Optional<Zahtev> zahtev = zahtevRepository.findById(id);
+        if (zahtev.isPresent())
+            return zahtev.get();
+        return null;
+    }
 
 }

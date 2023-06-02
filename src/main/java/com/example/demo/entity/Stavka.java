@@ -9,11 +9,15 @@ public class Stavka implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Recenzija recenzija;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Knjiga knjiga;
+
+    public Knjiga getKnjiga() {
+        return knjiga;
+    }
 
     public void setKnjiga(Knjiga knjiga) {
         this.knjiga = knjiga;
