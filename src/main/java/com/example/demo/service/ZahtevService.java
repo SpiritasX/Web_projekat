@@ -22,6 +22,8 @@ public class ZahtevService {
     private ZahtevRepository zahtevRepository;
     @Autowired
     private AutorRepository autorRepository;
+    @Autowired
+    private MailService mailService;
 
     public void sacuvajZahtev(ZahtevDto dto, Autor autor) {
         Zahtev zahtev = new Zahtev();
@@ -69,23 +71,22 @@ public class ZahtevService {
     private void posaljiMejlSaLozinkom(String email, String lozinka) {
         String poruka = "Vaš nalog je uspešno aktiviran. Vaša lozinka je: " + lozinka;
         // bilo bi dobro da napravimo neki mailService ali ne znam kako
-       // mailService.posaljiMejl(email, "Aktivacija naloga", poruka);
+       mailService.posaljiMejl(email, "Aktivacija naloga", poruka);
     }
 
     private void posaljiMejlOdbijanje(String email) {
 
         String poruka = "Vaš zahtev za aktivaciju naloga je odbijen.";
-        //mailService.posaljiMejl(email, "Odbijanje zahteva", poruka);
+        mailService.posaljiMejl(email, "Odbijanje zahteva", poruka);
     }
     public void kreirajNalogAutora(Zahtev zahtev, String lozinka) {
         Autor autor = new Autor();
         autor=zahtev.getAutor();
         autor.setEmail(zahtev.getEmail());
         autor.setLozinka(lozinka);
-
-
         autorRepository.save(autor);
     }
+
 
     public Zahtev findById(Long id) {
         Optional<Zahtev> zahtev = zahtevRepository.findById(id);
@@ -93,5 +94,4 @@ public class ZahtevService {
             return zahtev.get();
         return null;
     }
-
 }

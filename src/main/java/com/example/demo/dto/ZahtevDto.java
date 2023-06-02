@@ -1,5 +1,6 @@
 package com.example.demo.dto;
 
+import com.example.demo.entity.Autor;
 import com.example.demo.entity.Status;
 import com.example.demo.entity.Zahtev;
 
@@ -72,6 +73,7 @@ public class ZahtevDto {
     public void setImeAutora(String imeAutora) {
         this.imeAutora = imeAutora;
     }
+
 
 
 }

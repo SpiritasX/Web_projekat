@@ -285,8 +285,8 @@ public class Controller {
         }
         return new ResponseEntity<>("Knjiga nije pronađena", HttpStatus.NOT_FOUND);
     }
-    @PostMapping("/api/obradi-zahtev/{id}")
-    public ResponseEntity obradiZahtev(@PathVariable Long id, @RequestParam("prihvati") boolean prihvati) {
+    @GetMapping("/api/obradi-zahtev/{id}")
+    public ResponseEntity obradiZahtev(@PathVariable Long id, @RequestParam ("prihvati") Boolean prihvati) {
         Zahtev zahtev = zahtevService.findById(id);
 
         if (zahtev == null) {
@@ -301,7 +301,6 @@ public class Controller {
 
         return new ResponseEntity<>("Zahtev uspešno obrađen", HttpStatus.OK);
     }
-
 
 
 }
