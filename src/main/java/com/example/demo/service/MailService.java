@@ -7,17 +7,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class MailService {
     @Autowired
-    private JavaMailSender javaMailSender;
+    private final JavaMailSender javaMailSender;
 
-   // public void setJavaMailSender(JavaMailSender javaMailSender) {
-     //   this.javaMailSender=javaMailSender;
-    //}
+
+    public MailService(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
+
     public void posaljiMejl(String to, String naslov, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("terzicanastasijaa@gmail.com");
         message.setTo(to);
         message.setSubject(naslov);
         message.setText(text);
-        javaMailSender.send(message);
+        this.javaMailSender.send(message);
     }
 
 }
