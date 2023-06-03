@@ -6,23 +6,18 @@ public class RegisterDto extends LoginDto {
     private String ime;
     private String prezime;
     private String korisnickoIme;
+    private String ponovljenEmail;
 
     public RegisterDto() {
         super();
     }
 
-    public RegisterDto(String email, String lozinka, String ime, String prezime, String korisnickoIme) {
+    public RegisterDto(String email, String lozinka, String ime, String prezime, String korisnickoIme, String ponovljenEmail) {
         super(email, lozinka);
         this.ime = ime;
         this.prezime = prezime;
         this.korisnickoIme = korisnickoIme;
-    }
-
-    public RegisterDto(Korisnik korisnik) {
-        super(korisnik);
-        this.ime = korisnik.getIme();
-        this.prezime = korisnik.getPrezime();
-        this.korisnickoIme = korisnik.getKorisnickoIme();
+        this.ponovljenEmail = ponovljenEmail;
     }
 
     public String getIme() {
@@ -47,5 +42,13 @@ public class RegisterDto extends LoginDto {
 
     public void setKorisnickoIme(String korisnickoIme) {
         this.korisnickoIme = korisnickoIme;
+    }
+
+    public String getPonovljenEmail() {
+        return ponovljenEmail;
+    }
+
+    public void setPonovljenEmail(String ponovljenEmail) {
+        this.ponovljenEmail = ponovljenEmail;
     }
 }

@@ -10,20 +10,16 @@ public class ZahtevDto {
     private String email;
     private String telefon;
     private String poruka;
-    private Date datum;
-    private Status status;
-    private String imeAutora;
+    private Long idAutora;
 
     public ZahtevDto() {
     }
 
-    public ZahtevDto(String email, String telefon, String poruka, Date datum, Status status, String imeAutora) {
+    public ZahtevDto(String email, String telefon, String poruka, Long idAutora) {
         this.email = email;
         this.telefon = telefon;
         this.poruka = poruka;
-        this.datum = datum;
-        this.status = status;
-        this.imeAutora = imeAutora;
+        this.idAutora = idAutora;
     }
 
     public String getEmail() {
@@ -50,28 +46,12 @@ public class ZahtevDto {
         this.poruka = poruka;
     }
 
-    public Date getDatum() {
-        return datum;
+    public Long getIdAutora() {
+        return idAutora;
     }
 
-    public void setDatum(Date datum) {
-        this.datum = datum;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public String getImeAutora() {
-        return imeAutora;
-    }
-
-    public void setImeAutora(String imeAutora) {
-        this.imeAutora = imeAutora;
+    public void setIdAutora(Long idAutora) {
+        this.idAutora = idAutora;
     }
 
 

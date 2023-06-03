@@ -7,12 +7,11 @@ import org.hibernate.annotations.GenericGenerator;
 import java.io.Serializable;
 import java.util.Date;
 
-@MappedSuperclass
-public abstract class Korisnik implements Serializable {
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Korisnik implements Serializable {
     @Id
-//    @SequenceGenerator(name = "mySeqGenV1")
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV1")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String ime;
     private String prezime;
@@ -26,7 +25,8 @@ public abstract class Korisnik implements Serializable {
     private String profilnaSlika;
     private String opis;
     @Column(nullable = false)
-    private Boolean admin;
+    @Enumerated(EnumType.STRING)
+    private Uloga uloga;
 
     public Long getId() {
         return id;
@@ -100,12 +100,12 @@ public abstract class Korisnik implements Serializable {
         this.opis = opis;
     }
 
-    public Boolean getAdmin() {
-        return admin;
+    public Uloga getUloga() {
+        return uloga;
     }
 
-    public void setAdmin(Boolean admin) {
-        this.admin = admin;
+    public void setUloga(Uloga uloga) {
+        this.uloga = uloga;
     }
 
     @Override

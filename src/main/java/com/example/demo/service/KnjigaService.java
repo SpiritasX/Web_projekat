@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.KnjigaDto;
+import com.example.demo.entity.Autor;
 import com.example.demo.entity.Knjiga;
 import com.example.demo.entity.Polica;
 import com.example.demo.repository.KnjigaRepository;
@@ -16,38 +18,59 @@ public class KnjigaService {
     private KnjigaRepository knjigaRepository;
 
     public Knjiga findById(Long id) {
-        Optional<Knjiga> knjiga = knjigaRepository.findById(id);
-        if (knjiga.isPresent())
-            return knjiga.get();
-        return null;
+        return knjigaRepository.findById(id).orElse(null);
     }
 
-    public List<Knjiga> pretrazi(String pretraga) {
-        return knjigaRepository.findAllByNaslov(pretraga);
-    }
-
-    public Knjiga dodajKnjigu(String nazivKnjige, String slika, String isbn, Date datum, Integer str) {
-        Knjiga knjiga = new Knjiga();
-        knjiga.setNaslovnaFotografija(slika);
-        knjiga.setISBN(isbn);
-        knjiga.setNaslov(nazivKnjige);
-        knjiga.setDatumObjavljivanja(datum);
-        knjiga = knjigaRepository.save(knjiga);
-        return knjiga;
-    }
-
-    public void sacuvajKnjigu(Knjiga knjiga) {
-        knjigaRepository.save(knjiga);
-    }
-
-    public Knjiga findByISBN(String ISBN) {
-        Optional<Knjiga> knjiga = knjigaRepository.findByISBN(ISBN);
-        if (knjiga.isPresent())
-            return knjiga.get();
-        return null;
+    public Knjiga save(Knjiga knjiga) {
+        return knjigaRepository.save(knjiga);
     }
 
     public void delete(Knjiga knjiga) {
         knjigaRepository.delete(knjiga);
+    }
+
+    public List<Knjiga> findAll() {
+        return knjigaRepository.findAll();
+    }
+
+    public Knjiga findByISBN(String ISBN) {
+        return knjigaRepository.findByISBN(ISBN).orElse(null);
+    }
+
+    public Knjiga dodajKnjigu(String naslov, String slika, String isbn, Date datum, Integer str) {
+        Knjiga knjiga = new Knjiga();
+        knjiga.setNaslovnaFotografija(slika);
+        knjiga.setISBN(isbn);
+        knjiga.setNaslov(naslov);
+        knjiga.setDatumObjavljivanja(datum);
+        knjiga.setBrojStrana(str);
+        knjiga = save(knjiga);
+        return knjiga;
+    }
+
+    public Integer obrisiKnjigu(Long id) {
+        Knjiga knjiga = findById(id);
+
+        if (knjiga == null) {
+            return 1;
+        }
+
+        // ako knjiga ima recenzije ne moze biti obrisana
+        //a ako ima recenzije onda ima ocenu pa proveravam sa ocenom jer oceni mogu direktno da pristupim
+        if (knjiga.getOcena() > 0) {
+            return 2;
+        }
+
+        delete(knjiga);
+        return 0;
+    }
+
+    public Boolean knjigaPripadaAutoru(Knjiga knjiga, Autor autor) {
+        for (Knjiga k : autor.getKnjige()) {
+            if (knjiga.getId().equals(k.getId())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

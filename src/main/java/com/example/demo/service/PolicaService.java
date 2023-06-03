@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.KnjigaPolicaDto;
+import com.example.demo.dto.RecenzijaDto;
 import com.example.demo.entity.*;
 import com.example.demo.repository.PolicaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ public class PolicaService {
 
     @Autowired
     private PolicaRepository policaRepository;
-
     @Autowired
     private KnjigaService knjigaService;
     @Autowired
@@ -25,28 +25,42 @@ public class PolicaService {
     @Autowired
     private RecenzijaService recenzijaService;
 
+    public Polica findById(Long id) {
+        return policaRepository.findById(id).orElse(null);
+    }
+
+    public Polica save(Polica polica) {
+        return policaRepository.save(polica);
+    }
+
+    public void delete(Polica polica) {
+        policaRepository.delete(polica);
+    }
+
+    public List<Polica> findAll() {
+        return policaRepository.findAll();
+    }
+
     public Polica dodajPolicu(String naziv, Boolean primarna){
         Polica polica = new Polica();
         polica.setNaziv(naziv);
         polica.setPrimarna(primarna);
-        policaRepository.save(polica);
+        polica = save(polica);
         return polica;
     }
 
-    public List<Polica> listaPolica() {
-        return policaRepository.findAll();
-    }
-
     public Integer obrisiPolicu(Long id){
-        Optional<Polica> polica = policaRepository.findById(id);
+        Polica polica = findById(id);
 
-        if (!polica.isPresent())
+        if (polica == null) {
             return 1;
+        }
 
-        if (polica.get().isPrimarna())
+        if (polica.isPrimarna()) {
             return 2;
+        }
 
-        policaRepository.deleteById(id);
+        delete(polica);
         return 0;
     }
 
@@ -59,17 +73,35 @@ public class PolicaService {
         return false;
     }
 
-    // TODO azuriranje polica u korisniku??
-    public Integer dodajKnjiguNaPolicu(KnjigaPolicaDto dto, Citalac citalac) {
-        Knjiga knjiga = knjigaService.findById(dto.getIdKnjige());
-        Optional<Polica> optionalPolica = policaRepository.findById(dto.getIdPolice());
-        Recenzija recenzija = null;
-        Stavka stavka = null;
+    public Boolean knjigaURead(Knjiga knjiga, Citalac citalac) {
+        for (Polica p : citalac.getOstalePolice()) {
+            if (p.getNaziv().equals("Read")) {
+                for (Stavka s : p.getStavke()) {
+                    if (s.getKnjiga().getId().equals(knjiga.getId())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
-        if (knjiga == null || !optionalPolica.isPresent())
+    public void dodajStavkuNaPolicu(Stavka stavka, Polica polica) {
+        for (Stavka s : polica.getStavke()) {
+            if (s.getId().equals(stavka.getId())) {
+                return;
+            }
+        }
+        polica.getStavke().add(stavka);
+    }
+
+    public Integer dodajKnjiguNaPolicu(Citalac citalac, Long idKnjige, Long idPolice, RecenzijaDto dto) {
+        Knjiga knjiga = knjigaService.findById(idKnjige);
+        Polica polica = findById(idPolice);
+
+        if (knjiga == null || polica == null) {
             return 1;
-
-        Polica polica = optionalPolica.get();
+        }
 
         boolean sadrzi = false;
         for (Polica p : citalac.getOstalePolice()) {
@@ -77,57 +109,38 @@ public class PolicaService {
                 sadrzi = true;
             }
         }
-        if (!sadrzi)
-            return 2;
 
-        for (Polica p : citalac.getOstalePolice()) {
-            for (Stavka s : p.getStavke()) {
-                if (s.getKnjiga().getId().equals(knjiga.getId())) {
-                    stavka = s;
-                    break;
-                }
-            }
+        if (!sadrzi) {
+            return 2;
         }
+
+        if (knjigaNaPrimarnojPolici(knjiga, citalac) && polica.isPrimarna()) {
+            return 3;
+        }
+
+        if (!knjigaNaPrimarnojPolici(knjiga, citalac) && !polica.isPrimarna()) {
+            return 4;
+        }
+
+        if (!knjigaURead(knjiga, citalac) && dto != null) {
+            return 5;
+        }
+
+        Stavka stavka = stavkaService.findByCitalacAndKnjiga(citalac, knjiga);
 
         if (stavka == null) {
             stavka = new Stavka();
             stavka.setKnjiga(knjiga);
         }
 
-        if (knjigaNaPrimarnojPolici(knjiga, citalac) && polica.isPrimarna())
-            return 3;
-
-        if (!knjigaNaPrimarnojPolici(knjiga, citalac) && !polica.isPrimarna())
-            return 4;
-
-//        if (polica.getNaziv().equals("Read") && dto.getRecenzijaDto() == null)
-//            return 5;
-
-        if (dto.getRecenzijaDto() != null && dto.getRecenzijaDto().getOcena() == null)
-            return 6;
-
-        if (dto.getRecenzijaDto() != null) {
-            recenzija = new Recenzija();
-            recenzija.setOcena(dto.getRecenzijaDto().getOcena());
-            recenzija.setDatumRecenzije(dto.getRecenzijaDto().getDatumRecenzije());
-            recenzija.setTekst(dto.getRecenzijaDto().getTekst());
-            recenzija = recenzijaService.save(recenzija);
+        if (dto != null) {
+            stavka.setRecenzija(recenzijaService.dodajRecenziju(dto.getTekst(), dto.getOcena()));
         }
 
-        stavka.setRecenzija(recenzija);
         stavka = stavkaService.save(stavka);
 
-        sadrzi = false;
-        Set<Stavka> stavke = polica.getStavke();
-        for (Stavka s : stavke) {
-            if (s.getId().equals(stavka.getId())) {
-                sadrzi = true;
-                break;
-            }
-        }
-        if (!sadrzi)
-            stavke.add(stavka);
-        polica.setStavke(stavke);
+        dodajStavkuNaPolicu(stavka, polica);
+
         polica = policaRepository.save(polica);
         Set<Polica> police = citalac.getOstalePolice();
         for (Polica p : police) {
@@ -137,52 +150,56 @@ public class PolicaService {
             }
         }
         police.add(polica);
-        citalac.setOstalePolice(police);
 
         return 0;
     }
 
-    public Integer obrisiKnjiguSaPolice(@RequestBody KnjigaPolicaDto dto, Citalac citalac) {
-        Knjiga knjiga = knjigaService.findById(dto.getIdKnjige());
-        Optional<Polica> optionalPolica = policaRepository.findById(dto.getIdPolice());
-        Recenzija recenzija = null;
-        Stavka stavka = null;
+    public Integer obrisiKnjiguSaPolice(Citalac citalac, Long idKnjige, Long idPolice) {
+        Knjiga knjiga = knjigaService.findById(idKnjige);
+        Polica polica = findById(idPolice);
 
-        if (knjiga == null || !optionalPolica.isPresent())
+        if (knjiga == null || polica == null) {
             return 1;
+        }
 
-        Polica polica = optionalPolica.get();
-
-        if (!citalac.getOstalePolice().contains(polica))
-            return 2;
-
+        boolean sadrzi = false;
         for (Polica p : citalac.getOstalePolice()) {
-            for (Stavka s : p.getStavke()) {
-                if (s.getKnjiga().equals(knjiga)) {
-                    stavka = s;
-                    break;
-                }
+            if (p.getId().equals(polica.getId())) {
+                sadrzi = true;
             }
         }
 
-        if (stavka == null)
+        if (!sadrzi) {
+            return 2;
+        }
+
+        Stavka stavka = stavkaService.findByCitalacAndKnjiga(citalac, knjiga);
+
+        if (stavka == null) {
             return 3;
+        }
 
         if (polica.isPrimarna()) {
+            // TODO mozda moze da se obrise iz police automatski brisanjem stavke
+            // TODO override equals metodu svih klasa da bi contains i remove i ostale metode radile lepo
             for (Polica p : citalac.getOstalePolice()) {
                 for (Stavka s : p.getStavke()) {
                     if (s.getKnjiga().equals(knjiga)) {
-                        recenzijaService.delete(s.getRecenzija());
-                        stavkaService.delete(s);
+                        p.getStavke().remove(s);
                         break;
                     }
                 }
             }
+            recenzijaService.delete(stavka.getRecenzija());
+            stavkaService.delete(stavka);
         } else {
-            Set<Stavka> stavke = polica.getStavke();
-            stavke.remove(stavka);
-            polica.setStavke(stavke);
-            policaRepository.save(polica);
+            for (Stavka s : polica.getStavke()) {
+                if (s.getKnjiga().equals(knjiga)) {
+                    polica.getStavke().remove(s);
+                    break;
+                }
+            }
+            save(polica);
         }
 
         return 0;
