@@ -35,7 +35,7 @@ public class RecenzijaController {
     }
 
     // TODO azurirati avg ocenu knjige pri dodavanju recenzije
-    @PostMapping("/")
+    @PostMapping("/") // TODO OBRISI DATUM IZ DTO
     public ResponseEntity dodajRecenziju(@RequestBody RecenzijaDto dto, HttpSession session){
         Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
 

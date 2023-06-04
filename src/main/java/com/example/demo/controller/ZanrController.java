@@ -48,7 +48,7 @@ public class ZanrController {
         return new ResponseEntity("Uspesno dodat zanr", HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}") // TODO dodati metodu za brisanje umesto delete
     public ResponseEntity obrisiZanr(@PathVariable Long id, HttpSession session) {
         Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
 

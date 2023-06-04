@@ -35,7 +35,7 @@ public class PolicaController {
     }
 
     @PostMapping("/")
-    public ResponseEntity dodajPolicu(@RequestParam String nazivPolice, HttpSession session) {
+    public ResponseEntity dodajPolicu(@RequestBody String nazivPolice, HttpSession session) {
         Korisnik korisnik = (Korisnik)session.getAttribute("korisnik");
         if (korisnik == null) {
             return new ResponseEntity<>("Morate biti prijavljeni", HttpStatus.UNAUTHORIZED);
@@ -54,7 +54,7 @@ public class PolicaController {
         return new ResponseEntity<>("Polica " + nazivPolice + " uspesno dodana", HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}") // TODO poslati novi naziv police
     public ResponseEntity azurirajPolicu(@PathVariable Long id, HttpSession session) {
         return new ResponseEntity("TODO", HttpStatus.NO_CONTENT);
     }

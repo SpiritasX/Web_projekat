@@ -36,7 +36,7 @@ public class KorisnikController {
         return new ResponseEntity("Nepostojeci korisnik", HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/api/prijavi-se")
+    @PostMapping("prijavi-se")
     public ResponseEntity prijava(@RequestBody LoginDto dto, HttpSession session) {
         if (dto.getEmail() == null || dto.getLozinka() == null) {
             return new ResponseEntity("Moraju biti popunjena sva polja", HttpStatus.BAD_REQUEST);
@@ -53,7 +53,7 @@ public class KorisnikController {
     }
 
     // TODO ponovljena email adresa i mora da bude jedinstvena, kao i korisnicko ime
-    @PostMapping("/api/registruj-se")
+    @PostMapping("registruj-se") // TODO ispraviti da radi u postmanu
     public ResponseEntity registracija(@RequestBody RegisterDto dto, HttpSession session) {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
@@ -77,7 +77,7 @@ public class KorisnikController {
         return new ResponseEntity<>("Uspesno registrovan", HttpStatus.OK);
     }
 
-    @GetMapping("/{id}/police")
+    @GetMapping("/{id}/police") // TODO treba da ispise police od prosledjenog korisnika a ne od prijavljenog
     public ResponseEntity listaPolica(@PathVariable Long id, HttpSession session) {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
         if (korisnik == null) {
@@ -87,7 +87,7 @@ public class KorisnikController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}") // TODO obrisati veze
     public ResponseEntity obrisiKorisnika(@PathVariable Long id, HttpSession session) {
         Korisnik korisnik = (Korisnik)session.getAttribute("korisnik");
 
@@ -117,7 +117,7 @@ public class KorisnikController {
         return new ResponseEntity("Uspesno obrisan korisnik", HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping("/") //TODO isto kao za registraciju autora
     public ResponseEntity kreirajNalogAutora(@RequestBody RegisterDto dto, HttpSession session) {
         Korisnik korisnik = (Korisnik)session.getAttribute("korisnik");
 
