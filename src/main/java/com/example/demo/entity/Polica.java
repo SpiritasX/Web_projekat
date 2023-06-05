@@ -14,11 +14,7 @@ public class Polica implements Serializable {
     @Column(nullable = false)
     private boolean primarna;
 
-//    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "korisnik_id")
-//    private Citalac citalac;
-
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "polica_id")
     private Set<Stavka> stavke = new HashSet<Stavka>();
 

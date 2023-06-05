@@ -16,7 +16,7 @@ public class Recenzija implements Serializable {
     @Column(nullable = false)
     private Date datumRecenzije;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "korisnik_id")
     private Citalac citalac;
 

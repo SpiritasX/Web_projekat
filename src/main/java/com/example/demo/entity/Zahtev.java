@@ -21,7 +21,7 @@ public class Zahtev implements Serializable {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     private Autor autor;
 

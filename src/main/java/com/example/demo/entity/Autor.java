@@ -9,7 +9,7 @@ public class Autor extends Citalac {
     @Column(nullable = false)
     private Boolean aktivan;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "autor_id")
     private Set<Knjiga> knjige = new HashSet<Knjiga>();
 
