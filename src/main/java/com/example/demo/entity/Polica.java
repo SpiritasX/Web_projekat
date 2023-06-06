@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -14,8 +15,7 @@ public class Polica implements Serializable {
     @Column(nullable = false)
     private boolean primarna;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
-    @JoinColumn(name = "polica_id")
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Set<Stavka> stavke = new HashSet<Stavka>();
 
     public Long getId() {
@@ -57,5 +57,23 @@ public class Polica implements Serializable {
                 ", naziv='" + naziv + '\'' +
                 ", primarna=" + primarna +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Polica))
+            return false;
+
+        Polica other = (Polica) o;
+
+        return id != null &&
+                id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

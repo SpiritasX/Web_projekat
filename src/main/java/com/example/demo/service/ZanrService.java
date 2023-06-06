@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.Knjiga;
 import com.example.demo.entity.Zanr;
 import com.example.demo.repository.ZanrRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +35,9 @@ public class ZanrService {
         zanr.setNaziv(naziv);
         zanr = save(zanr);
         return zanr;
+    }
+
+    public void obrisiZanr(Zanr zanr) {
+        delete(zanr);
     }
 }

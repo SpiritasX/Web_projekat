@@ -1,5 +1,7 @@
 package com.example.demo.dto;
 
+import com.example.demo.entity.Recenzija;
+
 import java.util.Date;
 
 public class RecenzijaDto {
@@ -7,10 +9,17 @@ public class RecenzijaDto {
     private String tekst;
     private Date datumRecenzije;
 
-    public RecenzijaDto(Float ocena, String tekst, Date datumRecenzije) {
+    public RecenzijaDto(Float ocena, String tekst) {
         this.ocena = ocena;
         this.tekst = tekst;
-        this.datumRecenzije = datumRecenzije;
+    }
+
+    public RecenzijaDto(Recenzija recenzija) {
+        if (recenzija != null) {
+            this.ocena = recenzija.getOcena();
+            this.tekst = recenzija.getTekst();
+            this.datumRecenzije = recenzija.getDatumRecenzije();
+        }
     }
 
     public Float getOcena() {

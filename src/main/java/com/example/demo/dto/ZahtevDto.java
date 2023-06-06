@@ -12,6 +12,9 @@ public class ZahtevDto {
     private String poruka;
     private Long idAutora;
 
+    private Status status;
+    private Date datum;
+
     public ZahtevDto() {
     }
 
@@ -20,6 +23,14 @@ public class ZahtevDto {
         this.telefon = telefon;
         this.poruka = poruka;
         this.idAutora = idAutora;
+    }
+
+    public ZahtevDto(Zahtev zahtev) {
+        this.poruka = zahtev.getPoruka();
+        this.telefon = zahtev.getTelefon();
+        this.email = zahtev.getEmail();
+        this.status = zahtev.getStatus();
+        this.datum = zahtev.getDatum();
     }
 
     public String getEmail() {

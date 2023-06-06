@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class Zahtev implements Serializable {
@@ -92,5 +93,21 @@ public class Zahtev implements Serializable {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
 
+        if (!(o instanceof Zahtev))
+            return false;
+
+        Zahtev other = (Zahtev) o;
+
+        return id != null &&
+                id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

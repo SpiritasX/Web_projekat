@@ -26,19 +26,19 @@ public class KorisnikService {
     private AutorRepository autorRepository;
     @Autowired
     private PolicaService policaService;
+    @Autowired
+    private StavkaService stavkaService;
 
     public Korisnik findById(Long id) {
         return korisnikRepository.findById(id).orElse(null);
     }
 
     public Korisnik save(Korisnik korisnik) {
-        korisnik = korisnikRepository.save(korisnik);
+//        korisnik = korisnikRepository.save(korisnik);
 
         if (korisnik.getUloga().equals(Uloga.CITALAC)) {
             korisnik = citalacRepository.save((Citalac)korisnik);
-        }
-
-        if (korisnik.getUloga().equals(Uloga.AUTOR)) {
+        } else if (korisnik.getUloga().equals(Uloga.AUTOR)) {
             korisnik = autorRepository.save((Autor)korisnik);
         }
 
@@ -65,6 +65,10 @@ public class KorisnikService {
         return korisnikRepository.findByEmail(email).orElse(null);
     }
 
+    public Korisnik findByKorisnickoIme(String korisnickoIme) {
+        return korisnikRepository.findByKorisnickoIme(korisnickoIme).orElse(null);
+    }
+
     public Korisnik prijava(LoginDto dto) {
         Korisnik korisnik = korisnikRepository.findByEmail(dto.getEmail()).orElse(null);
         if (korisnik != null && korisnik.getLozinka().equals(dto.getLozinka())) {
@@ -73,21 +77,32 @@ public class KorisnikService {
         return null;
     }
 
-    public void registracija(RegisterDto dto) {
-        Citalac citalac = new Citalac();
-
-        citalac.setIme(dto.getIme());
-        citalac.setPrezime(dto.getPrezime());
-        citalac.setKorisnickoIme(dto.getKorisnickoIme());
-        citalac.setEmail(dto.getEmail());
-        citalac.setLozinka(dto.getLozinka());
-        citalac.setUloga(Uloga.CITALAC);
-
+    public void dodajPrimarnePolice(Citalac citalac) {
         Set<Polica> police = new HashSet<Polica>();
         police.add(policaService.dodajPolicu("Read",true));
         police.add(policaService.dodajPolicu("Currently Reading",true));
         police.add(policaService.dodajPolicu("Want To Read",true));
         citalac.setOstalePolice(police);
+    }
+
+    public void registracija(String ime, String prezime, String korisnickoIme, String email, String lozinka, Uloga uloga, Boolean dodajPrimarnePolice) {
+        Citalac citalac = new Citalac();
+
+        citalac.setIme(ime);
+        citalac.setPrezime(prezime);
+        citalac.setKorisnickoIme(korisnickoIme);
+        citalac.setEmail(email);
+        citalac.setLozinka(lozinka);
+        citalac.setUloga(uloga);
+
+        if (uloga.equals(Uloga.AUTOR)) {
+            ((Autor)citalac).setAktivan(false);
+        }
+
+        if (dodajPrimarnePolice) {
+            dodajPrimarnePolice(citalac);
+        }
+
         save(citalac);
     }
 
@@ -102,42 +117,28 @@ public class KorisnikService {
             return 2;
         }
 
-        // TODO ne moze da se obrise autor koji ima knjige
-
-        if (korisnik.getUloga().equals(Uloga.AUTOR)) {
+        if (korisnik.getUloga().equals(Uloga.AUTOR) && ((Autor)korisnik).getKnjige().size() > 0) {
             return 3;
         }
 
+        Set<Polica> police = ((Citalac) korisnik).getOstalePolice();
+        ((Citalac) korisnik).setOstalePolice(null);
+        save(korisnik);
+        for (Polica p : police) {
+            for (Stavka s : p.getStavke()) {
+                stavkaService.obrisiStavku(s);
+            }
+            policaService.delete(p);
+        }
         delete(korisnik);
         return 0;
     }
 
-    // TODO pomeriti mozda u policaService nekako
-    public void dodajPolicu(Polica polica, Citalac citalac){
+    public void dodajPolicuKorisnika(Polica polica, Citalac citalac){
         Set<Polica> police = citalac.getOstalePolice();
         police.add(polica);
         citalac.setOstalePolice(police);
         citalacRepository.save(citalac);
-    }
-
-    // TODO razdvojiti kreiranje i aktiviranje?
-    public Autor kreirajNalogAutora(String ime, String prezime, String korisnickoIme, String email, String lozinka) {
-        Autor autor = new Autor();
-        autor.setEmail(email);
-        autor.setLozinka(lozinka);
-        autor.setAktivan(true);
-        autor.setUloga(Uloga.AUTOR);
-        autor.setIme(ime);
-        autor.setPrezime(prezime);
-        autor.setKorisnickoIme(korisnickoIme);
-
-        Set<Polica> police = new HashSet<Polica>();
-        police.add(policaService.dodajPolicu("Read",true));
-        police.add(policaService.dodajPolicu("Currently Reading",true));
-        police.add(policaService.dodajPolicu("Want To Read",true));
-        autor.setOstalePolice(police);
-        autor = (Autor)save(autor);
-        return autor;
     }
 
     public void azurirajAutora(Autor autor, String email, String lozinka) {

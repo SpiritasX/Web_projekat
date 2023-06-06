@@ -3,6 +3,8 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.Objects;
+
 @Entity
 public class Stavka implements Serializable {
     @Id
@@ -44,5 +46,23 @@ public class Stavka implements Serializable {
         return "Stavka{" +
                 "id=" + id +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Stavka))
+            return false;
+
+        Stavka other = (Stavka) o;
+
+        return id != null &&
+                id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

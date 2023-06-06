@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.LoginDto;
+import com.example.demo.dto.PolicaDto;
 import com.example.demo.dto.RegisterDto;
 import com.example.demo.entity.Citalac;
 import com.example.demo.entity.Korisnik;
+import com.example.demo.entity.Polica;
 import com.example.demo.entity.Uloga;
 import com.example.demo.service.KorisnikService;
 import jakarta.servlet.http.HttpSession;
@@ -12,7 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/korisnici")
@@ -24,8 +28,6 @@ public class KorisnikController {
     public List<Korisnik> listaKorisnika() {
         return korisnikService.findAll();
     }
-
-    // TODO Koristiti DTO za slanje svega!!!!
 
     @GetMapping("/{id}")
     public ResponseEntity jedanKorisnik(@PathVariable Long id) {
@@ -52,8 +54,7 @@ public class KorisnikController {
         return new ResponseEntity("Uspesno prijavljen", HttpStatus.OK);
     }
 
-    // TODO ponovljena email adresa i mora da bude jedinstvena, kao i korisnicko ime
-    @PostMapping("registruj-se") // TODO ispraviti da radi u postmanu
+    @PostMapping("registruj-se")
     public ResponseEntity registracija(@RequestBody RegisterDto dto, HttpSession session) {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
@@ -70,24 +71,35 @@ public class KorisnikController {
         }
 
         if (korisnikService.findByEmail(dto.getEmail()) != null) {
-            return new ResponseEntity("Korisnik sa zadatim email-om vec postoji", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Korisnik sa zadatim email-om vec postoji", HttpStatus.FORBIDDEN);
         }
 
-        korisnikService.registracija(dto);
+        if (korisnikService.findByKorisnickoIme(dto.getKorisnickoIme()) != null) {
+            return new ResponseEntity("Korisnik sa zadatim korisnickim imenom vec postoji", HttpStatus.FORBIDDEN);
+        }
+
+        korisnikService.registracija(dto.getIme(), dto.getPrezime(), dto.getKorisnickoIme(), dto.getEmail(), dto.getLozinka(), Uloga.CITALAC, true);
+
         return new ResponseEntity<>("Uspesno registrovan", HttpStatus.OK);
     }
 
-    @GetMapping("/{id}/police") // TODO treba da ispise police od prosledjenog korisnika a ne od prijavljenog
-    public ResponseEntity listaPolica(@PathVariable Long id, HttpSession session) {
-        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+    @GetMapping("/{id}/police")
+    public ResponseEntity listaPolica(@PathVariable Long id) {
+        Korisnik korisnik = korisnikService.findById(id);
+
         if (korisnik == null) {
-            return new ResponseEntity<>("Nisi prijavljen", HttpStatus.FORBIDDEN);
-        } else {
-            return new ResponseEntity(((Citalac)korisnik).getOstalePolice(), HttpStatus.OK);
+            return new ResponseEntity("Nepostojeci korisnik", HttpStatus.BAD_REQUEST);
         }
+
+        Set<PolicaDto> police = new HashSet<>();
+        for (Polica p : ((Citalac)korisnikService.findById(korisnik.getId())).getOstalePolice()) {
+            police.add(new PolicaDto(p));
+        }
+
+        return new ResponseEntity(police, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}") // TODO obrisati veze
+    @DeleteMapping("/{id}")
     public ResponseEntity obrisiKorisnika(@PathVariable Long id, HttpSession session) {
         Korisnik korisnik = (Korisnik)session.getAttribute("korisnik");
 
@@ -99,25 +111,22 @@ public class KorisnikController {
             return new ResponseEntity("Samo administrator moze da brise druge korisnike", HttpStatus.FORBIDDEN);
         }
 
-        int rezultat = korisnikService.obrisiKorisnika(id);
+        int kodGreske = korisnikService.obrisiKorisnika(id);
 
-        if (rezultat == 1) {
-            return new ResponseEntity("Nepostojeci korisnik", HttpStatus.BAD_REQUEST);
-        }
-
-        // TODO odaje id administratora!!
-        if (rezultat == 2) {
-            return new ResponseEntity("Administrator ne moze da se obrise", HttpStatus.FORBIDDEN);
-        }
-
-        if (rezultat == 3) {
-            return new ResponseEntity("Autor trenutno ne moze da se obrise", HttpStatus.FORBIDDEN);
+        switch (kodGreske) {
+            case 1:
+                return new ResponseEntity("Nepostojeci korisnik", HttpStatus.BAD_REQUEST);
+            case 2:
+                // TODO odaje id administratora!!
+                return new ResponseEntity("Administrator ne moze da se obrise", HttpStatus.FORBIDDEN);
+            case 3:
+                return new ResponseEntity("Autor trenutno ne moze da se obrise", HttpStatus.FORBIDDEN);
         }
 
         return new ResponseEntity("Uspesno obrisan korisnik", HttpStatus.OK);
     }
 
-    @PostMapping("/") //TODO isto kao za registraciju autora
+    @PostMapping("/kreiraj-autora")
     public ResponseEntity kreirajNalogAutora(@RequestBody RegisterDto dto, HttpSession session) {
         Korisnik korisnik = (Korisnik)session.getAttribute("korisnik");
 
@@ -129,7 +138,8 @@ public class KorisnikController {
             return new ResponseEntity("Morate biti administrator", HttpStatus.FORBIDDEN);
         }
 
-        korisnikService.kreirajNalogAutora(dto.getIme(), dto.getPrezime(), dto.getKorisnickoIme(), dto.getEmail(), dto.getLozinka());
+        korisnikService.registracija(dto.getIme(), dto.getPrezime(), dto.getKorisnickoIme(), dto.getEmail(), dto.getLozinka(), Uloga.AUTOR, false);
+
         return new ResponseEntity("Uspesno dodan autor", HttpStatus.OK);
     }
 }

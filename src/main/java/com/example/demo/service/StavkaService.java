@@ -11,6 +11,10 @@ import java.util.List;
 public class StavkaService {
     @Autowired
     private StavkaRepository stavkaRepository;
+    @Autowired
+    private PolicaService policaService;
+//    @Autowired
+//    private RecenzijaService recenzijaService;
 
     public Stavka findById(Long id) {
         return stavkaRepository.findById(id).orElse(null);
@@ -31,7 +35,7 @@ public class StavkaService {
     public Stavka findByCitalacAndKnjiga(Citalac citalac, Knjiga knjiga) {
         for (Polica p : citalac.getOstalePolice()) {
             for (Stavka s : p.getStavke()) {
-                if (s.getKnjiga().getId().equals(knjiga.getId())) {
+                if (s.getKnjiga().equals(knjiga)) {
                     return s;
                 }
             }
@@ -39,7 +43,6 @@ public class StavkaService {
         return null;
     }
 
-    // TODO dodavanje i brisanje stavke, ne treba da ima svoj kontroler ali mozda treba da se poziva metoda sa drugih mesta...
     public Stavka dodajStavku(Knjiga knjiga, Recenzija recenzija) {
         Stavka stavka = new Stavka();
         stavka.setKnjiga(knjiga);
@@ -48,14 +51,19 @@ public class StavkaService {
         return stavka;
     }
 
-    public Integer obrisiStavku(Long id) {
-        Stavka stavka = findById(id);
-
-        if (stavka == null) {
-            return 1;
+    public Integer obrisiStavku(Stavka stavka) {
+        for (Polica p : policaService.findAll()) {
+            for (Stavka s : p.getStavke()) {
+                if (s.equals(stavka)) {
+                    p.getStavke().remove(s);
+                    break;
+                }
+            }
         }
 
+//        recenzijaService.delete(stavka.getRecenzija());
         delete(stavka);
+
         return 0;
     }
 }

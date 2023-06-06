@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class Recenzija implements Serializable {
@@ -52,18 +53,6 @@ public class Recenzija implements Serializable {
         this.datumRecenzije = datumRecenzije;
     }
 
-//    TODO zakomentarisati sve gettere i settere veza
-//    Zbog njih nastaje beskonacna rekurzija pri ispisu
-//    JSON objekata u responsu!!!
-
-//    public Citalac getCitalac() {
-//        return citalac;
-//    }
-//
-//    public void setCitalac(Citalac citalac) {
-//        this.citalac = citalac;
-//    }
-
     @Override
     public String toString() {
         return "Recenzija{" +
@@ -71,5 +60,23 @@ public class Recenzija implements Serializable {
                 ", ocena=" + ocena +
                 ", datumRecenzije=" + datumRecenzije +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Recenzija))
+            return false;
+
+        Recenzija other = (Recenzija) o;
+
+        return id != null &&
+                id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/zahtevi")
 public class ZahtevController {
@@ -30,7 +33,13 @@ public class ZahtevController {
             return new ResponseEntity("Morate biti administrator", HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity(zahtevService.findAll(), HttpStatus.OK);
+        List<ZahtevDto> zahtevi = new ArrayList<>();
+
+        for (Zahtev z : zahtevService.findAll()) {
+            zahtevi.add(new ZahtevDto(z));
+        }
+
+        return new ResponseEntity(zahtevi, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -48,10 +57,10 @@ public class ZahtevController {
         Zahtev zahtev = zahtevService.findById(id);
 
         if (zahtev == null) {
-            return new ResponseEntity("Nepostojeci zahtev", HttpStatus.NOT_FOUND);
+            return new ResponseEntity("Nepostojeci zahtev", HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity(zahtev, HttpStatus.OK);
+        return new ResponseEntity(new ZahtevDto(zahtev), HttpStatus.OK);
     }
 
     @PostMapping("/")
@@ -89,6 +98,7 @@ public class ZahtevController {
         }
 
         zahtevService.obradiZahtev(zahtev, prihvati);
+
         return new ResponseEntity<>("Zahtev uspesno obradjen", HttpStatus.OK);
     }
 }

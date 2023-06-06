@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.PolicaDto;
 import com.example.demo.entity.Citalac;
 import com.example.demo.entity.Korisnik;
 import com.example.demo.entity.Polica;
@@ -12,6 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @RestController
 @RequestMapping("/api/police")
 public class PolicaController {
@@ -22,41 +28,64 @@ public class PolicaController {
 
     @GetMapping("/")
     public ResponseEntity listaPolica() {
-        return new ResponseEntity(policaService.findAll(), HttpStatus.OK);
+        List<PolicaDto> police = new ArrayList<>();
+
+        for (Polica p : policaService.findAll()) {
+            police.add(new PolicaDto(p));
+        }
+
+        return new ResponseEntity(police, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity jednaPolica(@PathVariable Long id) {
         Polica polica = policaService.findById(id);
+
         if (polica == null) {
-            return new ResponseEntity("Nepostojeca recenzija", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Nepostojeca polica", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(polica, HttpStatus.OK);
+
+        return new ResponseEntity(new PolicaDto(polica), HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity dodajPolicu(@RequestBody String nazivPolice, HttpSession session) {
+    public ResponseEntity dodajPolicu(@RequestParam String nazivPolice, HttpSession session) {
         Korisnik korisnik = (Korisnik)session.getAttribute("korisnik");
+
         if (korisnik == null) {
             return new ResponseEntity<>("Morate biti prijavljeni", HttpStatus.UNAUTHORIZED);
         }
 
-        // TODO ako si prijaljen kao administrator, izazvaces server error :)
-
-        for (Polica p : ((Citalac)korisnik).getOstalePolice()) {
+        for (Polica p : ((Citalac)korisnikService.findById(korisnik.getId())).getOstalePolice()) {
             if (p.getNaziv().equals(nazivPolice)) {
                 return new ResponseEntity("Vec postoji polica sa tim nazivom", HttpStatus.BAD_REQUEST);
             }
         }
 
         Polica polica = policaService.dodajPolicu(nazivPolice, false);
-        korisnikService.dodajPolicu(polica, (Citalac)korisnik);
+        korisnikService.dodajPolicuKorisnika(polica, (Citalac)korisnikService.findById(korisnik.getId()));
+
         return new ResponseEntity<>("Polica " + nazivPolice + " uspesno dodana", HttpStatus.OK);
     }
 
-    @PutMapping("/{id}") // TODO poslati novi naziv police
-    public ResponseEntity azurirajPolicu(@PathVariable Long id, HttpSession session) {
-        return new ResponseEntity("TODO", HttpStatus.NO_CONTENT);
+    @PutMapping("/{id}")
+    public ResponseEntity azurirajPolicu(@PathVariable Long id, @RequestParam String noviNaziv, HttpSession session) {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (korisnik == null) {
+            return new ResponseEntity("Morate biti prijavljeni", HttpStatus.UNAUTHORIZED);
+        }
+
+        int kodGreske = policaService.azurirajPolicu((Citalac)korisnikService.findById(korisnik.getId()), id, noviNaziv);
+
+        switch (kodGreske) {
+            case 1:
+                return new ResponseEntity("Nepostojeca polica", HttpStatus.BAD_REQUEST);
+            case 2:
+                return new ResponseEntity("Ta polica ne pripada vama", HttpStatus.FORBIDDEN);
+        }
+
+        return new ResponseEntity("Uspesno azurirana polica", HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -64,18 +93,18 @@ public class PolicaController {
         Korisnik korisnik = (Korisnik)session.getAttribute("korisnik");
 
         if (korisnik == null) {
-            return new ResponseEntity("Morate biti prijaljeni", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity("Morate biti prijavljeni", HttpStatus.UNAUTHORIZED);
         }
 
-        int rezultat = policaService.obrisiPolicu(id);
-        korisnikService.save(korisnik);
+        int kodGreske = policaService.obrisiPolicu(id, (Citalac)korisnikService.findById(korisnik.getId()));
 
-        if (rezultat == 1) {
-            return new ResponseEntity("Nepostojeca polica", HttpStatus.BAD_REQUEST);
-        }
-
-        if (rezultat == 2) {
-            return new ResponseEntity("Ne moze se obrisati primarna polica", HttpStatus.FORBIDDEN);
+        switch (kodGreske) {
+            case 1:
+                return new ResponseEntity("Nepostojeca polica", HttpStatus.BAD_REQUEST);
+            case 2:
+                return new ResponseEntity("Polica ne pripada vama", HttpStatus.FORBIDDEN);
+            case 3:
+                return new ResponseEntity("Ne moze se obrisati primarna polica", HttpStatus.FORBIDDEN);
         }
 
         return new ResponseEntity<>("Uspesno obrisana polica", HttpStatus.OK);

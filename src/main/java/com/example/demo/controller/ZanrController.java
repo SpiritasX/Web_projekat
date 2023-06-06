@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Knjiga;
 import com.example.demo.entity.Korisnik;
 import com.example.demo.entity.Uloga;
 import com.example.demo.entity.Zanr;
+import com.example.demo.service.KnjigaService;
 import com.example.demo.service.ZanrService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -17,19 +21,29 @@ import java.util.Optional;
 public class ZanrController {
     @Autowired
     private ZanrService zanrService;
+    @Autowired
+    private KnjigaService knjigaService;
 
     @GetMapping("/")
     public ResponseEntity listaZanrova() {
-        return new ResponseEntity(zanrService.findAll(), HttpStatus.OK);
+        List<String> zanrovi = new ArrayList<>();
+
+        for (Zanr z : zanrService.findAll()) {
+            zanrovi.add(z.getNaziv());
+        }
+
+        return new ResponseEntity(zanrovi, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity jedanZanr(@PathVariable Long id) {
         Zanr zanr = zanrService.findById(id);
+
         if (zanr == null) {
             return new ResponseEntity("Nepostojeci zanr", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(zanr, HttpStatus.OK);
+
+        return new ResponseEntity(zanr.getNaziv(), HttpStatus.OK);
     }
 
     @PostMapping("/")
@@ -45,10 +59,11 @@ public class ZanrController {
         }
 
         zanrService.dodajZanr(naziv);
+
         return new ResponseEntity("Uspesno dodat zanr", HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}") // TODO dodati metodu za brisanje umesto delete
+    @DeleteMapping("/{id}")
     public ResponseEntity obrisiZanr(@PathVariable Long id, HttpSession session) {
         Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
 
@@ -66,7 +81,14 @@ public class ZanrController {
             return new ResponseEntity("Nepostojeci zanr", HttpStatus.BAD_REQUEST);
         }
 
-        zanrService.delete(zanr);
+        for (Knjiga k : knjigaService.findAll()) {
+            if (k.getZanrovi().contains(zanr)) {
+                return new ResponseEntity("Ne moze se obrisati zanr koji je u upotrebi", HttpStatus.FORBIDDEN);
+            }
+        }
+
+        zanrService.obrisiZanr(zanr);
+
         return new ResponseEntity("Uspesno obrisan zanr", HttpStatus.OK);
     }
 }

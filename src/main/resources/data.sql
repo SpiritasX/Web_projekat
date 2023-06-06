@@ -1,9 +1,9 @@
-INSERT INTO KORISNIK (id, ime, prezime, korisnicko_ime, email, lozinka, uloga, datum_rodjenja, profilna_slika) VALUES (1, 'J. K.', 'Rowling', 'rolovana', 'jkrowling@harrypotter.com', 'rolnica', 'AUTOR', '1965-07-31', '/slike/1.jpg');
-INSERT INTO KORISNIK (id, ime, prezime, korisnicko_ime, email, lozinka, uloga) VALUES (2, 'Dejan', 'Bogovac', 'Cutthroat', 'bogovac.in20.2021@uns.ac.rs', 'test123', 'ADMINISTRATOR');
-INSERT INTO KORISNIK (id, ime, prezime, korisnicko_ime, email, lozinka, uloga) VALUES (3, 'Anastasija', 'Terzic', 'Anastasija', 'terzic.in44.2021@uns.ac.rs', 'test123', 'ADMINISTRATOR');
-INSERT INTO KORISNIK (id, ime, prezime, korisnicko_ime, email, lozinka, uloga) VALUES (4, 'Milica', 'Mirkovic', 'MilicaM', 'mirkovic.pr44.2021@uns.ac.rs', 'test543', 'CITALAC');
-INSERT INTO KORISNIK (id, ime, prezime, korisnicko_ime, email, lozinka, uloga) VALUES (5, 'Marko', 'Markovic', 'MarkoMarko', 'markovic.in4.2020@uns.ac.rs', 'test321', 'CITALAC');
-INSERT INTO KORISNIK (id, ime, prezime, korisnicko_ime, email, lozinka, uloga) VALUES (6, 'Janko', 'Jankovic', 'JankoTheBoss', 'jankovic.ra122.2011@uns.ac.rs', 'test321', 'CITALAC');
+INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, email, lozinka, uloga, datum_rodjenja, profilna_slika) VALUES ('J. K.', 'Rowling', 'rolovana', 'jkrowling@harrypotter.com', 'rolnica', 'AUTOR', '1965-07-31', '/slike/1.jpg');
+INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, email, lozinka, uloga) VALUES ('Dejan', 'Bogovac', 'Cutthroat', 'bogovac.in20.2021@uns.ac.rs', 'test123', 'ADMINISTRATOR');
+INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, email, lozinka, uloga) VALUES ('Anastasija', 'Terzic', 'Anastasija', 'terzic.in44.2021@uns.ac.rs', 'test123', 'ADMINISTRATOR');
+INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, email, lozinka, uloga) VALUES ('Milica', 'Mirkovic', 'MilicaM', 'mirkovic.pr44.2021@uns.ac.rs', 'test543', 'CITALAC');
+INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, email, lozinka, uloga) VALUES ('Marko', 'Markovic', 'MarkoMarko', 'markovic.in4.2020@uns.ac.rs', 'test321', 'CITALAC');
+INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, email, lozinka, uloga) VALUES ('Janko', 'Jankovic', 'JankoTheBoss', 'jankovic.ra122.2011@uns.ac.rs', 'test321', 'CITALAC');
 
 INSERT INTO CITALAC (id) VALUES (1);
 INSERT INTO CITALAC (id) VALUES (2);
@@ -55,12 +55,19 @@ INSERT INTO RECENZIJA(ocena,tekst,datum_recenzije, korisnik_id)VALUES (1.0,'uzas
 INSERT INTO RECENZIJA(ocena,tekst,datum_recenzije, korisnik_id)VALUES (9.0,'sjajno, mali fali za 10 ','2020-04-24', 4);
 INSERT INTO RECENZIJA(ocena,tekst,datum_recenzije, korisnik_id)VALUES (5.0,'srednja zalost, ali moze da se izvuce pouka! ','2023-02-01', 5);
 
-INSERT INTO STAVKA (knjiga_id, recenzija_id, polica_id) VALUES (1, 1, 10);
-INSERT INTO STAVKA (knjiga_id, polica_id) VALUES (2, 8);
-INSERT INTO STAVKA (knjiga_id, polica_id) VALUES (1, 5);
-INSERT INTO STAVKA (knjiga_id, polica_id) VALUES (3, 6);
-INSERT INTO STAVKA (knjiga_id, recenzija_id, polica_id) VALUES (2, 1, 7);
-INSERT INTO STAVKA (knjiga_id, recenzija_id, polica_id) VALUES (4, 3, 14);
+INSERT INTO STAVKA (knjiga_id, recenzija_id) VALUES (1, 1);
+INSERT INTO STAVKA (knjiga_id) VALUES (2);
+INSERT INTO STAVKA (knjiga_id) VALUES (1);
+INSERT INTO STAVKA (knjiga_id) VALUES (3);
+INSERT INTO STAVKA (knjiga_id, recenzija_id) VALUES (2, 1);
+INSERT INTO STAVKA (knjiga_id, recenzija_id) VALUES (4, 3);
+
+INSERT INTO POLICA_STAVKE (stavke_id, polica_id) VALUES (1, 10);
+INSERT INTO POLICA_STAVKE (stavke_id, polica_id) VALUES (2, 8);
+INSERT INTO POLICA_STAVKE (stavke_id, polica_id) VALUES (3, 5);
+INSERT INTO POLICA_STAVKE (stavke_id, polica_id) VALUES (4, 6);
+INSERT INTO POLICA_STAVKE (stavke_id, polica_id) VALUES (5, 7);
+INSERT INTO POLICA_STAVKE (stavke_id, polica_id) VALUES (6, 11);
 
 
 INSERT INTO KNJIGA_ZANROVI (knjiga_id, zanr_id) VALUES (1, 2);

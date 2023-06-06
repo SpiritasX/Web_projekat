@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Knjiga;
-import com.example.demo.entity.Recenzija;
+import com.example.demo.entity.*;
 import com.example.demo.repository.RecenzijaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +13,8 @@ import java.util.Optional;
 public class RecenzijaService {
     @Autowired
     private RecenzijaRepository recenzijaRepository;
+    @Autowired
+    private StavkaService stavkaService;
 
     public Recenzija findById(Long id) {
         return recenzijaRepository.findById(id).orElse(null);
@@ -31,12 +32,34 @@ public class RecenzijaService {
         return recenzijaRepository.findAll();
     }
 
-    public Recenzija dodajRecenziju(String tekst, Float ocena) {
+    public Stavka knjigaURead(Long idKnjige, Citalac citalac) {
+        for (Polica p : citalac.getOstalePolice()) {
+            if (p.getNaziv().equals("Read")) {
+                for (Stavka s : p.getStavke()) {
+                    if (s.getKnjiga().getId().equals(idKnjige)) {
+                        return s;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public Recenzija dodajRecenziju(Citalac citalac, String tekst, Float ocena, Long idKnjige) {
+        Stavka stavka = knjigaURead(idKnjige, citalac);
+
+        if (stavka == null) {
+            return null;
+        }
+
         Recenzija recenzija = new Recenzija();
         recenzija.setTekst(tekst);
         recenzija.setDatumRecenzije(new Date());
         recenzija.setOcena(ocena);
         recenzija = save(recenzija);
+
+        stavka.setRecenzija(recenzija);
+        stavkaService.save(stavka);
         return recenzija;
     }
 

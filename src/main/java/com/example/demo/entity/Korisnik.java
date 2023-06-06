@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -114,5 +115,23 @@ public class Korisnik implements Serializable {
                 "id=" + id +
                 ", korisnickoIme='" + korisnickoIme + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Korisnik))
+            return false;
+
+        Korisnik other = (Korisnik) o;
+
+        return id != null &&
+                id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.HandlerTypePredicate;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/knjige")
@@ -15,26 +19,35 @@ public class KnjigaController {
     @Autowired
     private KnjigaService knjigaService;
     @Autowired
-    private PolicaService policaService;
-    @Autowired
     private KorisnikService korisnikService;
+    @Autowired
+    private KnjigaNaPoliciService knjigaNaPoliciService;
 
     @GetMapping("/")
     public ResponseEntity listaKnjiga() {
-        return new ResponseEntity(knjigaService.findAll(), HttpStatus.OK);
+        List<Knjiga> knjige = knjigaService.findAll();
+        List<KnjigaDto> dtos = new ArrayList();
+
+        for (Knjiga k : knjige) {
+            dtos.add(new KnjigaDto(k));
+        }
+
+        return new ResponseEntity(dtos, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity jednaKnjiga(@PathVariable Long id) {
         Knjiga knjiga = knjigaService.findById(id);
+
         if (knjiga == null) {
             return new ResponseEntity("Nepostojeca knjiga", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(knjiga, HttpStatus.OK);
+
+        return new ResponseEntity(new KnjigaDto(knjiga), HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity dodajNovuKnjigu(@RequestBody KnjigaDto dto, HttpSession session) {
+    public ResponseEntity dodajNovuKnjigu(@RequestPart KnjigaDto dto, @RequestPart MultipartFile naslovnaFotografija, HttpSession session) {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
         if (korisnik == null) {
@@ -46,16 +59,18 @@ public class KnjigaController {
         }
 
         if (knjigaService.findByISBN(dto.getISBN()) != null) {
-            return new ResponseEntity("Knjiga sa istim ISBN već postoji", HttpStatus.FORBIDDEN);
+            return new ResponseEntity("Knjiga sa istim ISBN već postoji", HttpStatus.BAD_REQUEST);
         }
 
-        // TODO fotografije moraju drugacije da se salju i njene adrese u fajlovima automatski da se dodaju
-        knjigaService.dodajKnjigu(dto.getNaslov(), dto.getNaslovnaFotografija(), dto.getISBN(), dto.getDatumObjavljivanja(), dto.getBrojStrana());
+        // TODO PROVERITI fotografije moraju drugacije da se salju i njene adrese u fajlovima automatski da se dodaju
+        // Postman form-data i promeni se u file
+        knjigaService.dodajKnjigu(dto.getNaslov(), naslovnaFotografija, dto.getISBN(), dto.getDatumObjavljivanja(), dto.getBrojStrana(), dto.getOpis());
+
         return new ResponseEntity<>("Uspesno dodata nova knjiga", HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity azurirajKnjigu(@PathVariable Long id, @RequestBody KnjigaDto dto, HttpSession session) {
+    public ResponseEntity azurirajKnjigu(@PathVariable Long id, @RequestPart KnjigaDto dto, @RequestPart(required = false) MultipartFile naslovnaFotografija, HttpSession session) {
         Korisnik korisnik = (Korisnik)session.getAttribute("korisnik");
 
         if (korisnik == null) {
@@ -72,33 +87,11 @@ public class KnjigaController {
             return new ResponseEntity<>("Knjiga nije pronađena", HttpStatus.NOT_FOUND);
         }
 
-        if (!knjigaService.knjigaPripadaAutoru(knjiga, (Autor)korisnik)) {
+        if (korisnik.getUloga().equals(Uloga.AUTOR) && !knjigaService.knjigaPripadaAutoru(knjiga, (Autor)korisnikService.findById(korisnik.getId()))) {
             return new ResponseEntity("Knjiga ne pripada vama", HttpStatus.FORBIDDEN);
         }
 
-        if (dto.getBrojStrana() != null) {
-            knjiga.setBrojStrana(dto.getBrojStrana());
-        }
-
-        if (dto.getISBN() != null) {
-            knjiga.setISBN(dto.getISBN());
-        }
-
-        if (dto.getNaslov() != null) {
-            knjiga.setNaslov(dto.getNaslov());
-        }
-
-        if (dto.getOpis() != null) {
-            knjiga.setOpis(dto.getOpis());
-        }
-
-        if (dto.getDatumObjavljivanja() != null) {
-            knjiga.setDatumObjavljivanja(dto.getDatumObjavljivanja());
-        }
-
-        if (dto.getNaslovnaFotografija() != null) {
-            knjiga.setNaslovnaFotografija(dto.getNaslovnaFotografija());
-        }
+        knjiga = knjigaService.azurirajKnjigu(knjiga, dto.getNaslov(), naslovnaFotografija, dto.getISBN(), dto.getDatumObjavljivanja(), dto.getBrojStrana(), dto.getOpis());
 
         knjigaService.save(knjiga);
         return new ResponseEntity("Knjiga je uspešno ažurirana", HttpStatus.OK);
@@ -116,13 +109,15 @@ public class KnjigaController {
             return new ResponseEntity("Morate biti autor ili administrator da bi ste obrisali knjigu", HttpStatus.FORBIDDEN);
         }
 
-        int rezultat = knjigaService.obrisiKnjigu(id);
+        Knjiga knjiga = knjigaService.findById(id);
 
-        if (rezultat == 1) {
+        if (knjiga == null) {
             return new ResponseEntity("Knjiga nije pronađena", HttpStatus.NOT_FOUND);
         }
 
-        if (rezultat == 2) {
+        int kodGreske = knjigaService.obrisiKnjigu(knjiga);
+
+        if (kodGreske == 1) {
             return new ResponseEntity("Knjiga ima recenzije i ne može biti obrisana", HttpStatus.BAD_REQUEST);
         }
 
@@ -130,63 +125,116 @@ public class KnjigaController {
     }
 
     @PostMapping("/{idKnjige}/polica/{idPolice}")
-    public ResponseEntity dodajNaPolicu(@PathVariable Long idKnjige, @PathVariable Long idPolice, @RequestBody RecenzijaDto dto, HttpSession session){
+    public ResponseEntity dodajNaPolicu(@PathVariable Long idKnjige, @PathVariable Long idPolice, HttpSession session){
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
         if (korisnik == null) {
             return new ResponseEntity("Morate biti prijavljeni", HttpStatus.UNAUTHORIZED);
         }
 
-        int rezultat = policaService.dodajKnjiguNaPolicu((Citalac)korisnik, idKnjige, idPolice, dto);
-        korisnikService.save(korisnik);
-        // TODO da li bi bolje bilo cuvati samo id jer ce onda uvek biti osvezen objekat sacuvan unutar sesije?
-        session.setAttribute("korisnik", korisnik);
+        int kodGreske = knjigaNaPoliciService.dodajKnjiguNaPolicu(korisnik.getId(), idKnjige, idPolice);
 
-        if (rezultat == 1) {
-            return new ResponseEntity("Knjiga ili polica ne postoji", HttpStatus.BAD_REQUEST);
-        }
-
-        if (rezultat == 2) {
-            return new ResponseEntity("Polica ne pripada dobrom citaocu", HttpStatus.FORBIDDEN);
-        }
-
-        if (rezultat == 3) {
-            return new ResponseEntity("Knjiga se vec nalazi na jednoj primarnoj polici", HttpStatus.BAD_REQUEST);
-        }
-
-        if (rezultat == 4) {
-            return new ResponseEntity("Knjiga mora da se nalazi na primarnoj polici da bi je dodali na obicnu", HttpStatus.BAD_REQUEST);
-        }
-
-        if (rezultat == 5) {
-            return new ResponseEntity("Ne moze se dodati recenzija, knjiga nije u Read polici", HttpStatus.BAD_REQUEST);
+        switch (kodGreske) {
+            case 1:
+                return new ResponseEntity("Nepostojeca knjiga", HttpStatus.BAD_REQUEST);
+            case 2:
+                return new ResponseEntity("Nepostojeca polica", HttpStatus.BAD_REQUEST);
+            case 3:
+                return new ResponseEntity("Polica ne pripada dobrom citaocu", HttpStatus.FORBIDDEN);
+            case 4:
+                return new ResponseEntity("Knjiga se vec nalazi na jednoj primarnoj polici", HttpStatus.BAD_REQUEST);
+            case 5:
+                return new ResponseEntity("Knjiga mora da se nalazi na primarnoj polici da bi je dodali na obicnu", HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity("Uspesno dodata knjiga na policu", HttpStatus.OK);
     }
 
-    @DeleteMapping("/{idKnjige}/polica/{idPolice}")
-    public ResponseEntity obrisiSaPolice(@PathVariable Long idKnjige, @PathVariable Long idPolice, HttpSession session) {
+    @DeleteMapping("/{idStavke}/polica/{idPolice}")
+    public ResponseEntity obrisiSaPolice(@PathVariable Long idStavke, @PathVariable Long idPolice, HttpSession session) {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
         if (korisnik == null) {
             return new ResponseEntity("Morate biti prijavljeni", HttpStatus.UNAUTHORIZED);
         }
 
-        int rezultat = policaService.obrisiKnjiguSaPolice((Citalac)korisnik, idKnjige, idPolice);
+        int kodGreske = knjigaNaPoliciService.obrisiKnjiguSaPolice(korisnik.getId(), idStavke, idPolice);
 
-        if (rezultat == 1) {
-            return new ResponseEntity("Knjiga ili polica ne postoji", HttpStatus.BAD_REQUEST);
+        switch (kodGreske) {
+            case 1:
+                return new ResponseEntity("Nepostojeca stavka", HttpStatus.BAD_REQUEST);
+            case 2:
+                return new ResponseEntity("Nepostojeca polica", HttpStatus.BAD_REQUEST);
+            case 3:
+                return new ResponseEntity("Polica ne pripada dobrom citaocu", HttpStatus.BAD_REQUEST);
+            case 4:
+                return new ResponseEntity("Knjiga se ne nalazi na toj polici", HttpStatus.BAD_REQUEST);
         }
-
-        if (rezultat == 2) {
-            return new ResponseEntity("Polica ne pripada dobrom citaocu", HttpStatus.BAD_REQUEST);
-        }
-
-        if (rezultat == 3) {
-            return new ResponseEntity("Knjiga se ne nalazi na toj polici", HttpStatus.BAD_REQUEST);
-        }
-
         return new ResponseEntity("Uspesno obrisana knjiga sa police", HttpStatus.OK);
+    }
+
+    @PutMapping("/{idKnjige}/zanr/{idZanra}")
+    public ResponseEntity dodajZanr(@PathVariable Long idKnjige, @PathVariable Long idZanra, HttpSession session) {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (korisnik == null) {
+            return new ResponseEntity("Morate biti prijavljeni", HttpStatus.UNAUTHORIZED);
+        }
+
+        Knjiga knjiga = knjigaService.findById(idKnjige);
+
+        if (knjiga == null) {
+            return new ResponseEntity("Nepostojeca knjiga", HttpStatus.BAD_REQUEST);
+        }
+
+        if (korisnik.getUloga().equals(Uloga.AUTOR) && !((Autor)korisnik).getKnjige().contains(knjiga)) {
+            return new ResponseEntity("Ne mozete dodavati zanr na tudje knjige", HttpStatus.FORBIDDEN);
+        }
+
+        if (korisnik.getUloga().equals(Uloga.CITALAC)) {
+            return new ResponseEntity("Morate biti autor knjige ili administrator", HttpStatus.FORBIDDEN);
+        }
+
+        int kodGreske = knjigaService.dodajZanr(knjiga, idZanra);
+
+        switch (kodGreske) {
+            case 1:
+                return new ResponseEntity("Nepostojeci zanr", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity("Uspesno dodan zanr na knjigu", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{idKnjige}/zanr/{idZanra}")
+    public ResponseEntity obrisiZanr(@PathVariable Long idKnjige, @PathVariable Long idZanra, HttpSession session) {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (korisnik == null) {
+            return new ResponseEntity("Morate biti prijavljeni", HttpStatus.UNAUTHORIZED);
+        }
+
+        Knjiga knjiga = knjigaService.findById(idKnjige);
+
+        if (knjiga == null) {
+            return new ResponseEntity("Nepostojeca knjiga", HttpStatus.BAD_REQUEST);
+        }
+
+        if (korisnik.getUloga().equals(Uloga.AUTOR) && !((Autor)korisnik).getKnjige().contains(knjiga)) {
+            return new ResponseEntity("Ne mozete brisati zanr sa tudje knjige", HttpStatus.FORBIDDEN);
+        }
+
+        if (korisnik.getUloga().equals(Uloga.CITALAC)) {
+            return new ResponseEntity("Morate biti autor knjige ili administrator", HttpStatus.FORBIDDEN);
+        }
+
+        int kodGreske = knjigaService.obrisiZanr(knjiga, idZanra);
+
+        switch (kodGreske) {
+            case 1:
+                return new ResponseEntity("Nepostojeci zanr", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity("Uspesno obrisan zanr sa knjige", HttpStatus.OK);
+
     }
 }

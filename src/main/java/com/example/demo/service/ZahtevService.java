@@ -71,8 +71,9 @@ public class ZahtevService {
     public void obradiZahtev(Zahtev zahtev, Boolean prihvati) {
         if (prihvati) {
             String lozinka = generatePassword();
-            // TODO moze azuriranje korisnika bolje da se uradi :<
-            korisnikService.azurirajAutora(zahtev.getAutor(), zahtev.getEmail(), lozinka);
+            Autor autor = zahtev.getAutor();
+            korisnikService.dodajPrimarnePolice(autor);
+            korisnikService.azurirajAutora(autor, zahtev.getEmail(), lozinka);
             posaljiMejlSaLozinkom(zahtev.getEmail(), lozinka);
             zahtev.setStatus(ODOBREN);
         } else {
