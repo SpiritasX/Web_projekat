@@ -47,15 +47,15 @@ public class KnjigaService {
         return knjigaRepository.findByISBN(ISBN).orElse(null);
     }
 
-    public Knjiga dodajKnjigu(String naslov, MultipartFile naslovnaFotografija, String isbn, Date datum, Integer str, String opis) {
+    public Knjiga dodajKnjigu(String naslov, String naslovnaFotografija, String isbn, Date datum, Integer str, String opis) {
         Knjiga knjiga = new Knjiga();
 
-        try {
+       /* try {
             naslovnaFotografija.transferTo(new File("src/main/resources/uploads/" + naslov + ".jpg"));
             knjiga.setNaslovnaFotografija("src/main/resources/uploads/" + naslov + ".jpg");
         } catch(Exception e) {
             knjiga.setNaslovnaFotografija(null);
-        }
+        }*/
 
         knjiga.setISBN(isbn);
         knjiga.setNaslov(naslov);
@@ -63,6 +63,7 @@ public class KnjigaService {
         knjiga.setBrojStrana(str);
         knjiga.setOpis(opis);
         knjiga.setOcena(0.0);
+        knjiga.setNaslovnaFotografija(naslovnaFotografija);
         knjiga = save(knjiga);
         return knjiga;
     }
@@ -102,7 +103,17 @@ public class KnjigaService {
     public Integer obrisiKnjigu(Knjiga knjiga) {
         // ako knjiga ima recenzije ne moze biti obrisana
         //a ako ima recenzije onda ima ocenu pa proveravam sa ocenom jer oceni mogu direktno da pristupim
-        if (knjiga.getOcena() > 0) {
+        if(knjiga.getOcena()==null){
+            for (Stavka s: stavkaService.findAll()) {
+                if (s.getKnjiga().getId().equals(knjiga.getId())) {
+                    stavkaService.obrisiStavku(s);
+                }
+            }
+
+            delete(knjiga);
+
+            return 0;
+        }else if (knjiga.getOcena() > 0) {
             return 1;
         }
 
@@ -133,8 +144,10 @@ public class KnjigaService {
         int brojRecenzija = 0;
         for (Stavka s : stavkaService.findAll()) {
             if (s.getKnjiga().equals(knjiga)) {
-                ocena += s.getRecenzija().getOcena();
-                brojRecenzija++;
+                if(s.getRecenzija()!=null) {
+                    ocena += s.getRecenzija().getOcena();
+                    brojRecenzija++;
+                }
             }
         }
         ocena /= brojRecenzija;

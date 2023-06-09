@@ -98,6 +98,9 @@ public class KnjigaNaPoliciService {
         if (!polica.getStavke().contains(stavka)) {
             return 4;
         }
+        if(polica.isPrimarna())
+
+
 
         if (polica.isPrimarna()) {
             // TODO override equals metodu svih klasa da bi contains i remove i ostale metode radile lepo

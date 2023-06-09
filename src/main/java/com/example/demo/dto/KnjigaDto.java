@@ -1,11 +1,6 @@
 package com.example.demo.dto;
 import com.example.demo.entity.Knjiga;
-import jakarta.persistence.Column;
-import org.springframework.web.multipart.MultipartFile;
-import org.yaml.snakeyaml.reader.StreamReader;
 
-import java.io.File;
-import java.io.FileReader;
 import java.util.Date;
 
 public class KnjigaDto {
@@ -78,6 +73,11 @@ public class KnjigaDto {
     public void setOcena(Double ocena) {
         this.ocena = ocena;
     }
+
+   // public MultipartFile getNaslovnaFotografija() {
+     //   return naslovnaFotografija;
+    //}
+
 
     public String getNaslovnaFotografija() {
         return naslovnaFotografija;

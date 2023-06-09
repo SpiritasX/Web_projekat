@@ -5,6 +5,7 @@ import com.example.demo.dto.PolicaDto;
 import com.example.demo.dto.RegisterDto;
 import com.example.demo.entity.Citalac;
 import com.example.demo.entity.Korisnik;
+import com.example.demo.entity.Autor;
 import com.example.demo.entity.Polica;
 import com.example.demo.entity.Uloga;
 import com.example.demo.service.KorisnikService;
@@ -53,6 +54,11 @@ public class KorisnikController {
         session.setAttribute("korisnik", korisnik);
         return new ResponseEntity("Uspesno prijavljen", HttpStatus.OK);
     }
+    @PostMapping("odjavi-se")
+    public ResponseEntity odjava(HttpSession session) {
+        session.invalidate();
+        return new ResponseEntity("Uspesno odjavljen", HttpStatus.OK);
+    }
 
     @PostMapping("registruj-se")
     public ResponseEntity registracija(@RequestBody RegisterDto dto, HttpSession session) {
@@ -62,12 +68,12 @@ public class KorisnikController {
             return new ResponseEntity("Vec ste prijavljeni", HttpStatus.BAD_REQUEST);
         }
 
-        if (dto.getEmail() == null || dto.getPonovljenEmail() == null || dto.getLozinka() == null || dto.getIme() == null || dto.getKorisnickoIme() == null || dto.getPrezime() == null) {
+        if (dto.getEmail() == null || dto.getPonovljenaLozinka() == null || dto.getLozinka() == null || dto.getIme() == null || dto.getKorisnickoIme() == null || dto.getPrezime() == null) {
             return new ResponseEntity("Moraju biti popunjena sva polja", HttpStatus.BAD_REQUEST);
         }
 
-        if (!dto.getEmail().equals(dto.getPonovljenEmail())) {
-            return new ResponseEntity("Email se ne poklapa", HttpStatus.BAD_REQUEST);
+        if (!dto.getLozinka().equals(dto.getPonovljenaLozinka())) {
+            return new ResponseEntity("Lozinka se ne poklapa. Morate uneti dva puta istu lozinku.", HttpStatus.BAD_REQUEST);
         }
 
         if (korisnikService.findByEmail(dto.getEmail()) != null) {
