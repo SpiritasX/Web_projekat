@@ -71,6 +71,14 @@ public class ZahtevController {
             return new ResponseEntity("Nepostojeci autor", HttpStatus.BAD_REQUEST);
         }
 
+        if (((Autor)korisnik).isAktivan()) {
+            return new ResponseEntity("Autor vec aktivan", HttpStatus.BAD_REQUEST);
+        }
+
+        if (korisnikService.findByEmail(dto.getEmail()) != null) {
+            return new ResponseEntity("Vec postoji korisnik sa tim emailom", HttpStatus.BAD_REQUEST);
+        }
+
         zahtevService.dodajZahtev(dto.getEmail(), dto.getTelefon(), dto.getPoruka(), (Autor)korisnik);
         return new ResponseEntity("Uspesno dodan zahtev", HttpStatus.OK);
     }

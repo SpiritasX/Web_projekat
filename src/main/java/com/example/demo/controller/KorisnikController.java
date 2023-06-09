@@ -26,8 +26,8 @@ public class KorisnikController {
     private KorisnikService korisnikService;
 
     @GetMapping("")
-    public List<Korisnik> listaKorisnika() {
-        return korisnikService.findAll();
+    public ResponseEntity listaKorisnika() {
+        return new ResponseEntity(korisnikService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -142,6 +142,12 @@ public class KorisnikController {
 
         if (!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
             return new ResponseEntity("Morate biti administrator", HttpStatus.FORBIDDEN);
+        }
+        if(korisnikService.findByKorisnickoIme(dto.getKorisnickoIme() )!= null){
+            return new ResponseEntity<>("morate uneti unique korisnika",HttpStatus.BAD_REQUEST);
+        }
+        if(korisnikService.findByEmail(dto.getEmail() )!= null){
+            return new ResponseEntity<>("morate uneti unique korisnika",HttpStatus.BAD_REQUEST);
         }
 
         korisnikService.registracija(dto.getIme(), dto.getPrezime(), dto.getKorisnickoIme(), dto.getEmail(), dto.getLozinka(), Uloga.AUTOR, false);

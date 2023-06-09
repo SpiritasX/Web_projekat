@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.KnjigaDto;
+import com.example.demo.dto.KorisnikDto;
 import com.example.demo.dto.LoginDto;
 import com.example.demo.dto.RegisterDto;
 import com.example.demo.entity.*;
@@ -11,10 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class KorisnikService {
@@ -59,8 +57,13 @@ public class KorisnikService {
         korisnikRepository.delete(korisnik);
     }
 
-    public List<Korisnik> findAll() {
-        return korisnikRepository.findAll();
+    public List<KorisnikDto> findAll() {
+        List<Korisnik> korisnici = korisnikRepository.findAll();
+        List<KorisnikDto> korisniciDto = new ArrayList<>();
+        for (Korisnik k : korisnici) {
+            korisniciDto.add(new KorisnikDto(k));
+        }
+        return korisniciDto;
     }
 
     public Korisnik findByEmail(String email) {
@@ -88,24 +91,29 @@ public class KorisnikService {
     }
 
     public void registracija(String ime, String prezime, String korisnickoIme, String email, String lozinka, Uloga uloga, Boolean dodajPrimarnePolice) {
-        Citalac citalac = new Citalac();
+        Korisnik korisnik;
+        if (uloga.equals(Uloga.AUTOR))
+            korisnik = new Autor();
+        else
+            korisnik = new Citalac();
+        //        Citalac citalac = new Citalac();
 
-        citalac.setIme(ime);
-        citalac.setPrezime(prezime);
-        citalac.setKorisnickoIme(korisnickoIme);
-        citalac.setEmail(email);
-        citalac.setLozinka(lozinka);
-        citalac.setUloga(uloga);
+        korisnik.setIme(ime);
+        korisnik.setPrezime(prezime);
+        korisnik.setKorisnickoIme(korisnickoIme);
+        korisnik.setEmail(email);
+        korisnik.setLozinka(lozinka);
+        korisnik.setUloga(uloga);
 
         if (uloga.equals(Uloga.AUTOR)) {
-            ((Autor)citalac).setAktivan(false);
+            ((Autor)korisnik).setAktivan(false);
         }
 
         if (dodajPrimarnePolice) {
-            dodajPrimarnePolice(citalac);
+            dodajPrimarnePolice((Citalac)korisnik);
         }
 
-        save(citalac);
+        save(korisnik);
     }
 
     public Integer obrisiKorisnika(Long id) {

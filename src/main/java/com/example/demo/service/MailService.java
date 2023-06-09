@@ -11,7 +11,7 @@ public class MailService {
 
     public void posaljiMejl(String to, String naslov, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("xxx@xxx.xxx");
+        message.setFrom("bogovac.in20.2021@uns.ac.rs");
         message.setTo(to);
         message.setSubject(naslov);
         message.setText(text);

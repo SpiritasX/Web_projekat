@@ -3,7 +3,7 @@ INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, email, lozinka, uloga) VALUE
 INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, email, lozinka, uloga) VALUES ('Anastasija', 'Terzic', 'Anastasija', 'terzic.in44.2021@uns.ac.rs', 'test123', 'ADMINISTRATOR');
 INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, email, lozinka, uloga) VALUES ('Milica', 'Mirkovic', 'MilicaM', 'mirkovic.pr44.2021@uns.ac.rs', 'test543', 'CITALAC');
 INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, email, lozinka, uloga) VALUES ('Marko', 'Markovic', 'MarkoMarko', 'markovic.in4.2020@uns.ac.rs', 'test321', 'CITALAC');
-INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, email, lozinka, uloga) VALUES ('Janko', 'Jankovic', 'JankoTheBoss', 'jankovic.ra122.2011@uns.ac.rs', 'test321', 'CITALAC');
+INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, email, lozinka, uloga) VALUES ('Janko', 'Jankovic', 'JankoTheBoss', 'jankovic.ra122.2011@uns.ac.rs', 'test321', 'AUTOR');
 
 INSERT INTO CITALAC (id) VALUES (1);
 INSERT INTO CITALAC (id) VALUES (2);
@@ -34,8 +34,8 @@ INSERT INTO POLICA (naziv, primarna, korisnik_id) VALUES ('Currently Reading', t
 INSERT INTO POLICA (naziv, primarna, korisnik_id) VALUES ('Read', true, 6);
 INSERT INTO POLICA (naziv, primarna, korisnik_id) VALUES ('najbolje drame', false, 6);
 
-INSERT INTO ZAHTEV (email, telefon, poruka, datum, status, autor_id) VALUES ('deja.bogovac@gmail.com', '+111 111 111', 'pls gib author uwu >///<', '2023-04-10', 'CEKA', 3);
-INSERT INTO ZAHTEV (email, telefon, poruka, datum, status, autor_id) VALUES ('jankovic.ra122.2011@uns.ac.rs', '+222 131 131', 'autor?plz', '2022-01-11', 'CEKA', 6);
+INSERT INTO ZAHTEV (email, telefon, poruka, datum, status, autor_id) VALUES ('deja.bogovac@gmail.com', '+111 111 111', 'pls gib author uwu >///<', '2023-04-10', 'ODOBREN', 3);
+INSERT INTO ZAHTEV (email, telefon, poruka, datum, status, autor_id) VALUES ('deja.bogovac@gmail.com', '+222 131 131', 'autor?plz', '2022-01-11', 'CEKA', 6);
 
 INSERT INTO KNJIGA (naslov,naslovna_fotografija,ISBN,datum_objavljivanja,broj_strana,opis,ocena) VALUES ('Sta nam svako telo govori','www.slika.com',12345,'2002-09-16',300,'bas dobra knjiga',10.0);
 INSERT INTO KNJIGA (naslov,naslovna_fotografija,ISBN,datum_objavljivanja,broj_strana,opis,ocena) VALUES ('HARRY POTTER','www.hair_poter.kegenda',19945,'2000-01-11',500,'najjaca knjiga ikada!!!!',9.0);
