@@ -28,6 +28,8 @@ public class KorisnikService {
     private PolicaService policaService;
     @Autowired
     private StavkaService stavkaService;
+    @Autowired
+    private RecenzijaService recenzijaService;
 
     public Korisnik findById(Long id) {
         return korisnikRepository.findById(id).orElse(null);
@@ -121,15 +123,20 @@ public class KorisnikService {
             return 3;
         }
 
-        Set<Polica> police = ((Citalac) korisnik).getOstalePolice();
-        ((Citalac) korisnik).setOstalePolice(null);
-        save(korisnik);
-        for (Polica p : police) {
-            for (Stavka s : p.getStavke()) {
-                stavkaService.obrisiStavku(s);
-            }
-            policaService.delete(p);
-        }
+//        Set<Polica> police = ((Citalac) korisnik).getOstalePolice();
+//        ((Citalac) korisnik).setOstalePolice(null);
+//        save(korisnik);
+//        for (Polica p : police) {
+//            for (Stavka s : p.getStavke()) {
+//                stavkaService.obrisiStavku(s);
+//            }
+//            policaService.delete(p);
+//        }
+//        for (Recenzija r : recenzijaService.findAllByCitalac((Citalac)korisnik)) {
+//            r.setCitalac(null);
+//            recenzijaService.save(r);
+//        }
+        recenzijaService.deleteAll(recenzijaService.findAllByCitalac((Citalac)korisnik));
         delete(korisnik);
         return 0;
     }

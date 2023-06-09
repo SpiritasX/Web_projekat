@@ -53,6 +53,14 @@ public class Recenzija implements Serializable {
         this.datumRecenzije = datumRecenzije;
     }
 
+    public Citalac getCitalac() {
+        return citalac;
+    }
+
+    public void setCitalac(Citalac citalac) {
+        this.citalac = citalac;
+    }
+
     @Override
     public String toString() {
         return "Recenzija{" +

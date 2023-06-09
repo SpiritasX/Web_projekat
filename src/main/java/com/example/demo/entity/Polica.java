@@ -15,7 +15,7 @@ public class Polica implements Serializable {
     @Column(nullable = false)
     private boolean primarna;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private Set<Stavka> stavke = new HashSet<Stavka>();
 
     public Long getId() {

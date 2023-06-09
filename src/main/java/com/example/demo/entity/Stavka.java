@@ -11,7 +11,7 @@ public class Stavka implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private Recenzija recenzija;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -32,6 +32,14 @@ public class RecenzijaService {
         return recenzijaRepository.findAll();
     }
 
+    public List<Recenzija> findAllByCitalac(Citalac citalac) {
+        return recenzijaRepository.findAllByCitalac(citalac);
+    }
+
+    public void deleteAll(List<Recenzija> recenzije) {
+        recenzijaRepository.deleteAll(recenzije);
+    }
+
     public Stavka knjigaURead(Long idKnjige, Citalac citalac) {
         for (Polica p : citalac.getOstalePolice()) {
             if (p.getNaziv().equals("Read")) {
