@@ -26,7 +26,7 @@ public class Stavka implements Serializable {
     }
 
     public Recenzija getRecenzija() {
-        return recenzija;
+       return recenzija;
     }
 
     public void setRecenzija(Recenzija recenzija) {

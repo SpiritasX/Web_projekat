@@ -38,6 +38,7 @@ public class Polica implements Serializable {
         return primarna;
     }
 
+
     public void setPrimarna(boolean primarna) {
         this.primarna = primarna;
     }

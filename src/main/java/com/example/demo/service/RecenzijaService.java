@@ -81,4 +81,17 @@ public class RecenzijaService {
         delete(recenzija);
         return 0;
     }
+
+    public Recenzija azurirajRecenziju(Recenzija recenzija, Float ocena, String tekst, Date datumRecenzije) {
+        if(ocena != null){
+            recenzija.setOcena(ocena);
+        }
+        if(tekst !=null){
+            recenzija.setTekst(tekst);
+        }
+        if(datumRecenzije != null){
+            recenzija.setDatumRecenzije(datumRecenzije);
+        }
+        return recenzija;
+    }
 }

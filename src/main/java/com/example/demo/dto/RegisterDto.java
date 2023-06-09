@@ -1,23 +1,21 @@
 package com.example.demo.dto;
 
-import com.example.demo.entity.Korisnik;
-
 public class RegisterDto extends LoginDto {
     private String ime;
     private String prezime;
     private String korisnickoIme;
-    private String ponovljenEmail;
+    private String ponovljenaLozinka;
 
     public RegisterDto() {
         super();
     }
 
-    public RegisterDto(String email, String lozinka, String ime, String prezime, String korisnickoIme, String ponovljenEmail) {
+    public RegisterDto(String email, String lozinka, String ime, String prezime, String korisnickoIme, String ponovljenaLozinka) {
         super(email, lozinka);
         this.ime = ime;
         this.prezime = prezime;
         this.korisnickoIme = korisnickoIme;
-        this.ponovljenEmail = ponovljenEmail;
+        this.ponovljenaLozinka = ponovljenaLozinka;
     }
 
     public String getIme() {
@@ -44,11 +42,11 @@ public class RegisterDto extends LoginDto {
         this.korisnickoIme = korisnickoIme;
     }
 
-    public String getPonovljenEmail() {
-        return ponovljenEmail;
+    public String getPonovljenaLozinka() {
+        return ponovljenaLozinka;
     }
 
-    public void setPonovljenEmail(String ponovljenEmail) {
-        this.ponovljenEmail = ponovljenEmail;
+    public void setPonovljenaLozinka(String ponovljenaLozinka) {
+        this.ponovljenaLozinka = ponovljenaLozinka;
     }
 }

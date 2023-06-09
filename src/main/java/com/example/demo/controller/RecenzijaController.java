@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.KnjigaDto;
 import com.example.demo.dto.RecenzijaDto;
 import com.example.demo.entity.*;
 import com.example.demo.service.KnjigaService;
@@ -65,6 +66,24 @@ public class RecenzijaController {
         knjigaService.azurirajOcenuKnjige(idKnjige);
 
         return new ResponseEntity("Uspesno dodana recenzija", HttpStatus.OK);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity azurirajRecenziju(@PathVariable Long id, @RequestBody RecenzijaDto dto, HttpSession session){
+        Korisnik korisnik = (Korisnik)session.getAttribute("korisnik");
+
+        if (korisnik == null) {
+            return new ResponseEntity("Morate biti prijavljeni", HttpStatus.UNAUTHORIZED);
+        }
+        Recenzija recenzija= recenzijaService.findById(id);
+        if (recenzija == null) {
+            return new ResponseEntity("Recenzija nije pronadjena", HttpStatus.NOT_FOUND);
+
+        }
+        recenzija=recenzijaService.azurirajRecenziju(recenzija,dto.getOcena(), dto.getTekst(), dto.getDatumRecenzije());
+
+        recenzijaService.save(recenzija);
+        return new ResponseEntity("Recenzija je uspešno ažurirana", HttpStatus.OK);
+
     }
 
     @DeleteMapping("/{id}")

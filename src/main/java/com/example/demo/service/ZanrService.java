@@ -17,6 +17,7 @@ public class ZanrService {
     public Zanr findById(Long id) {
         return zanrRepository.findById(id).orElse(null);
     }
+    public Zanr findByNaziv(String naziv){return  zanrRepository.findByNaziv(naziv).orElse(null);}
 
     public Zanr save(Zanr zanr) {
         return zanrRepository.save(zanr);

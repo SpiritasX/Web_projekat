@@ -9,6 +9,8 @@ import com.example.demo.service.ZanrService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import com.example.demo.repository.ZanrRepository;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,8 @@ public class ZanrController {
     private ZanrService zanrService;
     @Autowired
     private KnjigaService knjigaService;
+    @Autowired
+    private ZanrRepository zanrRepository;
 
     @GetMapping("/")
     public ResponseEntity listaZanrova() {
@@ -47,22 +51,27 @@ public class ZanrController {
     }
 
     @PostMapping("/")
-    public ResponseEntity dodajZanr(@RequestParam String naziv, HttpSession session){
-        Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
+    public ResponseEntity dodajZanr(@RequestParam String naziv, HttpSession session) {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
         if (korisnik == null) {
             return new ResponseEntity("Morate biti prijavljeni", HttpStatus.UNAUTHORIZED);
         }
 
-        if(!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
+        if (!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
             return new ResponseEntity("Morate biti administrator", HttpStatus.FORBIDDEN);
         }
 
-        zanrService.dodajZanr(naziv);
+        // return new ResponseEntity("Postoji zanr sa istim imenom, pokusajte ponovo.", HttpStatus.BAD_REQUEST);
 
-        return new ResponseEntity("Uspesno dodat zanr", HttpStatus.OK);
+
+        if (zanrService.findByNaziv(naziv) == null) {
+            zanrService.dodajZanr(naziv);
+
+            return new ResponseEntity("Uspesno dodat zanr", HttpStatus.OK);
+        } else
+            return new ResponseEntity<>("Zanr vec postoji, pokusajte ponovo.", HttpStatus.FORBIDDEN);
     }
-
     @DeleteMapping("/{id}")
     public ResponseEntity obrisiZanr(@PathVariable Long id, HttpSession session) {
         Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");

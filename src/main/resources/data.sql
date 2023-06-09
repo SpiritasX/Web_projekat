@@ -37,10 +37,10 @@ INSERT INTO POLICA (naziv, primarna, korisnik_id) VALUES ('najbolje drame', fals
 INSERT INTO ZAHTEV (email, telefon, poruka, datum, status, autor_id) VALUES ('deja.bogovac@gmail.com', '+111 111 111', 'pls gib author uwu >///<', '2023-04-10', 'CEKA', 3);
 INSERT INTO ZAHTEV (email, telefon, poruka, datum, status, autor_id) VALUES ('jankovic.ra122.2011@uns.ac.rs', '+222 131 131', 'autor?plz', '2022-01-11', 'CEKA', 6);
 
-INSERT INTO KNJIGA (naslov,naslovna_fotografija,ISBN,datum_objavljivanja,broj_strana,opis,ocena) VALUES ('Sta nam svako telo govori','www.nesto.srbijaaaaa',12345,'2002-09-16',300,'bas dobra knjiga',10.0);
+INSERT INTO KNJIGA (naslov,naslovna_fotografija,ISBN,datum_objavljivanja,broj_strana,opis,ocena) VALUES ('Sta nam svako telo govori','www.slika.com',12345,'2002-09-16',300,'bas dobra knjiga',10.0);
 INSERT INTO KNJIGA (naslov,naslovna_fotografija,ISBN,datum_objavljivanja,broj_strana,opis,ocena) VALUES ('HARRY POTTER','www.hair_poter.kegenda',19945,'2000-01-11',500,'najjaca knjiga ikada!!!!',9.0);
 INSERT INTO KNJIGA (naslov,naslovna_fotografija,ISBN,datum_objavljivanja,broj_strana,opis,ocena) VALUES ('Sanja','slika.jpg.com.rs.najjace',1155,'2002-01-11',150,'osnovna skola procitati',7.0);
-INSERT INTO KNJIGA (naslov,naslovna_fotografija,ISBN,datum_objavljivanja,broj_strana,opis,ocena) VALUES ('atomske navike','www.nesto.rs',4454,'2019-06-08',200,'best seller!!',9.0);
+INSERT INTO KNJIGA (naslov,naslovna_fotografija,ISBN,datum_objavljivanja,broj_strana,opis,ocena) VALUES ('atomske navike','www.nesto.rs',4454,'2019-06-08',200,null,null);
 
 INSERT INTO ZANR(naziv)VALUES ('akcija');
 INSERT INTO ZANR(naziv)VALUES ('edukativna');

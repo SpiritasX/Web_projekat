@@ -47,7 +47,7 @@ public class KnjigaController {
     }
 
     @PostMapping("/")
-    public ResponseEntity dodajNovuKnjigu(@RequestPart KnjigaDto dto, @RequestPart MultipartFile naslovnaFotografija, HttpSession session) {
+    public ResponseEntity dodajNovuKnjigu(@RequestBody KnjigaDto dto, @RequestPart (required = false) MultipartFile naslovnaFotografijaa, HttpSession session) {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
         if (korisnik == null) {
@@ -64,13 +64,13 @@ public class KnjigaController {
 
         // TODO PROVERITI fotografije moraju drugacije da se salju i njene adrese u fajlovima automatski da se dodaju
         // Postman form-data i promeni se u file
-        knjigaService.dodajKnjigu(dto.getNaslov(), naslovnaFotografija, dto.getISBN(), dto.getDatumObjavljivanja(), dto.getBrojStrana(), dto.getOpis());
+        knjigaService.dodajKnjigu(dto.getNaslov(),dto.getNaslovnaFotografija(),  dto.getISBN(), dto.getDatumObjavljivanja(), dto.getBrojStrana(), dto.getOpis());
 
         return new ResponseEntity<>("Uspesno dodata nova knjiga", HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity azurirajKnjigu(@PathVariable Long id, @RequestPart KnjigaDto dto, @RequestPart(required = false) MultipartFile naslovnaFotografija, HttpSession session) {
+    public ResponseEntity azurirajKnjigu(@PathVariable Long id, @RequestBody KnjigaDto dto, @RequestPart(required = false) MultipartFile naslovnaFotografija, HttpSession session) {
         Korisnik korisnik = (Korisnik)session.getAttribute("korisnik");
 
         if (korisnik == null) {

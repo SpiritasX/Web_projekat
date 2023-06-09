@@ -30,6 +30,8 @@ public class Recenzija implements Serializable {
     }
 
     public Float getOcena() {
+        if(ocena == null) return (float) -1;
+
         return ocena;
     }
 
