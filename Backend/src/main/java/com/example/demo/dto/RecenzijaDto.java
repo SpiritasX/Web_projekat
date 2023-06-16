@@ -5,6 +5,7 @@ import com.example.demo.entity.Recenzija;
 import java.util.Date;
 
 public class RecenzijaDto {
+    private Long id;
     private Float ocena;
     private String tekst;
     private Date datumRecenzije;
@@ -16,6 +17,7 @@ public class RecenzijaDto {
 
     public RecenzijaDto(Recenzija recenzija) {
         if (recenzija != null) {
+            this.id = recenzija.getId();
             this.ocena = recenzija.getOcena();
             this.tekst = recenzija.getTekst();
             this.datumRecenzije = recenzija.getDatumRecenzije();
@@ -44,5 +46,13 @@ public class RecenzijaDto {
 
     public void setDatumRecenzije(Date datumRecenzije) {
         this.datumRecenzije = datumRecenzije;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

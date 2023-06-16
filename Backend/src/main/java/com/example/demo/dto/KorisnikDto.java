@@ -3,12 +3,14 @@ package com.example.demo.dto;
 import com.example.demo.entity.Korisnik;
 
 public class KorisnikDto {
+    private Long id;
     private String ime;
     private String prezime;
     private String korisnickoIme;
     private String profilnaSlika;
 
     public KorisnikDto(Korisnik korisnik) {
+        this.id = korisnik.getId();
         this.ime = korisnik.getIme();
         this.prezime = korisnik.getPrezime();
         this.korisnickoIme = korisnik.getKorisnickoIme();
@@ -45,5 +47,13 @@ public class KorisnikDto {
 
     public void setProfilnaSlika(String profilnaSlika) {
         this.profilnaSlika = profilnaSlika;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

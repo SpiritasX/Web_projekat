@@ -7,6 +7,7 @@ import com.example.demo.entity.Zahtev;
 import java.util.Date;
 
 public class ZahtevDto {
+    private Long id;
     private String email;
     private String telefon;
     private String poruka;
@@ -26,6 +27,7 @@ public class ZahtevDto {
     }
 
     public ZahtevDto(Zahtev zahtev) {
+        this.id = zahtev.getId();
         this.poruka = zahtev.getPoruka();
         this.telefon = zahtev.getTelefon();
         this.email = zahtev.getEmail();
@@ -66,5 +68,11 @@ public class ZahtevDto {
     }
 
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

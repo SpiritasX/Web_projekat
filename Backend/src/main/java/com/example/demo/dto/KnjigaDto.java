@@ -4,6 +4,7 @@ import com.example.demo.entity.Knjiga;
 import java.util.Date;
 
 public class KnjigaDto {
+    private Long id;
     private String naslov;
     private String ISBN;
     private Date datumObjavljivanja;
@@ -17,6 +18,7 @@ public class KnjigaDto {
     }
 
     public KnjigaDto(Knjiga knjiga) {
+        this.id = knjiga.getId();
         this.naslov = knjiga.getNaslov();
         this.ISBN = knjiga.getISBN();
         this.datumObjavljivanja = knjiga.getDatumObjavljivanja();
@@ -85,5 +87,13 @@ public class KnjigaDto {
 
     public void setNaslovnaFotografija(String naslovnaFotografija) {
         this.naslovnaFotografija = naslovnaFotografija;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

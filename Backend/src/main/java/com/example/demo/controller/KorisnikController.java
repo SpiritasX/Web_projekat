@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.KorisnikDto;
 import com.example.demo.dto.LoginDto;
 import com.example.demo.dto.PolicaDto;
 import com.example.demo.dto.RegisterDto;
@@ -52,7 +53,7 @@ public class KorisnikController {
         }
 
         session.setAttribute("korisnik", korisnik);
-        return new ResponseEntity("Uspesno prijavljen", HttpStatus.OK);
+        return new ResponseEntity(new KorisnikDto(korisnik), HttpStatus.OK);
     }
     @PostMapping("odjavi-se")
     public ResponseEntity odjava(HttpSession session) {

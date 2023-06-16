@@ -1,15 +1,14 @@
 <template>
     <form>
         <label>Email</label>
-        <input name="email"/>
+        <input v-model="LoginDto.email"/>
         <label>Lozinka</label>
-        <input name="lozinka"/>
-        <button v-on:click="prijava">Prijavi se</button>
+        <input v-model="LoginDto.lozinka"/>
+        <button v-on:click="prijava()">Prijavi se</button>
     </form>
 </template>
 
 <script>
-import axios from "axios"
 export default {
   name: 'PrijaviSe',
   data: function () {
@@ -22,14 +21,15 @@ export default {
   },
   methods: {
     prijava: function () {
-      axios
-      .post('http://localhost:8880/api/korisnici/prijavi-se/', this.LoginDto)
-      .then((res) => {
+      fetch('http://localhost:8880/api/korisnici/prijavi-se', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.LoginDto)
+      }).then((res) => {
         if (res.ok) {
           this.$router.push('/profil')
         }
-      })
-      .catch(error => {
+      }).catch(error => {
         console.error(error)
       })
     }

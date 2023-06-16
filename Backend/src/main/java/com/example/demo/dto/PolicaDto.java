@@ -7,11 +7,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class PolicaDto {
+    private Long id;
     private String naziv;
     private Set<StavkaDto> stavke;
 
     public PolicaDto(Polica polica) {
         if (polica != null) {
+            this.id = polica.getId();
             this.naziv = polica.getNaziv();
             stavke = new HashSet<>();
             for (Stavka s : polica.getStavke()) {
@@ -34,5 +36,13 @@ public class PolicaDto {
 
     public void setStavke(Set<StavkaDto> stavke) {
         this.stavke = stavke;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
