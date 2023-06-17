@@ -1,19 +1,21 @@
 <template>
-    Police
+  <polica-comp v-for="polica in police" :key="polica.id" :polica="polica" />
 </template>
 
 <script>
+import PolicaComp from '../components/PolicaComp.vue'
 export default {
   name: 'LoggedIn',
+  components: { PolicaComp },
   data: function () {
     return {
-      Police: []
+      police: []
     }
   },
-  mounted: function (test) {// Kako proslediti id prijavljenog korisnika da dobijemo njegove police >///<
-    fetch('http://localhost:8880/api/korisnici/' + test.id + '/police')
+  mounted: function () {
+    fetch('http://localhost:8880/api/korisnici/' + this.$route.query.id + '/police')
       .then(res => res.json())
-      .then(data => { this.Police = data })
+      .then(data => { this.police = data })
       .catch(error => console.error(error))
   }
 }

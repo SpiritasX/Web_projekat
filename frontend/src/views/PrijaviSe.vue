@@ -25,10 +25,12 @@ export default {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(this.LoginDto)
-      }).then((res) => {
-        if (res.ok) {
-          this.$router.push('/profil')
+      }).then(response => {
+        if (response.ok) {
+          return response.json()
         }
+      }).then(body => {
+        this.$router.push('/profil?id=' + body.id)
       }).catch(error => {
         console.error(error)
       })

@@ -11,17 +11,17 @@ const routes = [
     component: HomePage
   },
   {
-    path: '/profil/',
+    path: '/profil',
     name: 'profil',
     component: LoggedIn
   },
   {
-    path: '/prijavi-se/',
+    path: '/prijavi-se',
     name: 'login',
     component: PrijaviSe
   },
   {
-    path: '/registruj-se/',
+    path: '/registruj-se',
     name: 'register',
     component: RegistrujSe
   }
