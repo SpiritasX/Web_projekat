@@ -3,6 +3,9 @@ import HomePage from '../views/HomePage.vue'
 import LoggedIn from '../views/LoggedIn.vue'
 import PrijaviSe from '../views/PrijaviSe.vue'
 import RegistrujSe from '../views/RegistrujeSe.vue'
+import ListaKnjiga from '../views/ListaKnjiga.vue'
+import KorisniciAplikacije from '../views/Korisnici.vue'
+import PodnesiZahtev from '../views/Zahtev.vue'
 
 const routes = [
   {
@@ -24,7 +27,23 @@ const routes = [
     path: '/registruj-se',
     name: 'register',
     component: RegistrujSe
+  },
+  {
+    path: '/lista-knjiga',
+    name: 'listaKnjiga',
+    component: ListaKnjiga
+  },
+  {
+    path: '/korisnici',
+    name: 'korisnici',
+    component: KorisniciAplikacije
+  },
+  {
+    path: '/podnesi-zahtev',
+    name: 'ponesiZahtev',
+    component: PodnesiZahtev
   }
+
 ]
 
 const router = createRouter({

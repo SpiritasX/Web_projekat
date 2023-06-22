@@ -31,6 +31,7 @@ public class StavkaService {
     public List<Stavka> findAll() {
         return stavkaRepository.findAll();
     }
+    public List<Stavka>findAllByKnjigaId(Long KnjigaID){return stavkaRepository.findAllByKnjigaId(KnjigaID);}
 
     public Stavka findByCitalacAndKnjiga(Citalac citalac, Knjiga knjiga) {
         for (Polica p : citalac.getOstalePolice()) {
