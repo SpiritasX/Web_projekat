@@ -1,9 +1,6 @@
 <template>
   <div class="home-page">
     <h1 class="heading">BetterReads</h1>
-    <div class="bookshelf-image">
-      <img src="assets\knjige.jpg" alt=" knjige">
-    </div>
     <nav class="nav-links">
       <router-link class="nav-link" to="/prijavi-se">Prijavi se</router-link>
       <router-link class="nav-link" to="/registruj-se">Registruj se</router-link>
@@ -11,27 +8,38 @@
       <router-link class="nav-link" to="/korisnici">Korisnici Stranice</router-link>
       <router-link class="nav-link" to="/podnesi-zahtev">Zahtev za autora</router-link>
     </nav>
+    <div class="bookshelf-image">
+      <img src="../assets/knjige.jpeg"  style="width: 300px;">
+      <img src="../assets/knjige2.jpg"  style="width: 300px;">
+      <img src="../assets/knjige3.jpg"  style="width: 300px;">
+    </div>
   </div>
 </template>
 
 <style>
 .home-page {
   text-align: center;
-  background-color: #cfe9f9;
+  background-color: #f5f5dc; /* Bež */
   padding: 20px;
 }
 
 .heading {
   font-size: 28px;
   margin-bottom: 20px;
-  color: #333;
+  color: #a0522d; /* Braon */
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+.bookshelf-image {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 .bookshelf-image img {
-  width: 400px;
+  width: 300px;
   height: auto;
-  margin-bottom: 20px;
+  margin: 0 10px;
 }
 
 .nav-links {
@@ -44,33 +52,33 @@
 .nav-link {
   margin: 0 10px;
   text-decoration: none;
-  color: #1e8cbf;
+  color: #a0522d; /* Braon */
   font-weight: bold;
   transition: color 0.3s ease;
 }
 
 .nav-link:hover {
-  color: #ff8080;
+  color: #8b4513; /* Braon */
 }
 
 .nav-link:nth-child(1) {
-  color: #0099cc;
+  color: #f5deb3; /* Bež */
 }
 
 .nav-link:nth-child(2) {
-  color: #00b8a9;
+  color: #d2b48c; /* Bež */
 }
 
 .nav-link:nth-child(3) {
-  color: #00a4d3;
+  color: #f0e68c; /* Bež */
 }
 
 .nav-link:nth-child(4) {
-  color: #0089b3;
+  color: #ffd700; /* Bež */
 }
 
 .nav-link:nth-child(5) {
-  color: #00a7b5;
+  color: #daa520; /* Bež */
 }
 </style>
 
