@@ -25,8 +25,6 @@ public class KorisnikService {
     @Autowired
     private PolicaService policaService;
     @Autowired
-    private StavkaService stavkaService;
-    @Autowired
     private RecenzijaService recenzijaService;
 
     public Korisnik findById(Long id) {
@@ -57,13 +55,8 @@ public class KorisnikService {
         korisnikRepository.delete(korisnik);
     }
 
-    public List<KorisnikDto> findAll() {
-        List<Korisnik> korisnici = korisnikRepository.findAll();
-        List<KorisnikDto> korisniciDto = new ArrayList<>();
-        for (Korisnik k : korisnici) {
-            korisniciDto.add(new KorisnikDto(k));
-        }
-        return korisniciDto;
+    public List<Korisnik> findAll() {
+        return korisnikRepository.findAll();
     }
 
     public Korisnik findByEmail(String email) {

@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +29,12 @@ public class KorisnikController {
 
     @GetMapping("")
     public ResponseEntity listaKorisnika() {
-        return new ResponseEntity(korisnikService.findAll(), HttpStatus.OK);
+        List<Korisnik> korisnici = korisnikService.findAll();
+        List<KorisnikDto> korisniciDto = new ArrayList<>();
+        for (Korisnik k : korisnici) {
+            korisniciDto.add(new KorisnikDto(k));
+        }
+        return new ResponseEntity(korisniciDto, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
