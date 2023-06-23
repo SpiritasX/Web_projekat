@@ -28,4 +28,5 @@ public class StavkaDto {
     public void setKnjiga(KnjigaDto knjiga) {
         this.knjiga = knjiga;
     }
+
 }

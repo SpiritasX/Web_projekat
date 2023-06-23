@@ -1,7 +1,10 @@
 package com.example.demo.dto;
 import com.example.demo.entity.Knjiga;
+import com.example.demo.entity.Zanr;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class KnjigaDto {
     private Long id;
@@ -12,7 +15,7 @@ public class KnjigaDto {
     private String opis;
     private Double ocena;
     private String naslovnaFotografija;
-
+    private Set<Zanr> zanrovi;
     public KnjigaDto(){
         super();
     }
@@ -26,6 +29,8 @@ public class KnjigaDto {
         this.opis = knjiga.getOpis();
         this.ocena = knjiga.getOcena();
         this.naslovnaFotografija = knjiga.getNaslovnaFotografija();
+        this.zanrovi=knjiga.getZanrovi();
+
     }
 
     public String getNaslov() {
@@ -96,4 +101,14 @@ public class KnjigaDto {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Set<Zanr> getZanrovi() {
+        return zanrovi;
+    }
+
+    public void setZanrovi(Set<Zanr> zanrovi) {
+        this.zanrovi = zanrovi;
+    }
+
+
 }

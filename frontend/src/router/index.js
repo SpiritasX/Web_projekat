@@ -1,8 +1,11 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import HomePage from '../views/HomePage.vue'
 import KorisnikView from '../views/KorisnikView.vue'
 import PrijaviSe from '../views/PrijaviSe.vue'
 import RegistrujSe from '../views/RegistrujeSe.vue'
+import ListaKnjiga from '../views/ListaKnjiga.vue'
+import KorisniciAplikacije from '../views/Korisnici.vue'
+import PodnesiZahtev from '../views/Zahtev.vue'
 import AutorView from '../views/AutorView.vue'
 import PolicaView from '../views/PolicaView.vue'
 
@@ -11,6 +14,11 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomePage
+  },
+  {
+    path: '/profil',
+    name: 'profil',
+    component: LoggedIn
   },
   {
     path: '/prijavi-se',
@@ -36,6 +44,21 @@ const routes = [
     path: '/polica/:id',
     name: 'polica',
     component: PolicaView
+  },
+  {
+    path: '/lista-knjiga',
+    name: 'listaKnjiga',
+    component: ListaKnjiga
+  },
+  {
+    path: '/korisnici',
+    name: 'korisnici',
+    component: KorisniciAplikacije
+  },
+  {
+    path: '/podnesi-zahtev',
+    name: 'ponesiZahtev',
+    component: PodnesiZahtev
   }
 ]
 

@@ -21,6 +21,8 @@ public class KnjigaController {
     @Autowired
     private KorisnikService korisnikService;
     @Autowired
+    private StavkaService stavkaService;
+    @Autowired
     private KnjigaNaPoliciService knjigaNaPoliciService;
 
     @GetMapping("/")
@@ -237,4 +239,24 @@ public class KnjigaController {
         return new ResponseEntity("Uspesno obrisan zanr sa knjige", HttpStatus.OK);
 
     }
+    @GetMapping("/{idKnjige}/recenzije")
+    public ResponseEntity recenzijeKnjige(@PathVariable Long idKnjige, HttpSession session) {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (korisnik == null) {
+            return new ResponseEntity("Morate biti prijavljeni", HttpStatus.UNAUTHORIZED);
+        }
+
+        Knjiga knjiga = knjigaService.findById(idKnjige);
+
+        if (knjiga == null) {
+            return new ResponseEntity("Nepostojeca knjiga", HttpStatus.BAD_REQUEST);
+        }
+        List<RecenzijaDto>recenzijaDtos= new ArrayList<>();
+        for(Stavka s: stavkaService.findAllByKnjigaId(idKnjige)){
+           recenzijaDtos.add(new RecenzijaDto(s.getRecenzija()));
+        }
+        return new ResponseEntity(recenzijaDtos, HttpStatus.OK);
+    }
+
 }
