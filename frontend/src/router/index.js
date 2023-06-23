@@ -8,6 +8,8 @@ import KorisniciAplikacije from '../views/Korisnici.vue'
 import PodnesiZahtev from '../views/Zahtev.vue'
 import AutorView from '../views/AutorView.vue'
 import PolicaView from '../views/PolicaView.vue'
+import ZanrView from '../views/ZanrView.vue'
+import KnjigaView from '../views/KnjigaView.vue'
 
 const routes = [
   {
@@ -39,6 +41,16 @@ const routes = [
     path: '/polica/:id',
     name: 'polica',
     component: PolicaView
+  },
+  {
+    path: '/knjige/:id',
+    name: 'knjiga',
+    component: KnjigaView
+  },
+  {
+    path: '/zanrovi/:id',
+    name: 'zanr',
+    component: ZanrView
   },
   {
     path: '/lista-knjiga',

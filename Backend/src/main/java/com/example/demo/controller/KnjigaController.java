@@ -241,12 +241,6 @@ public class KnjigaController {
     }
     @GetMapping("/{idKnjige}/recenzije")
     public ResponseEntity recenzijeKnjige(@PathVariable Long idKnjige, HttpSession session) {
-        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
-
-        if (korisnik == null) {
-            return new ResponseEntity("Morate biti prijavljeni", HttpStatus.UNAUTHORIZED);
-        }
-
         Knjiga knjiga = knjigaService.findById(idKnjige);
 
         if (knjiga == null) {

@@ -3,7 +3,6 @@ import com.example.demo.entity.Knjiga;
 import com.example.demo.entity.Zanr;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 public class KnjigaDto {
@@ -16,6 +15,8 @@ public class KnjigaDto {
     private Double ocena;
     private String naslovnaFotografija;
     private Set<Zanr> zanrovi;
+    private KorisnikDto autor;
+
     public KnjigaDto(){
         super();
     }
@@ -30,7 +31,7 @@ public class KnjigaDto {
         this.ocena = knjiga.getOcena();
         this.naslovnaFotografija = knjiga.getNaslovnaFotografija();
         this.zanrovi=knjiga.getZanrovi();
-
+        this.autor = new KorisnikDto(knjiga.getAutor());
     }
 
     public String getNaslov() {
@@ -111,4 +112,11 @@ public class KnjigaDto {
     }
 
 
+    public KorisnikDto getAutor() {
+        return autor;
+    }
+
+    public void setAutor(KorisnikDto autor) {
+        this.autor = autor;
+    }
 }

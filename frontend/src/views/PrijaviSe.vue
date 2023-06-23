@@ -31,24 +31,16 @@ export default {
   methods: {
     prijava() {
       axios
-        .post('http://localhost:8880/api/korisnici/prijavi-se', this.LoginDto, {
-          timeout: 5000,
-          withCredentials: true,
-          headers: {
-            'Cookie': 'JSESSIONID=test'
-          }
-        })
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          }
-        })
-        .then(body => {
-          this.$router.push('/korisnik/' + body.id);
-        })
-        .catch(error => {
-          console.error(error);
-        });
+      .post('http://localhost:8880/api/korisnici/prijavi-se', this.LoginDto)
+      .then(response => {
+        console.log(response)
+        if (response.status === 200) {
+          this.$router.push('/korisnik/' + response.data.id);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
     }
   }
 };

@@ -44,9 +44,7 @@ export default {
   mounted: function () {
     fetch('http://localhost:8880/api/korisnici/' + this.$router.currentRoute._value.path.split('/')[2])
       .then(response => response.json())
-      .then(body => {
-        this.korisnik = body
-      })
+      .then(body => { this.korisnik = body })
       .catch(error => { console.error(error) })
 
     fetch('http://localhost:8880/api/korisnici/' + this.$router.currentRoute._value.path.split('/')[2] + '/police')

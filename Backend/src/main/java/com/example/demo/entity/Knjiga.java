@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -31,6 +32,10 @@ public class Knjiga implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "zanr_id")
     )
     private Set<Zanr> zanrovi = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Autor autor;
 
     public Long getId() {
         return id;
@@ -132,5 +137,13 @@ public class Knjiga implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public Autor getAutor() {
+        return autor;
+    }
+
+    public void setAutor(Autor autor) {
+        this.autor = autor;
     }
 }

@@ -29,7 +29,7 @@ public class Controller {
 
     // TODO ima duplikata zato sto se uvek prolazi kroz ceo niz
     @GetMapping("/api/pretrazi")
-    public ResponseEntity pretrazi(@RequestParam String pretraga, @RequestParam(required = false) String grupa) {
+    public ResponseEntity pretrazi(@RequestParam String pretraga, @RequestParam(required = false, defaultValue = "knjige") String grupa) {
         switch (grupa) {
             case "korisnici":
                 List<Korisnik> korisnici = korisnikService.findAll();
