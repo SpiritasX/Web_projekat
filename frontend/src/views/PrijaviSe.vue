@@ -1,11 +1,9 @@
 <template>
-    <form>
-        <label>Email</label>
-        <input v-model="LoginDto.email"/>
-        <label>Lozinka</label>
-        <input v-model="LoginDto.lozinka"/>
-        <button v-on:click="prijava()">Prijavi se</button>
-    </form>
+  <form>
+    <input v-model="LoginDto.email" placeholder="Email"/>
+    <input v-model="LoginDto.lozinka" placeholder="Lozinka"/>
+    <button v-on:click="prijava()">Prijavi se</button>
+  </form>
 </template>
 
 <script>
