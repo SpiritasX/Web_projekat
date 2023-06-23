@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '../views/HomePage.vue'
 import KorisnikView from '../views/KorisnikView.vue'
 import PrijaviSe from '../views/PrijaviSe.vue'
@@ -14,11 +14,6 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomePage
-  },
-  {
-    path: '/profil',
-    name: 'profil',
-    component: LoggedIn
   },
   {
     path: '/prijavi-se',
