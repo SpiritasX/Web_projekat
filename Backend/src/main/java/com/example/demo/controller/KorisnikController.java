@@ -35,7 +35,7 @@ public class KorisnikController {
     public ResponseEntity jedanKorisnik(@PathVariable Long id) {
         Korisnik korisnik = korisnikService.findById(id);
         if (korisnik != null) {
-            return new ResponseEntity(korisnik, HttpStatus.OK);
+            return new ResponseEntity(new KorisnikDto(korisnik), HttpStatus.OK);
         }
         return new ResponseEntity("Nepostojeci korisnik", HttpStatus.BAD_REQUEST);
     }

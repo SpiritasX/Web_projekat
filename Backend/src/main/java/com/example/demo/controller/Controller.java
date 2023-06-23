@@ -28,10 +28,10 @@ public class Controller {
     }
 
     // TODO ima duplikata zato sto se uvek prolazi kroz ceo niz
-//    @GetMapping("/api/pretrazi")
-//    public ResponseEntity pretrazi(@RequestParam String pretraga, @RequestParam(required = false) String grupa) {
-//        switch (grupa) {
-//            case "korisnici":
+    @GetMapping("/api/pretrazi")
+    public ResponseEntity pretrazi(@RequestParam String pretraga, @RequestParam(required = false) String grupa) {
+        switch (grupa) {
+            case "korisnici":
 //                List<Korisnik> korisnici = korisnikService.findAll();
 //                List<KorisnikDto> korisniciDto = new ArrayList<>();
 ////                for (Korisnik k : korisnici) {
@@ -63,7 +63,7 @@ public class Controller {
 //                    korisniciDto.add(new KorisnikDto(k));
 //                }
 //                return new ResponseEntity(korisniciDto, HttpStatus.OK);
-//            case "autori":
+            case "autori":
 //                List<Korisnik> autori = korisnikService.findAll();
 //                List<KorisnikDto> autoriDto = new ArrayList<>();
 ////                for (Korisnik k : autori) {
@@ -95,29 +95,29 @@ public class Controller {
 //                    autoriDto.add(new KorisnikDto(k));
 //                }
 //                return new ResponseEntity(autoriDto, HttpStatus.OK);
-//            default: // case "knjige":
-//                List<Knjiga> knjige = knjigaService.findAll();
-//                List<KnjigaDto> knjigeDto = new ArrayList<>();
-//                for (Knjiga k : knjige) {
-//                    if (k.getNaslov().toLowerCase().equals(pretraga.toLowerCase())) {
-//                        knjigeDto.add(new KnjigaDto(k));
-//                    }
-//                }
-//                for (Knjiga k : knjige) {
-//                    if (k.getNaslov().toLowerCase().contains(pretraga.toLowerCase())) {
-//                        knjigeDto.add(new KnjigaDto(k));
-//                    }
-//                }
-//                for (Knjiga k : knjige) {
-//                    if (k.getISBN().equals(pretraga)) {
-//                        knjigeDto.add(new KnjigaDto(k));
-//                    }
-//                }
-//                for (Knjiga k : knjige) {
-//                    knjigeDto.add(new KnjigaDto(k));
-//                }
-//                return new ResponseEntity(knjigeDto, HttpStatus.OK);
-//        }
-//    }
+            default: // case "knjige":
+                List<Knjiga> knjige = knjigaService.findAll();
+                List<KnjigaDto> knjigeDto = new ArrayList<>();
+                for (Knjiga k : knjige) {
+                    if (k.getNaslov().toLowerCase().equals(pretraga.toLowerCase())) {
+                        knjigeDto.add(new KnjigaDto(k));
+                    }
+                }
+                for (Knjiga k : knjige) {
+                    if (k.getNaslov().toLowerCase().contains(pretraga.toLowerCase())) {
+                        knjigeDto.add(new KnjigaDto(k));
+                    }
+                }
+                for (Knjiga k : knjige) {
+                    if (k.getISBN().equals(pretraga)) {
+                        knjigeDto.add(new KnjigaDto(k));
+                    }
+                }
+                for (Knjiga k : knjige) {
+                    knjigeDto.add(new KnjigaDto(k));
+                }
+                return new ResponseEntity(knjigeDto, HttpStatus.OK);
+        }
+    }
 }
 

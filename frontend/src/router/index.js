@@ -1,19 +1,16 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '../views/HomePage.vue'
-import LoggedIn from '../views/LoggedIn.vue'
+import KorisnikView from '../views/KorisnikView.vue'
 import PrijaviSe from '../views/PrijaviSe.vue'
 import RegistrujSe from '../views/RegistrujeSe.vue'
+import AutorView from '../views/AutorView.vue'
+import PolicaView from '../views/PolicaView.vue'
 
 const routes = [
   {
     path: '/',
     name: 'home',
     component: HomePage
-  },
-  {
-    path: '/profil',
-    name: 'profil',
-    component: LoggedIn
   },
   {
     path: '/prijavi-se',
@@ -24,11 +21,26 @@ const routes = [
     path: '/registruj-se',
     name: 'register',
     component: RegistrujSe
+  },
+  {
+    path: '/korisnik/:id',
+    name: 'korisnik',
+    component: KorisnikView
+  },
+  {
+    path: '/autor/:id',
+    name: 'autor',
+    component: AutorView
+  },
+  {
+    path: '/polica/:id',
+    name: 'polica',
+    component: PolicaView
   }
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
 

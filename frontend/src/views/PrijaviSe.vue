@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'PrijaviSe',
   data: function () {
@@ -21,19 +22,42 @@ export default {
   },
   methods: {
     prijava: function () {
-      fetch('http://localhost:8880/api/korisnici/prijavi-se', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(this.LoginDto)
-      }).then(response => {
-        if (response.ok) {
-          return response.json()
+      axios
+      .post('http://localhost:8880/api/korisnici/prijavi-se', this.LoginDto, {
+        timeout: 5000,
+        withCredentials: true,
+        headers: {
+          'Cookie': 'JSESSIONID=test'//document.cookie.match(/JSESSIONID=([^;]+)/)[1]
         }
-      }).then(body => {
-        this.$router.push('/profil?id=' + body.id)
-      }).catch(error => {
-        console.error(error)
       })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      .then(body => {
+        this.$router.push('/korisnik/' + body.id);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+      // fetch('http://localhost:8880/api/korisnici/prijavi-se', {
+      //   method: 'POST',
+      //   headers: {
+      //     Accept: 'application/json',
+      //     'Content-Type': 'application/json'
+      //   },
+      //   body: JSON.stringify(this.LoginDto)
+      // })
+      //   .then(response => {
+      //     if (response.ok) {
+      //       return response.json()
+      //     }
+      //   }).then(body => {
+      //     this.$router.push('/korisnik/' + body.id)
+      //   }).catch(error => {
+      //     console.error(error)
+      //   })
     }
   }
 }
