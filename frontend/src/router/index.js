@@ -5,11 +5,17 @@ import PrijaviSe from '../views/PrijaviSe.vue'
 import RegistrujSe from '../views/RegistrujeSe.vue'
 import ListaKnjiga from '../views/ListaKnjiga.vue'
 import KorisniciAplikacije from '../views/Korisnici.vue'
-import PodnesiZahtev from '../views/Zahtev.vue'
+import PodnesiZahtev from '../views/PodnesiZahtevView.vue'
 import AutorView from '../views/AutorView.vue'
 import PolicaView from '../views/PolicaView.vue'
 import ZanrView from '../views/ZanrView.vue'
 import KnjigaView from '../views/KnjigaView.vue'
+import AzurirajView from '../views/AzurirajView.vue'
+import DodajKnjiguView from '../views/DodajKnjiguView.vue'
+import AzurirajKnjiguView from '../views/AzurirajKnjiguView.vue'
+import ZahteviView from '../views/ZahteviView.vue'
+import ZahtevView from '../views/ZahtevView.vue'
+import PretragaView from '../views/PretragaView.vue'
 
 const routes = [
   {
@@ -66,6 +72,36 @@ const routes = [
     path: '/podnesi-zahtev',
     name: 'ponesiZahtev',
     component: PodnesiZahtev
+  },
+  {
+    path: '/korisnici/azuriraj',
+    name: 'azuriraj',
+    component: AzurirajView
+  },
+  {
+    path: '/dodaj_knjigu',
+    name: 'dodajKnjigu',
+    component: DodajKnjiguView
+  },
+  {
+    path: '/azuriraj_knjigu',
+    name: 'azurirajKnjigu',
+    component: AzurirajKnjiguView
+  },
+  {
+    path: '/zahtevi',
+    name: 'zahtevi',
+    component: ZahteviView
+  },
+  {
+    path: '/zahtev/:id',
+    name: 'zahtev',
+    component: ZahtevView
+  },
+  {
+    path: '/pretrazi',
+    name: 'pretraga',
+    component: PretragaView
   }
 ]
 

@@ -30,11 +30,16 @@ export default {
   },
   methods: {
     prijava() {
+      this.$cookies.remove('JSESSIONID')
       axios
       .post('http://localhost:8880/api/korisnici/prijavi-se', this.LoginDto)
       .then(response => {
         console.log(response)
         if (response.status === 200) {
+          this.$cookies.set('JSESSIONID', response.data.cookie)
+          if (response.data.uloga === 'ADMINISTRATOR')
+            this.$admin = true
+          this.$prijavljen = true
           this.$router.push('/korisnik/' + response.data.id);
         }
       })

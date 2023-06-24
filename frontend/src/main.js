@@ -1,5 +1,14 @@
-import { createApp } from 'vue'
+import { createApp, h } from 'vue'
 import App from './App.vue'
 import router from './router'
+import cookies from 'vue-cookies'
 
-createApp(App).use(router).mount('#app')
+const app = createApp({
+  setup() {
+    app.config.globalProperties.$prijavljen = false;
+    app.config.globalProperties.$admin = false;
+  },
+  render: () => h(App),
+})
+
+app.use(router).use(cookies).mount('#app')

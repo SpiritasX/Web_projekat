@@ -13,10 +13,13 @@
         <label>Ponovi lozinku</label>
         <input v-model="RegisterDto.ponovljenaLozinka"/>
         <button v-on:click="registracija()">Registruj se</button>
+        <button v-if="this.$admin" v-on:click="registracijaAutora()">Registruj autora</button>
     </form>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'RegistrujSe',
   data: function () {
@@ -32,7 +35,7 @@ export default {
     }
   },
   methods: {
-    registracija: function () {
+    registracija() {
       fetch('http://localhost:8880/api/korisnici/registruj-se', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -44,6 +47,16 @@ export default {
       }).catch(error => {
         console.error(error)
       })
+    },
+    registracijaAutora() {
+      axios
+      .post('http://localhost:8880/api/korisnici/kreiraj-autora', this.RegisterDto, { withCredentials: true })
+      .then(res => {
+        if (res.ok) {
+          this.$router.push('/')
+        }
+      })
+      .catch(error => { console.error(error) })
     }
   }
 }

@@ -43,6 +43,10 @@ public class KnjigaService {
         return knjigaRepository.findAll();
     }
 
+    public List<Knjiga> findAllByZanrovi(Zanr zanr) {
+        return knjigaRepository.findAllByZanrovi(zanr);
+    }
+
     public Knjiga findByISBN(String ISBN) {
         return knjigaRepository.findByISBN(ISBN).orElse(null);
     }

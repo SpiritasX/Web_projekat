@@ -37,6 +37,17 @@ public class KorisnikController {
         return new ResponseEntity(korisniciDto, HttpStatus.OK);
     }
 
+    @GetMapping("/prijavljen")
+    public ResponseEntity prijavljenKorisnik(HttpSession session) {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (korisnik == null) {
+            return new ResponseEntity("Morate biti prijavljeni", HttpStatus.UNAUTHORIZED);
+        }
+
+        return new ResponseEntity(new KorisnikDto(korisnik), HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity jedanKorisnik(@PathVariable Long id) {
         Korisnik korisnik = korisnikService.findById(id);
@@ -59,7 +70,7 @@ public class KorisnikController {
         }
 
         session.setAttribute("korisnik", korisnik);
-        return new ResponseEntity(new KorisnikDto(korisnik), HttpStatus.OK);
+        return new ResponseEntity(new KorisnikDto(korisnik, session.getId()), HttpStatus.OK);
     }
     @PostMapping("odjavi-se")
     public ResponseEntity odjava(HttpSession session) {
@@ -160,5 +171,25 @@ public class KorisnikController {
         korisnikService.registracija(dto.getIme(), dto.getPrezime(), dto.getKorisnickoIme(), dto.getEmail(), dto.getLozinka(), Uloga.AUTOR, false);
 
         return new ResponseEntity("Uspesno dodan autor", HttpStatus.OK);
+    }
+
+    @PutMapping("/")
+    public ResponseEntity azurirajKorisnika(@RequestBody KorisnikDto dto, HttpSession session) {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (korisnik == null) {
+            return new ResponseEntity("Morate biti prijaljeni", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (dto.getKorisnickoIme() != null && korisnikService.findByKorisnickoIme(dto.getKorisnickoIme()) != null) {
+            return new ResponseEntity("Vec postoji taj username", HttpStatus.FORBIDDEN);
+        }
+
+        if (dto.getEmail() != null && korisnikService.findByEmail(dto.getEmail()) != null) {
+            return new ResponseEntity("Vec postoji taj email", HttpStatus.FORBIDDEN);
+        }
+
+        korisnikService.azurirajKorisnika(korisnik, dto);
+        return new ResponseEntity("Uspesno azurirano", HttpStatus.OK);
     }
 }

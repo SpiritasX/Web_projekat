@@ -154,4 +154,21 @@ public class KorisnikService {
         autor.setLozinka(lozinka);
         save(autor);
     }
+
+    public void azurirajKorisnika(Korisnik korisnik, KorisnikDto dto) {
+        if (dto.getIme() != null)
+            korisnik.setIme(dto.getIme());
+        if (dto.getPrezime() != null)
+            korisnik.setPrezime(dto.getPrezime());
+        if (dto.getKorisnickoIme() != null)
+            korisnik.setKorisnickoIme(dto.getKorisnickoIme());
+        if (dto.getOpis() != null)
+            korisnik.setOpis(dto.getOpis());
+        if (dto.getDatumRodjenja() != null)
+            korisnik.setDatumRodjenja(dto.getDatumRodjenja());
+        if (dto.getEmail() != null)
+            korisnik.setEmail(dto.getEmail());
+
+        save(korisnik);
+    }
 }

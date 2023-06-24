@@ -109,4 +109,22 @@ public class PolicaController {
 
         return new ResponseEntity<>("Uspesno obrisana polica", HttpStatus.OK);
     }
+
+    // Pronadji policu po nazivu iz svojih polica
+    @GetMapping("/{naziv}")
+    public ResponseEntity findByNaziv(@PathVariable String naziv, HttpSession session) {
+        Citalac citalac = (Citalac) session.getAttribute("korisnik");
+
+        if (citalac == null) {
+            return new ResponseEntity("Morate biti prijavljeni", HttpStatus.UNAUTHORIZED);
+        }
+
+        Polica polica = policaService.findByNaziv(naziv);
+
+        if (!citalac.getOstalePolice().contains(polica)) {
+            return new ResponseEntity("Nemate tu policu", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity(new PolicaDto(polica), HttpStatus.OK);
+    }
 }

@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'PodnesiZahtev',
   data: function () {
@@ -18,23 +20,20 @@ export default {
       ZahtevDto: {
         email: '',
         telefon: '',
-        poruka: ''
+        poruka: '',
+        idAutora: 0
       }
     }
   },
+  mounted: function () {
+    this.ZahtevDto.idAutora = this.$route.query.id
+  },
   methods: {
     prijava: function () {
-      fetch('http://localhost:8880/api/zahtevi/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(this.ZahtevDto)
-      }).then(response => {
-        if (response.ok) {
-          return response.json()
-        }
-      }).then(body => {
-        this.$router.push('/')
-      }).catch(error => {
+      axios
+      .get('http://localhost:8880/api/zahtevi/', this.ZahtevDto)
+      .then(this.$router.push('/'))
+      .catch(error => {
         console.error(error)
       })
     }

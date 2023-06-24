@@ -34,11 +34,15 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data: function () {
     return {
       korisnik: {},
-      police: []
+      police: [],
+      naziv_police: '',
+      res: ''
     }
   },
   mounted: function () {

@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.KnjigaDto;
 import com.example.demo.entity.Knjiga;
 import com.example.demo.entity.Korisnik;
 import com.example.demo.entity.Uloga;
@@ -99,5 +100,22 @@ public class ZanrController {
         zanrService.obrisiZanr(zanr);
 
         return new ResponseEntity("Uspesno obrisan zanr", HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/knjige")
+    public ResponseEntity knjigePoZanru(@PathVariable Long id) {
+        Zanr zanr = zanrService.findById(id);
+
+        if (zanr == null) {
+            return new ResponseEntity("Nepostojeci zanr", HttpStatus.BAD_REQUEST);
+        }
+
+        List<Knjiga> knjige = knjigaService.findAllByZanrovi(zanr);
+        List<KnjigaDto> dtos = new ArrayList<KnjigaDto>();
+        for (Knjiga k : knjige) {
+            dtos.add(new KnjigaDto(k));
+        }
+
+        return new ResponseEntity(dtos, HttpStatus.OK);
     }
 }

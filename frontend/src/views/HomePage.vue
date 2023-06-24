@@ -13,6 +13,19 @@
       <img src="../assets/knjige2.jpg"  style="width: 300px;">
       <img src="../assets/knjige3.jpg"  style="width: 300px;">
     </div>
+    <form>
+      <input v-model="this.pretraga" placeholder="Search">
+      <button v-on:click="this.$router.push('/pretrazi?pretraga=' + this.pretraga)">Pretrazi</button>
+    </form>
+    <div v-if="this.$admin">
+      <router-link to="/dodaj_knjigu">Dodaj knjigu</router-link>
+      <router-link to="/zahtevi">Svi zahtevi</router-link>
+      <form>
+        <label>Dodaj zanr</label>
+        <input v-model="this.naziv">
+        <button v-on:click="dodaj_zanr()"></button>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -84,30 +97,21 @@
 
 <script>
 import axios from 'axios';
-import KnjigaComp from '../components/KnjigaComp.vue'
+
 export default {
   name: 'HomePage',
-  components: {
-    KnjigaComp
-  },
-  data: function () {
+  data: function (naziv) {
     return {
-      ima_za_prikaz: false,
-      pretraga: '',
-      knjige: []
+      naziv: ''
     }
   },
   methods: {
-    pretrazi() {
-      axios
-      .get('http://localhost:8880/api/pretrazi?pretraga=' + this.pretraga)
-      .then(response => {
-        if (response.data != null) {
-          this.ima_za_prikaz = true
-          knjige = response.data
-        }
-      })
-      .catch(error => { console.error(error) })
+    dodaj_zanr() {
+      if (this.naziv != null) {
+        axios
+        .post('http://localhost:8880/api/zanrovi/?naziv=' + this.naziv)
+        .catch(error => { console.error(error)})
+      }
     }
   }
 }
