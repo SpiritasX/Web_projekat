@@ -1,8 +1,8 @@
 <template>
     <h1>{{ polica.naziv }}</h1>
     <table>
-        <td v-for="stavka in polica.stavke" :key="stavka.knjiga.id" :knjiga="stavka.knjiga">
-            <knjiga-comp />
+        <td v-for="stavka in polica.stavke" :key="stavka.knjiga.id">
+            <knjiga-comp :knjiga="stavka.knjiga" /> 
         </td>
     </table>
 </template>
