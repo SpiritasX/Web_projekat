@@ -59,6 +59,7 @@ public class KorisnikController {
 
     @PostMapping("prijavi-se")
     public ResponseEntity prijava(@RequestBody LoginDto dto, HttpSession session) {
+        System.out.println(session.getId());
         if (dto.getEmail() == null || dto.getLozinka() == null) {
             return new ResponseEntity("Moraju biti popunjena sva polja", HttpStatus.BAD_REQUEST);
         }

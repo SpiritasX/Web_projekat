@@ -41,6 +41,9 @@ public class KorisnikDto {
         this.datumRodjenja = korisnik.getDatumRodjenja();
         this.opis = korisnik.getOpis();
         this.cookie = cookie;
+        this.uloga = korisnik.getUloga();
+        if (this.uloga.equals(Uloga.AUTOR))
+            this.aktivan = ((Autor)korisnik).isAktivan();
     }
 
     public String getIme() {

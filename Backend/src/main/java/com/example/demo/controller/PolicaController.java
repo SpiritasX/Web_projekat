@@ -48,7 +48,7 @@ public class PolicaController {
         return new ResponseEntity(new PolicaDto(polica), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity dodajPolicu(@RequestParam String nazivPolice, HttpSession session) {
         Korisnik korisnik = (Korisnik)session.getAttribute("korisnik");
 
@@ -111,7 +111,7 @@ public class PolicaController {
     }
 
     // Pronadji policu po nazivu iz svojih polica
-    @GetMapping("/{naziv}")
+    @GetMapping("/ponazivu/{naziv}")
     public ResponseEntity findByNaziv(@PathVariable String naziv, HttpSession session) {
         Citalac citalac = (Citalac) session.getAttribute("korisnik");
 

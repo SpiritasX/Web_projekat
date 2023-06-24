@@ -63,7 +63,7 @@ public class ZahtevController {
         return new ResponseEntity(new ZahtevDto(zahtev), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity podnesiZahtev(@RequestBody ZahtevDto dto) {
         Korisnik korisnik = korisnikService.findById(dto.getIdAutora());
 
