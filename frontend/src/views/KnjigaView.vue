@@ -64,7 +64,7 @@ export default {
         dodaj(naziv_police) {
             var id = 0
             axios
-            .get('http://localhost:8880/api/police/' + naziv_police)
+            .get('http://localhost:8880/api/police/ponazivu/' + naziv_police)
             .then(response => {
                 this.id = response.data.id
             })
@@ -82,7 +82,7 @@ export default {
         obrisi(naziv_police) {
             var id = 0
             axios
-            .get('http://localhost:8880/api/police/' + naziv_police)
+            .get('http://localhost:8880/api/police/ponazivu/' + naziv_police)
             .then(response => {
                 this.id = response.data.id
             })

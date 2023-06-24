@@ -59,26 +59,26 @@ export default {
         }
     },
     mounted: function () {
-        fetch('http://localhost:8880/api/korisnici/' + this.$router.currentRoute._value.path.split('/')[2])
-        .then(response => response.json())
-        .then(body => { this.korisnik = body })
+        axios
+        .get('http://localhost:8880/api/korisnici/prijavljen', {withCredentials:true})
+        .then(response => { this.korisnik = response.data })
         .catch(error => { console.error(error) })
 
-        fetch('http://localhost:8880/api/korisnici/' + this.$router.currentRoute._value.path.split('/')[2] + '/police')
-        .then(response => response.json())
-        .then(body => { this.police = body })
+        axios
+        .get('http://localhost:8880/api/korisnici/' + this.$cookies.get('ID') + '/police')
+        .then(response => { this.police = response.data })
         .catch(error => { console.error(error) })
     },
     methods: {
         nova_polica() {
-        axios
-        .post('http://localhost:8880/api/police', this.naziv_police, { withCredentials: true })
-        .then(response => {
-            if (response.status != 200) {
-            this.res = response.data
-            }
-        })
-        .catch(error => { console.error(error) })
+          axios
+          .post('http://localhost:8880/api/police', 'nazivPolice=' + this.naziv_police, { withCredentials: true })
+          .then(response => {
+              if (response.status != 200) {
+                this.res = response.data
+              }
+          })
+          .catch(error => { console.error(error) })
         }
     }
 }

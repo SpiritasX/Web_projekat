@@ -16,6 +16,7 @@ import AzurirajKnjiguView from '../views/AzurirajKnjiguView.vue'
 import ZahteviView from '../views/ZahteviView.vue'
 import ZahtevView from '../views/ZahtevView.vue'
 import PretragaView from '../views/PretragaView.vue'
+import ProfilView from '../views/ProfilView.vue'
 
 const routes = [
   {
@@ -102,6 +103,11 @@ const routes = [
     path: '/pretrazi',
     name: 'pretraga',
     component: PretragaView
+  },
+  {
+    path: '/profil',
+    name: 'profil',
+    component: ProfilView
   }
 ]
 

@@ -5,7 +5,7 @@
         <label>Telefon</label>
         <input v-model="ZahtevDto.telefon"/>
         <label>Poruka</label>
-        <input v-model="ZahtevDto.model"/>
+        <input v-model="ZahtevDto.poruka"/>
         <button v-on:click="podnesiZahtev()">Podnesi zahtev</button>
     </form>
 </template>
@@ -29,9 +29,9 @@ export default {
     this.ZahtevDto.idAutora = this.$route.query.id
   },
   methods: {
-    prijava: function () {
+    podnesiZahtev: function () {
       axios
-      .get('http://localhost:8880/api/zahtevi/', this.ZahtevDto)
+      .post('http://localhost:8880/api/zahtevi', this.ZahtevDto)
       .then(this.$router.push('/'))
       .catch(error => {
         console.error(error)

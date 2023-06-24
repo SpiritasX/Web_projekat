@@ -31,16 +31,17 @@ export default {
   methods: {
     prijava() {
       this.$cookies.remove('JSESSIONID')
+      this.$cookies.remove('ULOGA')
+      this.$cookies.remove('ID')
       axios
       .post('http://localhost:8880/api/korisnici/prijavi-se', this.LoginDto)
       .then(response => {
         console.log(response)
         if (response.status === 200) {
           this.$cookies.set('JSESSIONID', response.data.cookie)
-          if (response.data.uloga === 'ADMINISTRATOR')
-            this.$admin = true
-          this.$prijavljen = true
-          this.$router.push('/korisnik/' + response.data.id);
+          this.$cookies.set('ULOGA', response.data.uloga)
+          this.$cookies.set('ID', response.data.id)
+          this.$router.push('/profil');
         }
       })
       .catch(error => {
