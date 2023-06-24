@@ -25,9 +25,11 @@
       Police
       <hr />
       <table class="tabela">
-        <td v-for="polica in police" :key="polica.id" :polica="polica">
-          <router-link :to="{ name: 'polica', params: { id: polica.id }}">{{ polica.naziv }}</router-link>
-        </td>
+        <tr>
+          <td v-for="polica in police" :key="polica.id" :polica="polica">
+            <router-link :to="{ name: 'polica', params: { id: polica.id }}">{{ polica.naziv }}</router-link>
+          </td>
+        </tr>
       </table>
     </div>
   </div>
@@ -63,6 +65,8 @@ export default {
 .korisnik {
   width: 700px;
   margin: 10px auto;
+  color: #533d32;
+  background: linear-gradient(to bottom right, #F5DEB3, #8cd2cf94);
 }
 
 .slika {
@@ -80,6 +84,7 @@ export default {
 
 .podaci>div {
   margin: 5px 0;
+  color: #533d32;
 }
 
 h1 {
@@ -122,5 +127,7 @@ p {
 td {
   text-align: center;
   width: 25%;
+  color: #000000c7;
+  background-color: #005cfc32;
 }
 </style>
