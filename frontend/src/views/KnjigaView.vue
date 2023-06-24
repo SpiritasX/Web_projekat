@@ -1,35 +1,43 @@
 <template>
-    <h1>{{ knjiga.naslov }}</h1>
-    <!-- <h3>{{ knjiga.autor.ime }} {{ knjiga.autor.prezime }}</h3> -->
-    {{ knjiga.ocena }}
-    <br />
-    {{ knjiga.opis }}
-    <br />
-    <h3>Zanrovi</h3>
-    <p v-for="zanr in knjiga.zanrovi" :key="zanr.id" :zanr="zanr">{{ zanr.naziv }}</p>
-    <div class="dodaj_na_policu">
+    <div class="knjiga-view">
+      <h1>{{ knjiga.naslov }}</h1>
+      <!-- <h3>{{ knjiga.autor.ime }} {{ knjiga.autor.prezime }}</h3> -->
+      {{ knjiga.ocena }}
+      <br />
+      {{ knjiga.opis }}
+      <br />
+      <h3>Zanrovi</h3>
+      <p v-for="zanr in knjiga.zanrovi" :key="zanr.id" :zanr="zanr">{{ zanr.naziv }}</p>
+      <div class="dodaj-na-policu">
         <form>
-            <label>Polica na koju zelis da dodas:</label>
-            <input v-model="naziv_police">
-            <button v-on:click="dodaj(naziv_police)">Dodaj</button>
+          <label>Polica na koju želiš da dodaš:</label>
+          <input v-model="naziv_police">
+          <button v-on:click="dodaj(naziv_police)">Dodaj</button>
         </form>
         <div class="poruka">
-            {{ amsg }}
+          {{ amsg }}
         </div>
-    </div>
-    <div class="ukloni_sa_police">
+      </div>
+      <div class="ukloni-sa-police">
         <form>
-            <label>Polica sa koje brises</label>
-            <input v-model="naziv_police">
-            <button v-on:click="obrisi(naziv_police)">Obrisi</button>
+          <label>Polica sa koje brišeš:</label>
+          <input v-model="naziv_police">
+          <button v-on:click="obrisi(naziv_police)">Obriši</button>
         </form>
         <div class="poruka">
-            {{ rmsg }}
+          {{ rmsg }}
         </div>
+      </div>
+      <h3>Recenzije</h3>
+      <recenzija-comp v-for="recenzija in recenzije" :key="recenzija.id" :recenzija="recenzija" />
+      <div class="slika-desno">
+        <img src="../assets/knjige10.jpeg" alt="Slika knjige" class="smanjena-slika">
+      </div>
     </div>
-    <h3>Recenzije</h3>
-    <recenzija-comp v-for="recenzija in recenzije" :key="recenzija.id" :recenzija="recenzija" />
-</template>
+  </template>
+  
+  
+  
 
 <script>
 import axios from 'axios';
@@ -100,3 +108,71 @@ export default {
     }
 }
 </script>
+<style>
+.knjiga-view {
+  font-family: "Arial", sans-serif;
+  color: #333;
+  background-color: #f7f9fa;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #008080;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #a0522d;
+}
+
+p {
+  color: #333;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  background-color: #008080;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #006666;
+}
+
+.dodaj-na-policu,
+.ukloni-sa-police {
+  margin-top: 20px;
+}
+
+.poruka {
+  color: #a0522d;
+}
+
+.slika-desno {
+  float: right;
+  margin-left: 20px;
+  margin-top: -600px; 
+}
+
+.smanjena-slika {
+  max-width: 300px;
+  height: auto;
+}
+
+</style>
