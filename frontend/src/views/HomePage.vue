@@ -14,8 +14,10 @@
       <img src="../assets/knjige3.jpg"  style="width: 300px;">
     </div>
     <form>
+      <div class="pretraga-gore">
       <input v-model="this.pretraga" placeholder="Search">
       <button v-on:click="this.$router.push('/pretrazi?pretraga=' + this.pretraga)">Pretrazi</button>
+      </div>
     </form>
     <div v-if="this.$cookies.get('ULOGA') === 'ADMINISTRATOR'">
       <router-link to="/dodaj_knjigu">Dodaj knjigu</router-link>
@@ -93,6 +95,14 @@
 .nav-link:nth-child(5) {
   color: #daa520; /* Bež */
 }
+.pretraga-gore {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  z-index: 9999;
+}
+
 </style>
 
 <script>
