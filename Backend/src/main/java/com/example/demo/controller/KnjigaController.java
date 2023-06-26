@@ -152,19 +152,19 @@ public class KnjigaController {
         return new ResponseEntity("Uspesno dodata knjiga na policu", HttpStatus.OK);
     }
 
-    @DeleteMapping("/{idStavke}/polica/{idPolice}")
-    public ResponseEntity obrisiSaPolice(@PathVariable Long idStavke, @PathVariable Long idPolice, HttpSession session) {
+    @DeleteMapping("/{idKnjige}/polica/{idPolice}")
+    public ResponseEntity obrisiSaPolice(@PathVariable Long idKnjige, @PathVariable Long idPolice, HttpSession session) {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
         if (korisnik == null) {
             return new ResponseEntity("Morate biti prijavljeni", HttpStatus.UNAUTHORIZED);
         }
 
-        int kodGreske = knjigaNaPoliciService.obrisiKnjiguSaPolice(korisnik.getId(), idStavke, idPolice);
+        int kodGreske = knjigaNaPoliciService.obrisiKnjiguSaPolice(korisnik.getId(), idKnjige, idPolice);
 
         switch (kodGreske) {
             case 1:
-                return new ResponseEntity("Nepostojeca stavka", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity("Nepostojeca knjiga", HttpStatus.BAD_REQUEST);
             case 2:
                 return new ResponseEntity("Nepostojeca polica", HttpStatus.BAD_REQUEST);
             case 3:

@@ -78,12 +78,12 @@ public class KnjigaNaPoliciService {
         return 0;
     }
 
-    public Integer obrisiKnjiguSaPolice(Long idKorisnika, Long idStavke, Long idPolice) {
+    public Integer obrisiKnjiguSaPolice(Long idKorisnika, Long idKnjige, Long idPolice) {
         Citalac citalac = (Citalac) korisnikService.findById(idKorisnika);
-        Stavka stavka = stavkaService.findById(idStavke);
+        Knjiga knjiga = knjigaService.findById(idKnjige);
         Polica polica = policaService.findById(idPolice);
 
-        if (stavka == null) {
+        if (knjiga == null) {
             return 1;
         }
 
@@ -95,12 +95,17 @@ public class KnjigaNaPoliciService {
             return 3;
         }
 
-        if (!polica.getStavke().contains(stavka)) {
+        Stavka stavka = null;
+        for (Stavka s : polica.getStavke())
+            if (s.getKnjiga().equals(knjiga))
+            {
+                stavka = s;
+                break;
+            }
+
+        if (stavka == null) {
             return 4;
         }
-        if(polica.isPrimarna())
-
-
 
         if (polica.isPrimarna()) {
             // TODO override equals metodu svih klasa da bi contains i remove i ostale metode radile lepo
