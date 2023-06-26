@@ -17,7 +17,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="knjiga in knjige" :key="knjiga.id">
+        <tr v-for="knjiga in knjige" :key="knjiga.id" v-on:click="this.$router.push('/knjige/' + knjiga.id)">
           <td>{{ knjiga.naslov }}</td>
           <td>{{ knjiga.ocena }}</td>
           <td>{{ knjiga.opis }}</td>

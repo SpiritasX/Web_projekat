@@ -17,8 +17,8 @@ public class PolicaService {
         return policaRepository.findById(id).orElse(null);
     }
 
-    public Polica findByNaziv(String naziv) {
-        return policaRepository.findByNaziv(naziv).orElse(null);
+    public List<Polica> findByNaziv(String naziv) {
+        return policaRepository.findByNaziv(naziv);
     }
 
     public Polica save(Polica polica) {

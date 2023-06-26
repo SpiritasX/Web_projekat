@@ -1,9 +1,9 @@
 <template>
-    <form v-if="this.$admin">
+    <form v-if="this.$cookies.get('ULOGA') === 'ADMINISTRATOR'">
         <label>Naslov</label>
         <input v-model="BookDto.naslov"/>
-        <label>ISBN</label>
-        <input v-model="BookDto.ISBN"/>
+        <label>isbn</label>
+        <input v-model="BookDto.isbn"/>
         <label>Datum objavljivanja</label>
         <input type="date" v-model="BookDto.datumObjavljivanja"/>
         <label>Opis</label>
@@ -21,17 +21,16 @@ export default {
         return {
             BookDto: {
                 naslov: '',
-                ISBN: '',
+                isbn: '',
                 datumObjavljivanja: '',
-                opis: '',
-                idAutora: 0
+                opis: ''
             }
         }
     },
     methods: {
         saveBook() {
             axios
-            .post('http://localhost:8880/api/knjige/', this.BookDto)
+            .post('http://localhost:8880/api/knjige/', this.BookDto, {withCredentials:true})
             .catch(error => { console.error(error) })
         }
     }

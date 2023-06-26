@@ -11,5 +11,5 @@ import java.util.Set;
 public interface PolicaRepository extends JpaRepository<Polica, Long> {
 
     Optional<Polica> findById(Long id);
-    Optional<Polica>findByNaziv(String naziv);
+    List<Polica>findByNaziv(String naziv);
 }

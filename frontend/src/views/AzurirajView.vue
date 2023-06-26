@@ -1,15 +1,11 @@
 <template>
-    <form v-if="prijavljen">
+    <form>
         <label>Ime</label>
         <input v-model="KorisnikDto.ime"/>
         <label>Prezime</label>
         <input v-model="KorisnikDto.prezime"/>
         <label>Korisnicko ime</label>
         <input v-model="KorisnikDto.korisnickoIme"/>
-        <label>Email</label>
-        <input v-model="KorisnikDto.email"/>
-        <label>Lozinka</label>
-        <input v-model="KorisnikDto.lozinka"/>
         <label>Datum</label>
         <input type="date" v-model="KorisnikDto.datumRodjenja">
         <label>Opis</label>
@@ -28,8 +24,6 @@ export default {
                 ime: '',
                 prezime: '',
                 korisnickoIme: '',
-                email: '',
-                lozinka: '',
                 datumRodjenja: '',
                 opis: ''
             }
@@ -46,10 +40,7 @@ export default {
     methods: {
         azuriraj() {
             axios
-            .post('http://localhost:8880/api/korisnici', { withCredentials: true })
-            .then(response => {
-                this.KorisnikDto = response.data
-            })
+            .put('http://localhost:8880/api/korisnici', this.KorisnikDto, { withCredentials: true })
             .catch(error => { console.error(error) })
         }
     }

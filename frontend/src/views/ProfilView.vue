@@ -42,7 +42,7 @@
         </div>
       </div>
       
-      <button v-on:click="this.$router.push('/azuriraj')">Azuriraj profil</button>
+      <button v-on:click="this.$router.push('/korisnici/azuriraj')">Azuriraj profil</button>
     </div>
   </template>
 

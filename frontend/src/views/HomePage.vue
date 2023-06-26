@@ -6,7 +6,7 @@
       <router-link class="nav-link" to="/registruj-se">Registruj se</router-link>
       <router-link class="nav-link" to="/lista-knjiga">Lista knjiga</router-link>
       <router-link class="nav-link" to="/korisnici">Korisnici Stranice</router-link>
-      <router-link class="nav-link" to="/podnesi-zahtev">Zahtev za autora</router-link>
+      <router-link class="nav-link" to="/zanrovi">Zanrovi</router-link>
     </nav>
     <div class="bookshelf-image">
       <img src="../assets/knjige.jpeg"  style="width: 300px;">
@@ -17,7 +17,7 @@
       <input v-model="this.pretraga" placeholder="Search">
       <button v-on:click="this.$router.push('/pretrazi?pretraga=' + this.pretraga)">Pretrazi</button>
     </form>
-    <div v-if="this.$admin">
+    <div v-if="this.$cookies.get('ULOGA') === 'ADMINISTRATOR'">
       <router-link to="/dodaj_knjigu">Dodaj knjigu</router-link>
       <router-link to="/zahtevi">Svi zahtevi</router-link>
       <form>
@@ -109,7 +109,7 @@ export default {
     dodaj_zanr() {
       if (this.naziv != null) {
         axios
-        .post('http://localhost:8880/api/zanrovi/?naziv=' + this.naziv)
+        .post('http://localhost:8880/api/zanrovi/', 'naziv=' + this.naziv, {withCredentials:true})
         .catch(error => { console.error(error)})
       }
     }

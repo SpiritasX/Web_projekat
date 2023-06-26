@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3>KORISNIK-> {{ korisnik.korisnickoIme }}</h3>
+        <router-link :to="'/korisnik/' + korisnik.id">KORISNIK-> {{ korisnik.korisnickoIme }}</router-link>
         <h3>{{ korisnik.ime }}</h3>
     </div>
 </template>

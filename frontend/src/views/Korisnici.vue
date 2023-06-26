@@ -13,7 +13,7 @@ export default {
     }
   },
   mounted: function () {
-    fetch('http://localhost:8880/api/korisnci')
+    fetch('http://localhost:8880/api/korisnici')
       .then(res => res.json())
       .then(data => { this.korisnici = data })
       .catch(error => console.error(error))

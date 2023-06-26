@@ -14,7 +14,7 @@
         <label>Ponovi lozinku</label>
         <input v-model="RegisterDto.ponovljenaLozinka"/>
         <button v-on:click="registracija()">Registruj se</button>
-        <button v-if="this.$admin" v-on:click="registracijaAutora()">Registruj autora</button>
+        <button v-if="this.$cookies.get('ULOGA') === 'ADMINISTRATOR'" v-on:click="registracijaAutora()">Registruj autora</button>
     </form>
     <div class="image-container">
       <div class="welcome-message">
@@ -62,11 +62,6 @@ export default {
     registracijaAutora() {
       axios
       .post('http://localhost:8880/api/korisnici/kreiraj-autora', this.RegisterDto, { withCredentials: true })
-      .then(res => {
-        if (res.ok) {
-          this.$router.push('/')
-        }
-      })
       .catch(error => { console.error(error) })
     }
   }

@@ -29,15 +29,9 @@ public class ZanrController {
     @Autowired
     private ZanrRepository zanrRepository;
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity listaZanrova() {
-        List<String> zanrovi = new ArrayList<>();
-
-        for (Zanr z : zanrService.findAll()) {
-            zanrovi.add(z.getNaziv());
-        }
-
-        return new ResponseEntity(zanrovi, HttpStatus.OK);
+        return new ResponseEntity(zanrService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

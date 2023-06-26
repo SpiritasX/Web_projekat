@@ -1,7 +1,7 @@
 <template>
-    <div v-if="this.$admin">
+    <div v-if="this.$cookies.get('ULOGA') === 'ADMINISTRATOR'">
         <div v-for="zahtev in zahtevi" :key="zahtev.id">
-            <zahtev-comp :zahtev="zahtev" />
+            <zahtev-comp :ZahtevDto="zahtev" />
             <button v-on:click="this.$router.push('/zahtev/' + zahtev.id)">Vidi vise</button>
         </div>
     </div>

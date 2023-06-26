@@ -119,12 +119,14 @@ public class PolicaController {
             return new ResponseEntity("Morate biti prijavljeni", HttpStatus.UNAUTHORIZED);
         }
 
-        Polica polica = policaService.findByNaziv(naziv);
+        List<Polica> police = policaService.findByNaziv(naziv);
 
-        if (!citalac.getOstalePolice().contains(polica)) {
-            return new ResponseEntity("Nemate tu policu", HttpStatus.BAD_REQUEST);
+
+        for (Polica p : police) {
+            if (((Citalac)korisnikService.findById(citalac.getId())).getOstalePolice().contains(p))
+                return new ResponseEntity(new PolicaDto(p), HttpStatus.OK);
         }
 
-        return new ResponseEntity(new PolicaDto(polica), HttpStatus.OK);
+        return new ResponseEntity("Nemate policu sa tim nazivom", HttpStatus.BAD_REQUEST);
     }
 }

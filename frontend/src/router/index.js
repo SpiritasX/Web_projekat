@@ -17,6 +17,7 @@ import ZahteviView from '../views/ZahteviView.vue'
 import ZahtevView from '../views/ZahtevView.vue'
 import PretragaView from '../views/PretragaView.vue'
 import ProfilView from '../views/ProfilView.vue'
+import ZanroviView from '../views/ZanroviView.vue'
 
 const routes = [
   {
@@ -108,6 +109,11 @@ const routes = [
     path: '/profil',
     name: 'profil',
     component: ProfilView
+  },
+  {
+    path: '/zanrovi',
+    name: 'zanrovi',
+    component: ZanroviView
   }
 ]
 

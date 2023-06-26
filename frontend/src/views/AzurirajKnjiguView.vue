@@ -3,7 +3,7 @@
         <label>Naslov</label>
         <input v-model="BookDto.naslov"/>
         <label>ISBN</label>
-        <input v-model="BookDto.ISBN"/>
+        <input v-model="BookDto.isbn"/>
         <label>Datum objavljivanja</label>
         <input type="date" v-model="BookDto.datumObjavljivanja"/>
         <label>Broj strana</label>
@@ -24,7 +24,7 @@ export default {
         return {
             BookDto: {
                 naslov: '',
-                ISBN: '',
+                isbn: '',
                 datumObjavljivanja: '',
                 opis: '',
                 brojStrana: 0
@@ -42,7 +42,7 @@ export default {
     methods: {
         saveBook() {
             axios
-            .put('http://localhost:8880/api/knjige/' + this.$route.query.id, this.BookDto)
+            .put('http://localhost:8880/api/knjige/' + this.$route.query.id, this.BookDto, {withCredentials:true})
             .catch(error => { console.error(error) })
         }
     }

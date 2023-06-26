@@ -126,7 +126,7 @@ public class KnjigaController {
         return new ResponseEntity("Knjiga je uspešno obrisana", HttpStatus.OK);
     }
 
-    @PostMapping("/{idKnjige}/polica/{idPolice}")
+    @GetMapping("/{idKnjige}/polica/{idPolice}")
     public ResponseEntity dodajNaPolicu(@PathVariable Long idKnjige, @PathVariable Long idPolice, HttpSession session){
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 

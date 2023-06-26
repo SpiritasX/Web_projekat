@@ -21,7 +21,7 @@ public class ZahtevController {
     @Autowired
     private KorisnikService korisnikService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity listaZahteva(HttpSession session) {
         Korisnik korisnik = (Korisnik)session.getAttribute("korisnik");
 

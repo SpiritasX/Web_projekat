@@ -174,16 +174,12 @@ public class KorisnikController {
         return new ResponseEntity("Uspesno dodan autor", HttpStatus.OK);
     }
 
-    @PutMapping("/")
+    @PutMapping("")
     public ResponseEntity azurirajKorisnika(@RequestBody KorisnikDto dto, HttpSession session) {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
         if (korisnik == null) {
             return new ResponseEntity("Morate biti prijaljeni", HttpStatus.UNAUTHORIZED);
-        }
-
-        if (dto.getKorisnickoIme() != null && korisnikService.findByKorisnickoIme(dto.getKorisnickoIme()) != null) {
-            return new ResponseEntity("Vec postoji taj username", HttpStatus.FORBIDDEN);
         }
 
         if (dto.getEmail() != null && korisnikService.findByEmail(dto.getEmail()) != null) {

@@ -19,6 +19,23 @@ public class KorisnikDto {
     private Uloga uloga;
     private Boolean aktivan;
 
+    public KorisnikDto() {
+    }
+
+    public KorisnikDto(Long id, String ime, String prezime, String korisnickoIme, Date datumRodjenja, String profilnaSlika, String opis, String cookie, String email, Uloga uloga, Boolean aktivan) {
+        this.id = id;
+        this.ime = ime;
+        this.prezime = prezime;
+        this.korisnickoIme = korisnickoIme;
+        this.datumRodjenja = datumRodjenja;
+        this.profilnaSlika = profilnaSlika;
+        this.opis = opis;
+        this.cookie = cookie;
+        this.email = email;
+        this.uloga = uloga;
+        this.aktivan = aktivan;
+    }
+
     public KorisnikDto(Korisnik korisnik) {
         this.id = korisnik.getId();
         this.ime = korisnik.getIme();

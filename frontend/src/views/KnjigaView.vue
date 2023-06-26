@@ -11,24 +11,28 @@
         <form>
             <label>Polica na koju zelis da dodas:</label>
             <input v-model="naziv_police">
-            <button v-on:click="dodaj(naziv_police)">Dodaj</button>
+            <button v-on:click="dodaj()">Dodaj</button>
         </form>
         <div class="poruka">
-            {{ amsg }}
+            {{ this.amsg }}
         </div>
     </div>
     <div class="ukloni_sa_police">
         <form>
             <label>Polica sa koje brises</label>
             <input v-model="naziv_police">
-            <button v-on:click="obrisi(naziv_police)">Obrisi</button>
+            <button v-on:click="obrisi()">Obrisi</button>
         </form>
         <div class="poruka">
-            {{ rmsg }}
+            {{ this.rmsg }}
         </div>
     </div>
     <h3>Recenzije</h3>
     <recenzija-comp v-for="recenzija in recenzije" :key="recenzija.id" :recenzija="recenzija" />
+    <div v-if="this.$cookies.get('ULOGA') === 'ADMINISTRATOR'">
+        <router-link :to="'/azuriraj_knjigu?id='+this.knjiga.id">Azuriraj knjigu</router-link>
+        <button v-on:click="ukloni()">Ukloni</button>
+    </div>
 </template>
 
 <script>
@@ -42,7 +46,11 @@ export default {
     data: function () {
         return {
             knjiga: {},
-            recenzije: []
+            recenzije: [],
+            amsg: '',
+            rmsg: '',
+            naziv_police: '',
+            id: ''
         }
     },
     mounted: function () {
@@ -61,40 +69,39 @@ export default {
         .catch(error => { console.error(error) })
     },
     methods: {
-        dodaj(naziv_police) {
-            var id = 0
-            axios
-            .get('http://localhost:8880/api/police/ponazivu/' + naziv_police)
+        async dodaj() {
+            await axios
+            .get('http://localhost:8880/api/police/ponazivu/' + this.naziv_police, { withCredentials:true})
             .then(response => {
                 this.id = response.data.id
             })
             .catch(error => { console.error(error) })
 
-            axios
-            .post('http://localhost:8880/api/knjige' + this.$router.currentRoute._value.path.split('/')[2] + '/polica/' + id, { withCredentials: true })
+            await axios
+            .get('http://localhost:8880/api/knjige/' + this.$router.currentRoute._value.path.split('/')[2] + '/polica/' + this.id, { withCredentials: true })
             .then(response => {
-                if (response.status != 200) {
-                    this.amsg = response.body
-                }
+                this.amsg = response.body
             })
             .catch(error => { console.error(error) })
         },
-        obrisi(naziv_police) {
-            var id = 0
-            axios
-            .get('http://localhost:8880/api/police/ponazivu/' + naziv_police)
+        async obrisi() {
+            await axios
+            .get('http://localhost:8880/api/police/ponazivu/' + this.naziv_police, { withCredentials:true})
             .then(response => {
                 this.id = response.data.id
             })
             .catch(error => { console.error(error) })
 
-            axios
-            .delete('http://localhost:8880/api/knjige' + this.$router.currentRoute._value.path.split('/')[2] + '/polica/' + id, { withCredentials: true })
+            await axios
+            .delete('http://localhost:8880/api/knjige/' + this.$router.currentRoute._value.path.split('/')[2] + '/polica/' + this.id, { withCredentials: true })
             .then(response => {
-                if (response.status != 200) {
-                    this.rmsg = response.body
-                }
+                this.rmsg = response.body
             })
+            .catch(error => { console.error(error) })
+        },
+        ukloni() {
+            axios
+            .delete('http://localhost:8880/api/knjige/' + this.$router.currentRoute._value.path.split('/')[2], {withCredentials:true})
             .catch(error => { console.error(error) })
         }
     }

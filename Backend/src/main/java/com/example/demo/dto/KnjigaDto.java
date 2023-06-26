@@ -21,6 +21,16 @@ public class KnjigaDto {
         super();
     }
 
+    public KnjigaDto(Long id, String naslov, String ISBN, Date datumObjavljivanja, Integer brojStrana, String opis, Double ocena) {
+        this.id = id;
+        this.naslov = naslov;
+        this.ISBN = ISBN;
+        this.datumObjavljivanja = datumObjavljivanja;
+        this.brojStrana = brojStrana;
+        this.opis = opis;
+        this.ocena = ocena;
+    }
+
     public KnjigaDto(Knjiga knjiga) {
         this.id = knjiga.getId();
         this.naslov = knjiga.getNaslov();
@@ -31,7 +41,7 @@ public class KnjigaDto {
         this.ocena = knjiga.getOcena();
         this.naslovnaFotografija = knjiga.getNaslovnaFotografija();
         this.zanrovi=knjiga.getZanrovi();
-        this.autor = new KorisnikDto(knjiga.getAutor());
+//        this.autor = new KorisnikDto(knjiga.getAutor());
     }
 
     public String getNaslov() {

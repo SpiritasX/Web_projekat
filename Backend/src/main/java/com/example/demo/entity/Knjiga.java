@@ -16,7 +16,7 @@ public class Knjiga implements Serializable {
     private Long id;
     @Column(nullable = false)
     private String naslov;
-    @Column(nullable = false)
+    @Column
     private String naslovnaFotografija;
     @Column(unique = true, nullable = false)
     private String ISBN;
